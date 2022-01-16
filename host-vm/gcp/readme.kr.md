@@ -52,11 +52,11 @@ vi /etc/hosts
 0.0.0.0 kafka2 
 172.17.0.3 kafka1
 
-# mkdir /zookeeper
-# cd /zookeeper 
-wget http://apache.tt.co.kr/zookeeper/stable/apache-zookeeper-3.6.3.tar.gz
-tar -zxf apache-zookeeper-3.6.3.tar.gz 
-ln -s apache-zookeeper-3.6.3 zookeeper
+mkdir /zookeeper
+cd /zookeeper 
+wget http://apache.tt.co.kr/zookeeper/stable/apache-zookeeper-3.6.3-bin.tar.gz
+tar -zxf apache-zookeeper-3.6.3-bin.tar.gz 
+ln -s apache-zookeeper-3.6.3-bin zookeeper
 
 cd zookeeper/conf
 cp zoo_sample.cfg zoo.cfg
@@ -77,3 +77,14 @@ server.2=kafka2:2888:3888
 /zookeeper/zookeeper/bin/zkServer.sh start
 ```
 
+Error:could not find or load main class org.apache.zookeeper.server.quorum.QuorumPeerMain 
+java -cp zookeeper-3.4.6.jar:lib/log4j-1.2.16.jar: org.apache.zookeeper.server.quorum.QuorumPeerMain conf/zoo.cfg
+
+
+---  
+# Kafka 설치  
+```bash
+mkdir /kafka 
+cd /kafka 
+wget https://dlcdn.apache.org/kafka/3.0.0/kafka_2.12-3.0.0.tgz
+```
