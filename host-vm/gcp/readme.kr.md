@@ -1,0 +1,79 @@
+# GCP VM 설정하기  
+spark-env, 4vCPU, RAM 16GB, HDD 200GB, Ubuntu 18.04  
+Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050 tcp v4 포트 오픈 조건 추가  
+
+1. install docker  
+```bash
+sudo -i
+apt-get update  
+apt-get install -y ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+  
+2. run spark-jupyter docker   
+```bash
+sudo -i 
+mkdir /spark-test
+docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 80:8888 -p 4040-4050:4040-4050 -v /spark-test:/tf/notebooks shwsun/jupyter-spark
+docker exec -it spark-client /bin/bash
+jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 &   
+docker network connect spark_default spark-client  
+
+# run spark-client jupyter lab 
+# port 4040 ~ is opened for using spark web ui.
+docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 80:8888 -p 4040-4050:4040-4050 -v /spark-test:/tf/notebooks shwsun/jupyter-spark jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
+```
+  
+### Creating Kafka container  
+```bash
+mkdir -p /kafka/k0/data  
+
+docker run -itd --privileged --name kafka1 --hostname kafka1 --rm ubuntu:18.04
+docker run -itd --privileged --name kafka2 --hostname kafka2 --rm ubuntu:18.04
+
+docker exec -it kafka1 /bin/bash  
+docker exec -it kafka2 /bin/bash 
+
+apt-get update 
+apt-get install -y vim 
+apt-get install -y openjdk-8-jdk  
+update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/bin/java
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+vi /etc/hosts  
+
+0.0.0.0 kafka1 
+172.17.0.4 kafka2
+
+0.0.0.0 kafka2 
+172.17.0.3 kafka1
+
+# mkdir /zookeeper
+# cd /zookeeper 
+wget http://apache.tt.co.kr/zookeeper/stable/apache-zookeeper-3.6.3.tar.gz
+tar -zxf apache-zookeeper-3.6.3.tar.gz 
+ln -s apache-zookeeper-3.6.3 zookeeper
+
+cd zookeeper/conf
+cp zoo_sample.cfg zoo.cfg
+vi zoo.cfg
+
+
+mkdir /data
+echo 1 > /data/myid 
+echo 2 > /data/myid
+
+vi zoo.cfg
+dataDir=/data
+# add below
+server.1=kafka1:2888:3888
+server.2=kafka2:2888:3888
+
+# in kafka1 
+/zookeeper/zookeeper/bin/zkServer.sh start
+```
+
