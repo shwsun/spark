@@ -88,3 +88,32 @@ mkdir /kafka
 cd /kafka 
 wget https://dlcdn.apache.org/kafka/3.0.0/kafka_2.12-3.0.0.tgz
 ```
+
+---  
+# code-server web connect
+1. run code-server web using docker container  
+2. git clone spark project  
+3. enable git connection setting in code-server  
+  
+```bash 
+mkdir -p ~/.config
+# run code-server in background mode & expose port 80 as a external web connection port 
+sudo docker run -it --name code-server -p 80:8080 \
+  -v "$HOME/.config:/home/coder/.config" \
+  -v "$PWD:/home/coder/project" \
+  -u "$(id -u):$(id -g)" \
+  -e "DOCKER_USER=$USER" \
+  codercom/code-server:latest  > /dev/null 2>&1 & 
+# to get login password for code-server 
+cat ~/.config/code-server/config.yaml 
+```
+### in code-server spark project 
+```bash
+cd /home/coder 
+mkdir -p spark-prj 
+cd spark-prj
+git clone https://github.com/shwsun/spark.git
+cd spark-prj 
+git config --global user.name "shwsun"
+git config --global user.email "shwsun@naver.com"
+```
