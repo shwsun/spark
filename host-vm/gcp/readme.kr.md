@@ -114,6 +114,10 @@ mkdir -p spark-prj
 cd spark-prj
 git clone https://github.com/shwsun/spark.git
 cd spark-prj 
-git config --global user.name "shwsun"
-git config --global user.email "shwsun@naver.com"
+git config --global user.name "<your name>"
+git config --global user.email "<your email>"
+# I need privileged connection to git hub shwsun/spark so that I need modifying this project.  
+# git config credential.helper store  
+git remote set-url origin "https://shwsun@github.com/shwsun/spark.git" 
+git push --all -u origin master 
 ```
