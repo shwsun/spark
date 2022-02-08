@@ -136,16 +136,16 @@ spark cluster 용 bitnami 컨테이너가 위치한 경로에서 'docker-compose
   
 remote spark 에 연결하기 위해 spark-client docker 를 spark cluster network에 참여 시켜야 합니다.   
 ```bash
-docker run -itd --privileged --name spark-client --hostname spark-client --rm -v /home/shwsun/spark/client:/notebooks -p 8888 -p 4040 --gpus all shwsun/jupyter-spark
-docker network connect spark_default spark-client
-docker exec -it spark-client /bin/bash
-jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
-
+# spark cluster 실행하기
+cd /spark-cluster 
+docker-compose up
+# spark cluster network 에 참여하기  
+docker network connect spark-cluster_default spark-client
 ```
 
-docker run -itd --privileged --name spark-client --hostname spark-client --rm -v C:\Study\spark_env\git-prj\spark\spark-src:/notebooks -p 8888 -p 8080 -p 6006 -p 4040 shwsun/jupyter-spark
+`spark-client` 를 이용해 `spark-cluster`에 연결하는 스파크 세션을 생성하면 아래와 같은 spark master UI와 app UI를 확인할 수 있다.  
+[]()
 
-docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888 -p 8080 -p 6006 -p 4040 shwsun/jupyter-spark
 
 ### run spark-client in gcp  
 ```bash
@@ -174,6 +174,34 @@ curl -LO https://raw.githubusercontent.com/bitnami/bitnami-docker-spark/master/d
 # need to open gcp port 7077, 8080 
 # modify yaml to open 7077
 docker-compose up 
+```
+```yaml
+Page up
+version: '2'
+  
+services:
+  spark:
+    image: docker.io/bitnami/spark:3
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+            - '8080:8080'
+            - '7077:7077'
+  spark-worker:
+    image: docker.io/bitnami/spark:3
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://34.64.97.16:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
 ```
 yaml 에서 4040 등을 열면, spark Job UI 를 연결할 수 있다.  
   
