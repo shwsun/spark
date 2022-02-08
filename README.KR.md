@@ -12,25 +12,23 @@ This project is aim for creating spark exercise environment and making spark get
 
 ---  
 # 테스트용 VM 구성  
-exercise 환경을 구성할 ubuntu 머신이 없는 경우, 아래와 같이 ubuntu vm을 생성해 사용(Windows OS 사용자)  
-vagrant + virtualbox + ubuntu  
-- VirtualBox-6.1.30-148432-Win.exe [](https://download.virtualbox.org/virtualbox/6.1.30/VirtualBox-6.1.30-148432-Win.exe) 
-- vagrant_2.2.19_x86_64.msi [vagrant 2.2.19 다운로드 경로](https://www.vagrantup.com/downloads) 
-- Oracle_VM_VirtualBox_Extension_Pack-6.1.30.vbox-extpack [](https://download.virtualbox.org/virtualbox/6.1.30/Oracle_VM_VirtualBox_Extension_Pack-6.1.30.vbox-extpack) 
-- bionic-server-cloudimg-amd64-vagrant.box [Ubuntu:bionic 다운로드 경로](https://app.vagrantup.com/ubuntu/boxes/bionic64)  
+Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명합니다.  
+실행해 볼 수 있는 machine을 이미 준비해 둔 경우에는 이 단계는 생략합니다.  
+준비 과정은 각각 [`host-vm`], [`gcp`] 부분에서 자세하게 설명합니다.  
   
-1. virtualbox 설치  
-2. virtualbox extension 설치(생략 가능)  
-2. vagrant 설치(설치 후 재시작 필요)  
-3. ubuntu box 등록  
-
-위 3번에서 다운받은 ubuntu:bionic image를 vagrant cache에 추가  
-베이그런트에 한번 등록해 두면 내부 캐쉬에 저장되서 이후에는 이름으로 바로 호출 가능.
-매 번 다운로드 받아서 등록해 줄 필요 없음.  
-단, 베이그런트 완전 삭제시에는 캐쉬가 사라지므로 이미지 파일을 다시 등록해야 사용 가능.  
-ubuntu box를 다운받은 경로로 이동해서 아래와 같은 명령으로 ubuntu virtualbox image 등록  
-vagrant box add ubuntu bionic-server-cloudimg-amd64-vagrant.box
   
-
-git config --global user.name "shwsun"
-git config --global user.email "shwsun@naver.com"
+---  
+# 실행 순서  
+이 프로젝트는 아래와 같은 순서로 진행합니다.  
+1. 실행 환경(machine) 준비  
+ - 로컬 VM 환경  
+ - GCP 환경  
+2. Spark local mode 최소(pyspark + Jupyter) 실행  
+3. pyspark 최소 설치로 원격 spark cluster 사용하기  
+4. Spark local mode + Hdfs + Hive 실행  
+5. Spark Cluster mode 간단 설치(Docker-compose. bitnami container image)  
+6. Spark cluster에 kafka 추가  
+7. Spark cluster에 Ignite 추가  
+8. Spark Cluster + Hdfs + Hive 직접 구성  
+9. Oozie 추가  
+10. Zeppelin 추가  
