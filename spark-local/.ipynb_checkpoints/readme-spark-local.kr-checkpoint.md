@@ -109,32 +109,21 @@ docker commit spark-client shwsun/jupyter-spark
 미리 준비해 둔 `shwsun/jupyter-spark` 이미지를 이용해 spark 개발 환경을 실행합니다.  
 ```bash
 # in vm. /spark-git/spark/spark-local
-# 컨테이너 이미지를 실행
 docker run -itd --privileged --name spark-client --hostname spark-client --rm -v /spark-git/spark/spark-local:/tf/notebooks -p 8888:8888 -p 4040-4050 shwsun/jupyter-spark
 docker exec -it spark-client /bin/bash
-
+#jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin/
-# local vm 에서 실행시에는 본인만 접근하므로 login auth 없는게 편하다
-#jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --notebook-dir='/tf/notebooks' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
-# gcp 에서 실행 시에는 다른 사람이 연결 가능하므로, login auth 켜둔다. 
+#jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
 jupyter lab --allow-root --ip='*' --notebook-dir='/tf/notebooks' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
 # to get access token 
 jupyter server list 
 ```
-> `shwsun/jupyter-spark` 이미지가 아직 완전하지 않아서, 컨테이너 실행 후에 다시 컨테이너 내부에서 주피터를 실행해야 함.  
-> 향후에는 컨테이너 실행만으로 pyspark jupyter 가 자동 실행하게 개선할 예정  
-
 
 
 
 ## remote cluster에 연결하기  
-`spark-client` 외부에 cluster를 실행한 상태에서 spark cluster 에 연결해서 작동하는 `spark cluster client mode`를 실행해 봅니다.  
-먼저 미리 만들어 둔 spark cluster를 실행합니다.  
-간단하게 bitnami 의 spark용 컨테이너를 이용합니다.  
-spark cluster 용 bitnami 컨테이너가 위치한 경로에서 'docker-compose up'를 실행하면 클러스터가 실행됩니다.  
-  
-remote spark 에 연결하기 위해 spark-client docker 를 spark cluster network에 참여 시켜야 합니다.   
+remote spark 에 연결하기 위해 docker 를 spark-default bridge로 네트웍 설정해야 한다.  
 ```bash
 docker run -itd --privileged --name spark-client --hostname spark-client --rm -v /home/shwsun/spark/client:/notebooks -p 8888 -p 4040 --gpus all shwsun/jupyter-spark
 docker network connect spark_default spark-client
