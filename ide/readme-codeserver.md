@@ -19,6 +19,7 @@
 # code server git 연결 초기 설정  
 git config --global user.name "shwsun"
 git config --global user.email "shwsun@naver.com"  
+git remote add origin https://github.com/shwsun/spark.git
 # git hub token 방식 연결 설정. ......  
 
 ```
