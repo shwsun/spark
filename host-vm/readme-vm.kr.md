@@ -22,8 +22,32 @@ vagrant box add ubuntu bionic-server-cloudimg-amd64-vagrant.box
 ``` 
 ### create ubuntu vm setting file(Vagrantfile)
 ```ruby
-```
+Vagrant.configure("2") do |config|
+    # config.vbguest.auto_update = false
+    # test linux 
+    config.vm.define "test" do |vname|
+        vname.vm.box = "ubuntu"
+        vname.vm.hostname = "test"
+        vname.trigger.before :halt do |trigger|
+            trigger.warn = "graceful shutdown hook"
+            trigger.run_remote = {inline: "echo 'test machine now shutting down'"}
+        end
+        vname.vm.provider "virtualbox" do |vb|
+            vb.name = "test"
+            vb.customize ['modifyvm', :id, '--audio', 'none']
+            vb.memory = 2000
+            vb.cpus = 2
+        end
+        vname.vm.network "private_network", ip: "192.168.56.10"
+    end
+end  
+```  
+  
+---  
 ### ubuntu vm booting  
 ```bash
 # assume that 'Vagrantfile' already prepared
+# change directory to vagrant root in which folder 'Vagrantfile' exist. (./spark/host-vm)  
+# cd <vagrant root>
+vagrant up test
 ```
