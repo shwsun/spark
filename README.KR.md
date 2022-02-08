@@ -8,6 +8,7 @@ This project is aim for creating spark exercise environment and making spark get
 ### Pre-requisite
 
 - Ubuntu 18.04 (docker)
+- RAM >= 8 GB  
 
 
 ---  
