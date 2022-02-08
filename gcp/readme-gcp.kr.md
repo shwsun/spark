@@ -1,8 +1,15 @@
 # GCP VM 설정하기  
 spark-env, 4vCPU, RAM 16GB, HDD 200GB, Ubuntu 18.04  
-Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050 tcp v4 포트 오픈 조건 추가  
+Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 7077, 4040-4050, 8080, 8088, 8888, 9999-10010 tcp v4 포트 오픈 조건 추가  
+  
+[GCP VM](!imgs/gcp-vm.png)  
 
-1. install docker  
+1. GCP VM에 접속하기  
+
+이후 모든 명령은 GCP VM에 접속해서 실행한다. 
+  
+2. install docker  
+GCP VM 에 SSH 연결해서 명령창에서 아래와 같이 실행한다.  
 ```bash
 sudo -i
 apt-get update  
@@ -15,7 +22,7 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
   
-2. run spark-jupyter docker   
+3. run spark-jupyter docker   
 ```bash
 sudo -i 
 mkdir /spark-test
@@ -28,6 +35,10 @@ docker network connect spark_default spark-client
 # port 4040 ~ is opened for using spark web ui.
 docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 80:8888 -p 4040-4050:4040-4050 -v /spark-test:/tf/notebooks shwsun/jupyter-spark jupyter lab --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password='' --workspace='/tf/notebooks' > /dev/null 2>&1 & 
 ```
+  
+4. Code-Server 설치하기  
+간단하게 진행하기 위해 Docker constainer 버전으로 실행하고, 개발할 소스 코드 경로를 container 에 mount 해서 사용한다.  
+
   
 ### Creating Kafka container  
 ```bash
