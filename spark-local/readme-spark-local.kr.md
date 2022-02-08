@@ -67,6 +67,10 @@ vagrant ssh spark-client
 > 향후에 이를 `Dockerfile` script로 재구성할 예정입니다.  
 이렇게 구성해 둔 컨테이너는 앞으로 `shwsun/spark-client` 이름으로 불러서 사용합니다.  
 
+> *** image pull 반복 발생으로 테더링 비용 문제 발생. 아래부터는 gcp vm에서 진행 ***  
+
+
+
 ```bash
 # ubuntu 환경에 pyspark 설치하기 
 sudo -i 
