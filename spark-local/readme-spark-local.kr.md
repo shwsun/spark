@@ -105,12 +105,12 @@ docker commit spark-client shwsun/jupyter-spark
 ```
 
 
-## Run Spark-client image  
+## Run Spark Local mode 
 미리 준비해 둔 `shwsun/jupyter-spark` 이미지를 이용해 spark 개발 환경을 실행합니다.  
 ```bash
 # in vm. /spark-git/spark/spark-local
 # 컨테이너 이미지를 실행
-docker run -itd --privileged --name spark-client --hostname spark-client --rm -v /spark-git/spark/spark-local:/tf/notebooks -p 8888:8888 -p 4040-4050 shwsun/jupyter-spark
+docker run -itd --privileged --name spark-client --hostname spark-client --rm -v /spark-git/spark/spark-local:/tf/notebooks -p 8888:8888 -p 4040-4050:4040-4050 shwsun/jupyter-spark
 docker exec -it spark-client /bin/bash
 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
