@@ -110,6 +110,9 @@ wget https://dlcdn.apache.org/kafka/3.0.0/kafka_2.12-3.0.0.tgz
 ```bash 
 mkdir -p ~/.config
 # run code-server in background mode & expose port 80 as a external web connection port 
+# if you want to use your own project is served as code-server work directory, move to that directory and run below.
+# or change '$PWD' into your own directory path 
+# cd /spark-git/spark
 sudo docker run -it --name code-server -p 80:8080 \
   -v "$HOME/.config:/home/coder/.config" \
   -v "$PWD:/home/coder/project" \
