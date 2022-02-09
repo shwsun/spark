@@ -67,4 +67,16 @@ docker run -p 9999:8080 \
 실행 후에는 웹 브라우저를 이용해 아래와 같이 코드 서버에 연결할 수 있습니다.  
 [Code Server login](!imgs/codeserver-login.png)  
 [Code Server welcome](!imgs/codeserver-welcome.png)  
-  
+
+---  
+# code-server install 
+vm 에 직접 설치  
+```bash
+# as user account
+sudo -i
+curl -fsSL https://code-server.dev/install.sh | sh
+code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
+cat ~/.config/code-server/config.yaml  
+```
+
+
