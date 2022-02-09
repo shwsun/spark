@@ -24,6 +24,7 @@ Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명
 1. 실행 환경(machine) 준비  
  - 로컬 VM 환경  
  - GCP 환경  
+ - code-server 
 2. Spark local mode 최소(pyspark + Jupyter) 실행  
 3. pyspark 최소 설치로 원격 spark cluster 사용하기  
 4. Spark local mode + Hdfs + Hive 실행  
