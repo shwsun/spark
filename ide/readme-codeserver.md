@@ -78,5 +78,11 @@ curl -fsSL https://code-server.dev/install.sh | sh
 code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
 cat ~/.config/code-server/config.yaml  
 ```
+  
+spark scala 개발 환경을 설정하기 위해 extension으로 scala metal 을 설치.  
+jupyter는 code web에서 화면이 보이지 않아서, code 로 실행하지 않고 따로 실행.  
+scala, java : code-server  
+python : jupyter  
+ 
 
 
