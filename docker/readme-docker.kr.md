@@ -59,8 +59,17 @@ docker commit spark-client shwsun/jupyter-spark
   
 ---  
 # HDFS Single + Hive + Spark  
-hdfs cluster를 구성하고 그 위에 hive와 spark를 추가한 container  
+hdfs cluster를 구성하고 그 위에 hive와 spark를 추가한 container 를 구성한다.  
   
+ubuntu에 hadoop single cluster를 구성하는 순서는 아래와 같습니다.  
+1. ubuntu container 
+2. ubuntu apt repo 설정 및 필수 package 설치 - ssh 관련 
+3. jdk 설치  
+4. hadoop 설치 : 패키지 다운로드 및 압축 해제  
+5. hadoop 작동 확인 : standalone, pseudo distribution, pseudo distribution(Yarn)  
+  
+
+
 ### 유용한 site  
 [Hadoop Single Cluster 설치](https://hadoop.apache.org/docs/r3.2.2/hadoop-project-dist/hadoop-common/SingleCluster.html)  
 [Hive wiki] (https://cwiki.apache.org/confluence/display/Hive/Home)
@@ -87,53 +96,78 @@ apt install -y wget
 apt install -y ssh
 apt install -y pdsh
 
+# install java 
+apt install -y openjdk-8-jdk
+# set to the root of your Java installation
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin/
+
+# hadoop 설치 파일 준비  
 mkdir /install-files
 cd /install-files
 # hadoop 3.2.2 (3.2.0)
 wget https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
 mkdir /hadoop
 tar -xvf hadoop-3.2.2.tar.gz -C /hadoop
+# check hadoop installed
+/hadoop/hadoop-3.2.2/bin/hadoop
+
+
+cat <<EOF|tee shells/install-hadoop-single.sh
+sudo -i
+# in spark-hdfs 
+apt update 
+apt install -y wget 
+apt install -y ssh
+apt install -y pdsh
 
 # install java 
 apt install -y openjdk-8-jdk
 # set to the root of your Java installation
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin/
+
+# hadoop 설치 파일 준비  
+mkdir /install-files
+cd /install-files
+# hadoop 3.2.2 (3.2.0)
+wget https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
+mkdir /hadoop
+tar -xvf hadoop-3.2.2.tar.gz -C /hadoop
 # check hadoop installed
 /hadoop/hadoop-3.2.2/bin/hadoop
+EOF
+```
+```bash
+chmod 755 shells/install-hadoop-single.sh
+shells/install-hadoop-single.sh  
+
 ```
   
 ### Hadoop Standalone Operation 
 ```bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export HADOOP_HOME=/hadoop/hadoop-3.2.2
+cd $HADOOP_HOME
 mkdir input
 cp etc/hadoop/*.xml input
 bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.2.jar grep input output 'dfs[a-z.]+'
 cat output/*
+# rm -rdf input output
 ```
   
 ### Pseudo-Distributed Operation  
-etc/hadoop/core-site.xml:
-```xml
-<configuration>
-    <property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://localhost:9000</value>
-    </property>
-</configuration>
-```
-  
-etc/hadoop/hdfs-site.xml:
-```xml
-<configuration>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
-</configuration>
-```
-  
+env var setting 
 ```bash
-cat <<EOF|tee /hadoop/hadoop-3.2.2/etc/hadoop/core-site.xml
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export HADOOP_HOME=/hadoop/hadoop-3.2.2
+```
+
+etc/hadoop/core-site.xml, etc/hadoop/hdfs-site.xml:
+```bash
+# init-pseudo-setting.sh
+HADOOP_HOME=/hadoop/hadoop-3.2.2
+cat <<EOF|tee $HADOOP_HOME/etc/hadoop/core-site.xml
 <configuration>
     <property>
         <name>fs.defaultFS</name>
@@ -142,28 +176,38 @@ cat <<EOF|tee /hadoop/hadoop-3.2.2/etc/hadoop/core-site.xml
 </configuration>
 EOF
 
-cat <<EOF|tee /hadoop/hadoop-3.2.2/etc/hadoop/hdfs-site.xml
+cat <<EOF|tee $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 <configuration>
     <property>
         <name>dfs.replication</name>
         <value>1</value>
     </property>
-</configuration>>
+</configuration>
 EOF
+
+echo "[core-site, hdfs-site] setting for Pseudo-Distributed mode completed"
 ```
   
 #### Setup passphraseless ssh  
 ```bash
-ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+# start ssh 
+cat <<EOF|tee shells/init-ssh.sh
+#ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 chmod 0600 ~/.ssh/authorized_keys
 
-sudo /etc/init.d/ssh start
+#sudo /etc/init.d/ssh start
+/etc/init.d/ssh start
 ssh -o StrictHostKeyChecking=no localhost
+EOF
+
+chmod 755 shells/init-ssh.sh
+shells/init-ssh.sh
 ```
 #### Execution
 ```bash
-cd /hadoop/hadoop-3.2.2
+cd $HADOOP_HOME
 # 1. Format the filesystem: 
 bin/hdfs namenode -format
 # 2. Start NameNode daemon and DataNode daemon:
@@ -186,4 +230,14 @@ cat output/*
 bin/hdfs dfs -cat output/*
 # 8. When you're done, stop the daemons with:
 sbin/stop-dfs.sh
+```
+  
+settings to start name node as root 
+```bash
+# in hadoop-env.sh   
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
 ```
