@@ -261,4 +261,46 @@ sbin/stop-dfs.sh
 > docker login -u shwsun -p xxxx
 > docker push shwsun/hdfs
 
+---  
+### YARN on a Single Node 
+assume that ~ 'Make the HDFS directories' instructions are already executed.  
+#### Configure parameters  
+
+mapred, 
+```bash
+# etc/hadoop/mapred-site.xml:
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*</value>
+    </property>
+</configuration>
+
+# etc/hadoop/yarn-site.xml:  
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.env-whitelist</name>
+        <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+    </property>
+</configuration>
+```
+```bash
+# Start ResourceManager daemon and NodeManager daemon: 
+sbin/start-yarn.sh
+# Browse the web interface for the ResourceManager; by default it is available at:
+# ResourceManager - http://localhost:8088/
+
+# Run a MapReduce job. ...
+
+# stop the daemons with:
+sbin/stop-yarn.sh
+```
 
