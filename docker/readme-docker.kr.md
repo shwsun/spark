@@ -206,6 +206,31 @@ chmod 755 shells/init-ssh.sh
 shells/init-ssh.sh
 ```
 #### Execution
+settings to start name node as root 
+```bash
+# in hadoop-env.sh  
+cat <<EOF|tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export HADOOP_HOME=/hadoop/hadoop-3.2.2
+export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
+
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
+
+export PDSH_RCMD_TYPE=ssh
+EOF
+
+
+# $HADOOP_HOME/libexec/hadoop-functions.sh:
+PDSH_RCMD_TYPE=ssh PDSH_SSH_ARGS_APPEND="${HADOOP_SSH_OPTS}" pdsh \
+
+# I fixed this problem for hadoop 3.1.0 by adding
+# PDSH_RCMD_TYPE=ssh
+# in my .bashrc as well as $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+```
 ```bash
 cd $HADOOP_HOME
 # 1. Format the filesystem: 
@@ -216,7 +241,7 @@ sbin/start-dfs.sh
 #  http://localhost:9870/
 # 4. Make the HDFS directories required to execute MapReduce jobs:
 bin/hdfs dfs -mkdir /user
-bin/hdfs dfs -mkdir /user/<username>
+bin/hdfs dfs -mkdir /user/root
 # 5. Copy the input files into the distributed filesystem:
 bin/hdfs dfs -mkdir input
 bin/hdfs dfs -put etc/hadoop/*.xml input
@@ -232,12 +257,3 @@ bin/hdfs dfs -cat output/*
 sbin/stop-dfs.sh
 ```
   
-settings to start name node as root 
-```bash
-# in hadoop-env.sh   
-export HDFS_NAMENODE_USER=root
-export HDFS_DATANODE_USER=root
-export HDFS_SECONDARYNAMENODE_USER=root
-export YARN_RESOURCEMANAGER_USER=root
-export YARN_NODEMANAGER_USER=root
-```
