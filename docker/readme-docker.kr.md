@@ -257,3 +257,8 @@ bin/hdfs dfs -cat output/*
 sbin/stop-dfs.sh
 ```
   
+> docker commit spark-hdfs shwsun/hdfs:single  
+> docker login -u shwsun -p xxxx
+> docker push shwsun/hdfs
+
+
