@@ -199,9 +199,7 @@ chmod 0600 ~/.ssh/authorized_keys
 
 #sudo /etc/init.d/ssh start
 /etc/init.d/ssh start
-ssh -o StrictHostKeyChecking=no localhost
-EOF
-
+ssh -o StrictHostKeyChecking=no local
 chmod 755 shells/init-ssh.sh
 shells/init-ssh.sh
 ```

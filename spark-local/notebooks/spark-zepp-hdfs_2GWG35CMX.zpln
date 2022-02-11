@@ -1,0 +1,217 @@
+{
+  "paragraphs": [
+    {
+      "text": "spark",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 04:59:10.520",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres1\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@234aecff\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644555543329_1178576144",
+      "id": "paragraph_1644555543329_1178576144",
+      "dateCreated": "2022-02-11 04:59:03.329",
+      "dateStarted": "2022-02-11 04:59:10.540",
+      "dateFinished": "2022-02-11 04:59:24.191",
+      "status": "FINISHED"
+    },
+    {
+      "text": "sc",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 04:59:31.550",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres2\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.SparkContext\u001b[0m \u003d org.apache.spark.SparkContext@f16a85e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644555550537_984057406",
+      "id": "paragraph_1644555550537_984057406",
+      "dateCreated": "2022-02-11 04:59:10.537",
+      "dateStarted": "2022-02-11 04:59:31.554",
+      "dateFinished": "2022-02-11 04:59:31.759",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val textDF \u003d spark.read.textFile(\"hdfs://172.17.0.3:9000/user/root/output\")\r\ntextDF.show()",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 05:59:09.064",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----------------+\n|            value|\n+-----------------+\n|       1\tdfsadmin|\n|1\tdfs.replication|\n+-----------------+\n\n\u001b[1m\u001b[34mtextDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[String]\u001b[0m \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://eebad50317d5:4040/jobs/job?id\u003d1"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644555571553_1674701190",
+      "id": "paragraph_1644555571553_1674701190",
+      "dateCreated": "2022-02-11 04:59:31.554",
+      "dateStarted": "2022-02-11 05:59:09.068",
+      "dateFinished": "2022-02-11 05:59:09.528",
+      "status": "FINISHED"
+    },
+    {
+      "text": "spark.read.format(\"text\").load(\"hdfs://172.17.0.3:9000/user/root/output\").show()",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 05:59:52.268",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----------------+\n|            value|\n+-----------------+\n|       1\tdfsadmin|\n|1\tdfs.replication|\n+-----------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://eebad50317d5:4040/jobs/job?id\u003d2"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644558532245_977078102",
+      "id": "paragraph_1644558532245_977078102",
+      "dateCreated": "2022-02-11 05:48:52.245",
+      "dateStarted": "2022-02-11 05:59:52.271",
+      "dateFinished": "2022-02-11 05:59:52.721",
+      "status": "FINISHED"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 05:49:14.017",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644558543791_790219702",
+      "id": "paragraph_1644558543791_790219702",
+      "dateCreated": "2022-02-11 05:49:03.791",
+      "status": "READY"
+    }
+  ],
+  "name": "spark-zepp-hdfs",
+  "id": "2GWG35CMX",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

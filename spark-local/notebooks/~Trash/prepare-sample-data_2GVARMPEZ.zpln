@@ -1,0 +1,75 @@
+{
+  "paragraphs": [
+    {
+      "text": "import socket\r\nimport sys\r\nimport os\r\nfrom pyspark import SparkContext, SparkConf\r\nfrom pyspark.streaming import StreamingContext\r\nfrom pyspark.sql import Row, SparkSession\r\nimport findspark\r\nimport time ",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:12:45.433",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "tableHide": false,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003cconsole\u003e:2: \u001b[31merror: \u001b[0m\u0027.\u0027 expected but \u0027;\u0027 found.\nimport sys\n^\n\u003cconsole\u003e:3: \u001b[31merror: \u001b[0m\u0027.\u0027 expected but \u0027;\u0027 found.\nimport os\n^\n\u003cconsole\u003e:4: \u001b[31merror: \u001b[0m\u0027.\u0027 expected but \u0027;\u0027 found.\nfrom pyspark import SparkContext, SparkConf\n^\n\u003cconsole\u003e:4: \u001b[31merror: \u001b[0m\u0027;\u0027 expected but \u0027import\u0027 found.\nfrom pyspark import SparkContext, SparkConf\n             ^\n\u003cconsole\u003e:5: \u001b[31merror: \u001b[0m\u0027;\u0027 expected but \u0027.\u0027 found.\nfrom pyspark.streaming import StreamingContext\n            ^\n\u003cconsole\u003e:6: \u001b[31merror: \u001b[0m\u0027;\u0027 expected but \u0027.\u0027 found.\nfrom pyspark.sql import Row, SparkSession\n            ^\n\u003cconsole\u003e:8: \u001b[31merror: \u001b[0m\u0027.\u0027 expected but \u0027;\u0027 found.\nimport time\n^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644559417149_1431944458",
+      "id": "paragraph_1644559417149_1431944458",
+      "dateCreated": "2022-02-11 06:03:37.149",
+      "dateStarted": "2022-02-11 06:12:45.437",
+      "dateFinished": "2022-02-11 06:12:45.460",
+      "status": "ERROR"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:12:55.708",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644559965435_165518138",
+      "id": "paragraph_1644559965435_165518138",
+      "dateCreated": "2022-02-11 06:12:45.435",
+      "status": "READY"
+    }
+  ],
+  "name": "prepare-sample-data",
+  "id": "2GVARMPEZ",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

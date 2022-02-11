@@ -1,0 +1,509 @@
+{
+  "paragraphs": [
+    {
+      "text": "!pip install findspark\r\n#!pip install pyspark\r\n!pwd",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:19:34.853",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Requirement already satisfied: findspark in /opt/conda/envs/python_3_with_R/lib/python3.7/site-packages (2.0.0)\r\n\u001b[33mWARNING: Running pip as the \u0027root\u0027 user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\u001b[0m\r\n/opt/zeppelin\r\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560179830_1701419589",
+      "id": "paragraph_1644560179830_1701419589",
+      "dateCreated": "2022-02-11 06:16:19.830",
+      "dateStarted": "2022-02-11 06:19:34.896",
+      "dateFinished": "2022-02-11 06:19:37.767",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# import libraries \r\nimport socket\r\nimport sys\r\nimport os\r\nfrom pyspark import SparkContext, SparkConf\r\nfrom pyspark.streaming import StreamingContext\r\nfrom pyspark.sql import Row, SparkSession\r\nimport findspark\r\nimport time ",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:19:41.093",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560188391_1469054853",
+      "id": "paragraph_1644560188391_1469054853",
+      "dateCreated": "2022-02-11 06:16:28.391",
+      "dateStarted": "2022-02-11 06:19:41.095",
+      "dateFinished": "2022-02-11 06:19:41.203",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# 전역변수 설정 \r\n# local mode \r\nSPARK_LOCAL_MASTER \u003d \"local[3]\"\r\n# client mode \r\nSPARK_CLUSTER_MASTER \u003d \"spark://34.64.97.16:7077\" \r\nSPARK_APP_NAME \u003d \"DATA-Preparation\"\r\nHOST_NAME \u003d socket.gethostname()\r\nPORT \u003d 9999",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:20:00.908",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560249000_194478191",
+      "id": "paragraph_1644560249000_194478191",
+      "dateCreated": "2022-02-11 06:17:29.000",
+      "dateStarted": "2022-02-11 06:20:00.912",
+      "dateFinished": "2022-02-11 06:20:00.972",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# Define path\r\nDATA_ROOT \u003d f\u0027{os.getcwd()}/data\u0027\r\nDATA_PATH \u003d f\u0027{DATA_ROOT}\u0027\r\nprint(DATA_PATH)\r\nprint(HOST_NAME)",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:25:27.822",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "/opt/zeppelin/data\neebad50317d5\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560400910_1048891816",
+      "id": "paragraph_1644560400910_1048891816",
+      "dateCreated": "2022-02-11 06:20:00.910",
+      "dateStarted": "2022-02-11 06:25:27.825",
+      "dateFinished": "2022-02-11 06:25:27.887",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# os.environ[\u0027JAVA_HOME\u0027] \u003d \u0027/usr/lib/jvm/java-8-openjdk-amd64/\u0027\r\n# os.environ[\u0027PATH\u0027] \u003d \u0027/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/\u0027\r\nos.environ[\u0027SPARK_HOME\u0027] \u003d \u0027/opt/conda/envs/python_3_with_R\u0027 #\u0027/usr/local\u0027\r\n# os.environ[\u0027HADOOP_HOME\u0027] \u003d \u0027/hadoop-3.2.2\u0027\r\n# os.environ[\u0027hadoop.home.dir\u0027] \u003d \u0027/hadoop-3.2.2/bin\u0027\r\n# os.environ[\u0027CLASSPATH\u0027] \u003d \u0027$CLASSPATH:/hadoop-3.2.2/spark-3.2.0-bin-hadoop3.2.tar\u0027\r\nfindspark.init()\r\nprint(os.getenv(\u0027JAVA_HOME\u0027))",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:22:14.508",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "/usr/lib/jvm/java-8-openjdk-amd64\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560423605_398233038",
+      "id": "paragraph_1644560423605_398233038",
+      "dateCreated": "2022-02-11 06:20:23.605",
+      "dateStarted": "2022-02-11 06:22:14.510",
+      "dateFinished": "2022-02-11 06:22:14.570",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# Spark session 생성 메서드 \r\ndef init_remote_session():\r\n    #SPARK_CLUSTER_MASTER \u003d \"spark://34.64.108.172:7077\" \r\n    spark \u003d SparkSession.builder.master(SPARK_CLUSTER_MASTER).appName(SPARK_APP_NAME).getOrCreate()\r\n    return spark\r\n    \r\n# local mode 실행 시 메모리를 확장해야 하는 경우 있어서, conf에 memory 변경 추가  \r\ndef init_local_session():\r\n    #SPARK_LOCAL_MASTER \u003d \"local[3]\"\r\n    spark \u003d SparkSession.builder.master(SPARK_LOCAL_MASTER).appName(SPARK_APP_NAME).config(\u0027spark.driver.host\u0027, HOST_NAME).getOrCreate()\r\n    default_conf \u003d spark.sparkContext._conf#.getAll()\r\n    print(f\u0027Old Conf : {default_conf.getAll()}\u0027)\r\n    conf \u003d spark.sparkContext._conf.setAll([\r\n        (\u0027spark.executor.instances\u0027, 1)\r\n        #, (\u0027spark.driver.memory\u0027, \u002712g\u0027), (\u0027spark.executor.memory\u0027, \u00278g\u0027), (\u0027spark.driver.maxResultSize\u0027, \u00278g\u0027)\r\n        , (\u0027spark.driver.allowMultipleContexts\u0027, \u0027true\u0027), (\u0027spark.sql.shuffle.partitions\u0027, 8)\r\n        ##,(\u0027spark.memory.offHeap.enabled\u0027, True), (\u0027spark.memory.offHeap.size\u0027, \u00278g\u0027)\r\n    ])\r\n    spark.sparkContext.stop()\r\n    \r\n    spark \u003d SparkSession.builder.master(SPARK_LOCAL_MASTER).appName(SPARK_APP_NAME).config(conf\u003ddefault_conf).getOrCreate()\r\n    new_conf \u003d spark.sparkContext._conf\r\n    print(f\u0027Updated Conf : {new_conf.getAll()}\u0027)\r\n    return spark",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:22:45.618",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560443741_1756212080",
+      "id": "paragraph_1644560443741_1756212080",
+      "dateCreated": "2022-02-11 06:20:43.741",
+      "dateStarted": "2022-02-11 06:22:45.622",
+      "dateFinished": "2022-02-11 06:22:45.679",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# 스파크 생성 \r\nspark \u003d init_local_session()\r\n# 스파크 클러스터를 실행해 두었다고 가정\r\n#spark \u003d init_remote_session()\r\nsc \u003d spark.sparkContext\r\nsc",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:23:45.967",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Old Conf : [(\u0027spark.master\u0027, \u0027local[3]\u0027), (\u0027spark.driver.allowMultipleContexts\u0027, \u0027true\u0027), (\u0027spark.executor.id\u0027, \u0027driver\u0027), (\u0027spark.driver.host\u0027, \u0027eebad50317d5\u0027), (\u0027spark.driver.port\u0027, \u002745433\u0027), (\u0027spark.app.name\u0027, \u0027DATA-Preparation\u0027), (\u0027spark.app.id\u0027, \u0027local-1644560591297\u0027), (\u0027spark.app.startTime\u0027, \u00271644560591218\u0027), (\u0027spark.rdd.compress\u0027, \u0027True\u0027), (\u0027spark.serializer.objectStreamReset\u0027, \u0027100\u0027), (\u0027spark.executor.instances\u0027, \u00271\u0027), (\u0027spark.sql.warehouse.dir\u0027, \u0027file:/opt/zeppelin/spark-warehouse\u0027), (\u0027spark.submit.pyFiles\u0027, \u0027\u0027), (\u0027spark.submit.deployMode\u0027, \u0027client\u0027), (\u0027spark.sql.shuffle.partitions\u0027, \u00278\u0027), (\u0027spark.ui.showConsoleProgress\u0027, \u0027true\u0027)]\nUpdated Conf : [(\u0027spark.master\u0027, \u0027local[3]\u0027), (\u0027spark.driver.allowMultipleContexts\u0027, \u0027true\u0027), (\u0027spark.executor.id\u0027, \u0027driver\u0027), (\u0027spark.driver.host\u0027, \u0027eebad50317d5\u0027), (\u0027spark.driver.port\u0027, \u002745433\u0027), (\u0027spark.app.name\u0027, \u0027DATA-Preparation\u0027), (\u0027spark.rdd.compress\u0027, \u0027True\u0027), (\u0027spark.app.id\u0027, \u0027local-1644560626451\u0027), (\u0027spark.serializer.objectStreamReset\u0027, \u0027100\u0027), (\u0027spark.executor.instances\u0027, \u00271\u0027), (\u0027spark.sql.warehouse.dir\u0027, \u0027file:/opt/zeppelin/spark-warehouse\u0027), (\u0027spark.submit.pyFiles\u0027, \u0027\u0027), (\u0027spark.submit.deployMode\u0027, \u0027client\u0027), (\u0027spark.app.startTime\u0027, \u00271644560626384\u0027), (\u0027spark.sql.shuffle.partitions\u0027, \u00278\u0027), (\u0027spark.ui.showConsoleProgress\u0027, \u0027true\u0027)]\n22/02/11 06:23:46 WARN Utils: Service \u0027SparkUI\u0027 could not bind on port 4040. Attempting port 4041.\n\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\n        \u003cdiv\u003e\n            \u003cp\u003e\u003cb\u003eSparkContext\u003c/b\u003e\u003c/p\u003e\n\n            \u003cp\u003e\u003ca href\u003d\"http://eebad50317d5:4041\"\u003eSpark UI\u003c/a\u003e\u003c/p\u003e\n\n            \u003cdl\u003e\n              \u003cdt\u003eVersion\u003c/dt\u003e\n                \u003cdd\u003e\u003ccode\u003ev3.2.1\u003c/code\u003e\u003c/dd\u003e\n              \u003cdt\u003eMaster\u003c/dt\u003e\n                \u003cdd\u003e\u003ccode\u003elocal[3]\u003c/code\u003e\u003c/dd\u003e\n              \u003cdt\u003eAppName\u003c/dt\u003e\n                \u003cdd\u003e\u003ccode\u003eDATA-Preparation\u003c/code\u003e\u003c/dd\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n        "
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560492705_340289488",
+      "id": "paragraph_1644560492705_340289488",
+      "dateCreated": "2022-02-11 06:21:32.705",
+      "dateStarted": "2022-02-11 06:23:45.970",
+      "dateFinished": "2022-02-11 06:23:46.533",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# channel, day, seg, setop, 1000\r\nFILE_FORMAT \u003d \u0027parquet\u0027\r\n#FILE_FORMAT \u003d \u0027csv\u0027",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:25:50.892",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560736977_1964865096",
+      "id": "paragraph_1644560736977_1964865096",
+      "dateCreated": "2022-02-11 06:25:36.978",
+      "dateStarted": "2022-02-11 06:25:50.895",
+      "dateFinished": "2022-02-11 06:25:50.953",
+      "status": "FINISHED"
+    },
+    {
+      "text": "# setop data n 개 만들기\r\ndef create_setops():\r\n    setop_count \u003d 10000\r\n    setop_name \u003d [\u0027ST_A\u0027, \u0027ST_B\u0027, \u0027ST_C\u0027, \u0027ST_D\u0027, \u0027ST_E\u0027]\r\n    setops \u003d []\r\n    for s in setop_name:\r\n        for i in range(0, int(setop_count/len(setop_name))):\r\n            setops.append(f\u0027{s}_{i:03d}\u0027)\r\n            \r\n    print(setops[-10:])\r\n    return setops\r\n\r\n# channel, day, seg data 생성 \r\ndef create_others():\r\n    # 20\r\n    channels \u003d [\u0027KBS\u0027, \u0027MBC\u0027, \u0027SBS\u0027, \u0027JTBC\u0027, \u0027CBS\u0027 ,  \u0027OCN\u0027, \u0027TVN\u0027, \u0027TVCH\u0027, \u0027BTN\u0027, \u0027EBS\u0027,  \u0027Arirang\u0027, \u0027JTV\u0027, \u0027GAME-TV\u0027, \u0027HBC\u0027, \u0027BBC\u0027,  \u0027CNN\u0027, \u0027CNBC\u0027, \u0027CCN\u0027, \u0027NHK\u0027, \u0027ABC\u0027] \r\n    days \u003d [\u0027mon\u0027, \u0027tue\u0027, \u0027wed\u0027, \u0027thu\u0027, \u0027fri\u0027, \u0027sat\u0027, \u0027sun\u0027]\r\n    hour_bands \u003d [\u002700\u0027, \u002701\u0027, \u002710\u0027, \u002711\u0027, \u002723\u0027]\r\n    segs \u003d [\u0027Agriculture\u0027, \u0027Game\u0027]\r\n    rows \u003d []\r\n    row \u003d []\r\n    for c in channels:\r\n        for d in days:\r\n            for s in segs:\r\n                row \u003d [c, d, s]\r\n                rows.append(row)\r\n                \r\n    print(rows[:5])\r\n    return rows\r\n\r\ndef merge_to_inventory(setops, rows):\r\n    inven_time \u003d 10000 # 하드코딩 시간\r\n    invens \u003d []\r\n    for r in rows:\r\n        for s in setops:\r\n            invens.append(r + [s, inven_time])\r\n    print(f\u0027Inventory Length : {len(invens):,}\u0027)\r\n    return invens\r\n\r\ndef define_schema():\r\n    from pyspark.sql.types import StructType, StructField, StringType, LongType\r\n    columns \u003d [\r\n        StructField(\"channel\", StringType())\r\n        , StructField(\"day\", StringType())\r\n        , StructField(\"seg\", StringType())\r\n        , StructField(\"setop\", StringType())\r\n        , StructField(\"remains\", LongType())\r\n    ]\r\n    inven_schema \u003d StructType(columns)\r\n    return inven_schema\r\n\r\ndef save_inventory(invens, spark_session\u003dspark, file_name\u003df\u0027{DATA_PATH}/inven\u0027, sample_count\u003d10000):\r\n    inven_schema \u003d define_schema()\r\n    if (sample_count \u003c\u003d 0):\r\n        # all data \r\n        rdd \u003d spark_session.sparkContext.parallelize(invens)\r\n    else:\r\n        # sampling data\r\n        rdd \u003d spark_session.sparkContext.parallelize(invens[:sample_count])\r\n    df \u003d spark_session.createDataFrame(rdd, inven_schema)\r\n    #df.write.save(path\u003dfile_name, format\u003d\u0027csv\u0027, mode\u003d\u0027append\u0027, sep\u003d\u0027,\u0027)\r\n    df.write.save(path\u003dfile_name, format\u003dFILE_FORMAT, mode\u003d\u0027append\u0027, sep\u003d\u0027,\u0027)",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:26:23.272",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560778622_646563112",
+      "id": "paragraph_1644560778622_646563112",
+      "dateCreated": "2022-02-11 06:26:18.623",
+      "dateStarted": "2022-02-11 06:26:23.275",
+      "dateFinished": "2022-02-11 06:26:23.332",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%%time\r\nsetops \u003d create_setops()",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:26:57.798",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[\u0027ST_E_1990\u0027, \u0027ST_E_1991\u0027, \u0027ST_E_1992\u0027, \u0027ST_E_1993\u0027, \u0027ST_E_1994\u0027, \u0027ST_E_1995\u0027, \u0027ST_E_1996\u0027, \u0027ST_E_1997\u0027, \u0027ST_E_1998\u0027, \u0027ST_E_1999\u0027]\nCPU times: user 5.53 ms, sys: 648 µs, total: 6.18 ms\nWall time: 5.66 ms\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560813792_853062095",
+      "id": "paragraph_1644560813792_853062095",
+      "dateCreated": "2022-02-11 06:26:53.792",
+      "dateStarted": "2022-02-11 06:26:57.801",
+      "dateFinished": "2022-02-11 06:26:57.861",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%%time\r\nrows \u003d create_others()",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:27:17.358",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[[\u0027KBS\u0027, \u0027mon\u0027, \u0027Agriculture\u0027], [\u0027KBS\u0027, \u0027mon\u0027, \u0027Game\u0027], [\u0027KBS\u0027, \u0027tue\u0027, \u0027Agriculture\u0027], [\u0027KBS\u0027, \u0027tue\u0027, \u0027Game\u0027], [\u0027KBS\u0027, \u0027wed\u0027, \u0027Agriculture\u0027]]\nCPU times: user 195 µs, sys: 99 µs, total: 294 µs\nWall time: 205 µs\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560833557_735119952",
+      "id": "paragraph_1644560833557_735119952",
+      "dateCreated": "2022-02-11 06:27:13.557",
+      "dateStarted": "2022-02-11 06:27:17.361",
+      "dateFinished": "2022-02-11 06:27:17.424",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%%time\r\ninvens \u003d merge_to_inventory(setops, rows)",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:27:32.013",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Inventory Length : 2,800,000\nCPU times: user 2.13 s, sys: 169 ms, total: 2.3 s\nWall time: 2.31 s\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560848897_132381182",
+      "id": "paragraph_1644560848897_132381182",
+      "dateCreated": "2022-02-11 06:27:28.897",
+      "dateStarted": "2022-02-11 06:27:32.016",
+      "dateFinished": "2022-02-11 06:27:34.388",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%%time\r\n# invens data 파일로 저장하기 \r\n# gcp vm local : 12 s. csv - 90 MB, parq - 4.5 MB, 280만 rows \r\nSAMPLING_COUNT \u003d int(1e7)\r\nTABLE_NAME \u003d f\u0027{DATA_PATH}/inven\u0027\r\nTABLE_NAME \u003d f\u0027hdfs://172.17.0.3:9000/user/root/inven\u0027\r\n# need file permission  \r\n#TABLE_NAME \u003d f\u0027file:///home\u0027\r\n\r\nprint(f\u0027SAMPLING_COUNT : {SAMPLING_COUNT:,}\u0027)\r\nprint(f\u0027TABLE_NAME : {TABLE_NAME}\u0027)\r\nprint(f\u0027Inventory Length : {len(invens):,}\u0027)\r\n      \r\nsave_inventory(invens, spark, TABLE_NAME, SAMPLING_COUNT)",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:29:09.932",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "SAMPLING_COUNT : 10,000,000\nTABLE_NAME : hdfs://172.17.0.3:9000/user/root/inven\nInventory Length : 2,800,000\n22/02/11 06:29:16 WARN TaskSetManager: Stage 0 contains a task of very large size (22540 KiB). The maximum recommended task size is 1000 KiB.\n\r[Stage 0:\u003e                                                          (0 + 3) / 3]\rCPU times: user 1.54 s, sys: 185 ms, total: 1.73 s\nWall time: 19 s\n\r                                                                                \r"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560888647_1505189635",
+      "id": "paragraph_1644560888647_1505189635",
+      "dateCreated": "2022-02-11 06:28:08.647",
+      "dateStarted": "2022-02-11 06:29:09.935",
+      "dateFinished": "2022-02-11 06:29:29.025",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%%time \r\n# 저장 결과 확인하기 \r\nlines \u003d spark.read.format(FILE_FORMAT).schema(define_schema()).option(\u0027path\u0027, TABLE_NAME).load()\r\ndata_count \u003d lines.count()\r\nprint(f\u0027DATA Count : {data_count:,}\u0027)\r\nlines.show(10)",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:32:49.987",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "DATA Count : 2,800,000\n+-------+---+----+--------+-------+\n|channel|day| seg|   setop|remains|\n+-------+---+----+--------+-------+\n|    TVN|fri|Game|ST_B_864|  10000|\n|    TVN|fri|Game|ST_B_865|  10000|\n|    TVN|fri|Game|ST_B_866|  10000|\n|    TVN|fri|Game|ST_B_867|  10000|\n|    TVN|fri|Game|ST_B_868|  10000|\n|    TVN|fri|Game|ST_B_869|  10000|\n|    TVN|fri|Game|ST_B_870|  10000|\n|    TVN|fri|Game|ST_B_871|  10000|\n|    TVN|fri|Game|ST_B_872|  10000|\n|    TVN|fri|Game|ST_B_873|  10000|\n+-------+---+----+--------+-------+\nonly showing top 10 rows\n\nCPU times: user 15.8 ms, sys: 0 ns, total: 15.8 ms\nWall time: 429 ms\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560998992_1221640322",
+      "id": "paragraph_1644560998992_1221640322",
+      "dateCreated": "2022-02-11 06:29:58.992",
+      "dateStarted": "2022-02-11 06:32:49.992",
+      "dateFinished": "2022-02-11 06:32:50.466",
+      "status": "FINISHED"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2022-02-11 06:23:16.582",
+      "progress": 0,
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1644560586440_1169602294",
+      "id": "paragraph_1644560586440_1169602294",
+      "dateCreated": "2022-02-11 06:23:06.440",
+      "status": "READY"
+    }
+  ],
+  "name": "prepare",
+  "id": "2GWX1KQVH",
+  "defaultInterpreterGroup": "python",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
