@@ -57,6 +57,19 @@ docker commit spark-client shwsun/jupyter-spark
 
 ```
   
+## jupyter-spark Dockerfile  
+spark를 실행/연결하고 jupyter notebook을 이용해 코딩할 수 있는 최소 환경을 아래와 같이 설치합니다.  
+도커 이미지를 만들기 위한 스크립트는 `./jupyter-spark` 경로를 참고합니다.  
+- python3  
+- open jdk 8  
+- pyspark  
+- jupyter lab  
+아래와 같이 `shwsun/jupyter-spark` 컨테이너를 실행하면 jupyter notebook이 `8888` 포트로 실행됩니다.  
+```bash
+docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888:8888 -p 4040-4050:4040-4050 -v /spark-git/spark/spark-local/notebooks:/notebooks shwsun/jupyter-spark:1.0  
+```
+  
+  
 ---  
 # HDFS Single + Hive + Spark  
 hdfs cluster를 구성하고 그 위에 hive와 spark를 추가한 container 를 구성한다.  
