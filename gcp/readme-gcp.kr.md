@@ -1,6 +1,6 @@
 # GCP VM 설정하기  
 spark-env, 4vCPU, RAM 16GB, HDD 200GB, Ubuntu 18.04  
-Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050, 7077, 8080, 8088, 9999-10010 tcp v4 포트 오픈 조건 추가  
+Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050, 7077, 8080, 8088, 8888,9999-10010 tcp v4 포트 오픈 조건 추가  
   
 [GCP VM](!imgs/gcp-vm.png)  
 [GCP VM Firewall](!imgs/gcp-vm-network-firewall-allow.png)  

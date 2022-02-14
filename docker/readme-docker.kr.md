@@ -22,7 +22,8 @@ sudo chmod +x /usr/local/bin/docker-compose
   
 ---  
 # pyspark+jupyter 
-ubuntu container에 pyspark와 jupyter notebook을 설치  
+ubuntu container에 pyspark와 jupyter notebook을 직접 설치  
+뒤에서 이를 다시 `Dockerfile` 스크립트로 전환한다.  
 
 ```bash
 # ubuntu 환경에 pyspark 설치하기 
@@ -67,8 +68,17 @@ spark를 실행/연결하고 jupyter notebook을 이용해 코딩할 수 있는 
 아래와 같이 `shwsun/jupyter-spark` 컨테이너를 실행하면 jupyter notebook이 `8888` 포트로 실행됩니다.  
 ```bash
 docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888:8888 -p 4040-4050:4040-4050 -v /spark-git/spark/spark-local/notebooks:/notebooks shwsun/jupyter-spark:1.0  
+# token 확인 
+docker exec -it spark-client jupyter server list
 ```
   
+> ## Docker image 만들기  
+```bash
+WORK_ROOT=/spark-git/spark
+cd $WORK_ROOT
+docker build -t shwsun/jupyter-spark:1.0 docker/jupyter-spark/
+```
+>
   
 ---  
 # HDFS Single + Hive + Spark  
