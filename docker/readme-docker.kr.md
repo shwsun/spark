@@ -230,7 +230,7 @@ shells/init-ssh.sh
 settings to start name node as root 
 ```bash
 # in hadoop-env.sh  
-cat <<EOF|tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+cat <<EOF |tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export HADOOP_HOME=/hadoop/hadoop-3.2.2
 export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
@@ -265,6 +265,7 @@ bin/hdfs dfs -mkdir /user
 bin/hdfs dfs -mkdir /user/root
 # 5. Copy the input files into the distributed filesystem:
 bin/hdfs dfs -mkdir input
+bin/hdfs dfs -mkdir output
 bin/hdfs dfs -put etc/hadoop/*.xml input
 # 6. Run some of the examples provided:
 bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.2.jar grep input output 'dfs[a-z.]+'

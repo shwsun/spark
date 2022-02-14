@@ -81,6 +81,9 @@ git config --global user.name "shwsun"
 git config --global user.email "shwsun@naver.com"  
 git remote add origin https://github.com/shwsun/spark.git
 # git hub token 방식 연결 설정. ......  
+git credential-cache exit
+git config credential.helper cache
+git push https://github.com/shwsun/spark.git
 
 ```
   
