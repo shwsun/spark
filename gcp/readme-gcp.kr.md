@@ -1,9 +1,16 @@
 # GCP VM 설정하기  
-spark-env, 4vCPU, RAM 16GB, HDD 200GB, Ubuntu 18.04  
-Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050, 7077, 8080, 8088, 8888,9999-10010 tcp v4 포트 오픈 조건 추가  
+spark-env, 8vCPU, RAM 32GB, HDD 50GB, Ubuntu 18.04 LTS  
+e2-standard-8 : US$225.87, 시간당 약 US$0.31  
+Firewall 정책에 tag spark-env-firewall 추가 : 20-22, 80, 4040-4050, 7077, 8080, 8088, 9999-10010 tcp v4 포트 오픈 조건 추가  
   
-[GCP VM](!imgs/gcp-vm.png)  
-[GCP VM Firewall](!imgs/gcp-vm-network-firewall-allow.png)  
+![GCP VM](imgs/gcp-vm.png)  
+![GCP VM Firewall](imgs/gcp-vm-network-firewall-allow.png)  
+
+```bash
+# ubuntu 18 image pull 
+# gcr.io/gcp-runtimes/ubuntu_18_0_4:latest
+gcloud auth configure-docker && docker pull marketplace.gcr.io/google/ubuntu1804:latest
+```
 
 1. GCP VM에 접속하기  
 
@@ -39,6 +46,7 @@ docker run -itd --privileged --name spark-client --hostname spark-client --rm -p
   
 4. Code-Server 설치하기  
 간단하게 진행하기 위해 Docker constainer 버전으로 실행하고, 개발할 소스 코드 경로를 container 에 mount 해서 사용한다.  
+아래에 다시 설명  
 
   
 ### Creating Kafka container  
@@ -103,12 +111,24 @@ wget https://dlcdn.apache.org/kafka/3.0.0/kafka_2.12-3.0.0.tgz
 
 ---  
 # code-server web connect
+설치 등의 작업도 코드서버에서 진행하려면 코드 서버는 베어 메탈로 설치해야 한다.  
+
 1. run code-server web using docker container  
 2. git clone spark project  
 3. enable git connection setting in code-server  
   
 ```bash 
+sudo -i
+# git clone 
+mkdir /spark-git 
+cd /spark-git
+git clone https://github.com/shwsun/spark.git  
+
+# code-server run 
+# as user . exit from sudo -i 
+#exit 
 mkdir -p ~/.config
+cd /spark-git/spark
 # run code-server in background mode & expose port 80 as a external web connection port 
 # if you want to use your own project is served as code-server work directory, move to that directory and run below.
 # or change '$PWD' into your own directory path 
@@ -122,7 +142,27 @@ sudo docker run -it --name code-server -p 80:8080 \
 # to get login password for code-server 
 cat ~/.config/code-server/config.yaml 
 ```
-### in code-server spark project 
+### code-server를 컨테이너로 사용할 경우  
+```bash 
+# code-server run 
+# as user . exit from sudo -i 
+#exit 
+mkdir -p ~/.config
+cd /spark-git/spark
+# run code-server in background mode & expose port 80 as a external web connection port 
+# if you want to use your own project is served as code-server work directory, move to that directory and run below.
+# or change '$PWD' into your own directory path 
+# cd /spark-git/spark
+sudo docker run -it --name code-server -p 80:8080 \
+  -v "$HOME/.config:/home/coder/.config" \
+  -v "$PWD:/home/coder/project" \
+  -u "$(id -u):$(id -g)" \
+  -e "DOCKER_USER=$USER" \
+  codercom/code-server:latest  > /dev/null 2>&1 & 
+# to get login password for code-server 
+cat ~/.config/code-server/config.yaml 
+```
+in code-server spark project 
 ```bash
 cd /home/coder 
 mkdir -p spark-prj 
