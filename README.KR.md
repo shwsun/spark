@@ -34,3 +34,24 @@ Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명
 8. Spark Cluster + Hdfs + Hive 직접 구성  
 9. Oozie 추가  
 10. Zeppelin 추가  
+  
+---  
+# GCP spark-env 실행하기  
+1. spark-env start 
+2. ssh spark-env 
+3. code-server start 
+```bash
+code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
+cat ~/.config/code-server/config.yaml 
+# 연결 후 /spark-git/spark로 오픈 폴더 변경  
+```
+4. spark-client jupyter run   
+```bash
+docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888:8888 -p 4040-4050:4040-4050 -v /spark-git/spark/spark-local/notebooks:/notebooks shwsun/jupyter-spark:1.0  
+# token 확인 
+docker exec -it spark-client jupyter server list
+```
+5. hdfs-single run   
+```bash
+docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single
+```

@@ -14,7 +14,11 @@
 > 아주 먼 훗날에, 이에 대한 설명을 추가할 수도 있습니다.  
 > 설명할 게 많아서, 언제 추가하게 될 지는 모릅니다.    
   
-
+## Code-Server 직접 실행 
+```bash
+code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
+cat ~/.config/code-server/config.yaml  
+```
 
   
 ---  
