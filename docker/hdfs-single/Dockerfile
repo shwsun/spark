@@ -11,7 +11,7 @@ RUN /install-files/install-hadoop-single.sh
 
 ENV HADOOP_HOME=/hadoop/hadoop-3.2.2
 # 1. Format the filesystem: 
-RUN $HADOOP_HOME/bin/hdfs namenode -format
+#RUN $HADOOP_HOME/bin/hdfs namenode -format
 # 2. Start NameNode daemon and DataNode daemon:
-RUN $HADOOP_HOME/sbin/start-dfs.sh
+#RUN $HADOOP_HOME/sbin/start-dfs.sh
 CMD /bin/bash

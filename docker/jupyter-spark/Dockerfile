@@ -11,5 +11,4 @@ ADD install-pyspark.sh .
 RUN chmod 755 install-pyspark.sh;./install-pyspark.sh 
 # --NotebookApp.token='' --NotebookApp.password=''
 
-RUN jupyter lab --allow-root --ip='*'  --notebook-dir='/notebooks' --workspace='/notebooks' > /dev/null 2>&1 & 
-CMD /bin/bash
+CMD jupyter lab --allow-root --ip='*'  --notebook-dir='/notebooks' --workspace='/notebooks' 

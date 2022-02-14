@@ -74,3 +74,6 @@ EOF
 
 chmod 755 /shells/init-ssh.sh
 /shells/init-ssh.sh
+
+$HADOOP_HOME/bin/hdfs namenode -format
+$HADOOP_HOME/sbin/start-dfs.sh
