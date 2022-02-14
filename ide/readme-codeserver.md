@@ -15,14 +15,7 @@
 > 설명할 게 많아서, 언제 추가하게 될 지는 모릅니다.    
   
 
-```bash
-# code server git 연결 초기 설정  
-git config --global user.name "shwsun"
-git config --global user.email "shwsun@naver.com"  
-git remote add origin https://github.com/shwsun/spark.git
-# git hub token 방식 연결 설정. ......  
 
-```
   
 ---  
 ## Code-Server container 실행  
@@ -77,6 +70,18 @@ sudo -i
 curl -fsSL https://code-server.dev/install.sh | sh
 code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
 cat ~/.config/code-server/config.yaml  
+```
+
+code-server bare metal 에 연결하고 인증(config.yaml 의 키를 입력)하면, web code-server를 사용할 수 있습니다.  
+code-server의 폴더 경로를 `Open Folder` 메뉴를 이용해 <스파크 프로젝트 소스 경로>('/spark-git/spark')로 변경합니다.  
+코드서버의 View>Terminal 메뉴를 이용해 터미널을 열고, 기본 git 설정을 진행합니다.  
+```bash
+# code server git 연결 초기 설정  
+git config --global user.name "shwsun"
+git config --global user.email "shwsun@naver.com"  
+git remote add origin https://github.com/shwsun/spark.git
+# git hub token 방식 연결 설정. ......  
+
 ```
   
 spark scala 개발 환경을 설정하기 위해 extension으로 scala metal 을 설치.  
