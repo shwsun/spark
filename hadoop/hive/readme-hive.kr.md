@@ -63,9 +63,24 @@ hdfs dfs -ls -R /user/hive
 hdfs dfs -chmod g+w /user/hive/warehouse
 hdfs dfs -ls -R /user/hive
 # 5. schematool 띄우기  
-schematool -dbType derby -initSchema
+#schematool -dbType derby -initSchema
+$HIVE_HOME/bin/schematool -dbType derby -initSchema
+# No SuchMethod error 
+# You have 2 incompatible versions of guava on your classpath. Maybe the Hadoop/Spark version or something else you're using is not compatible with this Hive version.
+# $ rm /opt/shared/apache-hive-3.1.2-bin/lib/guava-19.0.jar
+# $ cp /opt/shared/hadoop-3.2.1/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/shared/apache-hive-3.1.2-bin/lib/
 
-
+# 6. hive 서버 실행  
+# Running HiveServer2 and Beeline
+$HIVE_HOME/bin/hiveserver2
+$HIVE_HOME/bin/beeline -u jdbc:hive2://$HS2_HOST:$HS2_PORT
+# Running HCatalog
+# run 
+$HIVE_HOME/hcatalog/sbin/hcat_server.sh
+# use 
+$HIVE_HOME/hcatalog/bin/hcat
+# Running WebHCat (Templeton)
+$HIVE_HOME/hcatalog/sbin/webhcat_server.sh
 ```
 
 하이브 실행 : hive  
