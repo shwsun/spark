@@ -53,5 +53,8 @@ docker exec -it spark-client jupyter server list
 ```
 5. hdfs-single run   
 ```bash
-docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single
+docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single:1.0 
+# hdfs 실행에 3~4분 시간 걸린다. 
+# 아래 명령으로 확인해서 data node 가 표시되면,  hdfs://172.17.0.3:9000 으로 준비 완료. 
+docker exec -it hdfs-single jps
 ```

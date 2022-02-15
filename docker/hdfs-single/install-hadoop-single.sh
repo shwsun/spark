@@ -72,8 +72,11 @@ chmod 0600 ~/.ssh/authorized_keys
 /etc/init.d/ssh start
 EOF
 
+echo "---- HDFS configuration completed. ----"
 chmod 755 /shells/init-ssh.sh
 /shells/init-ssh.sh
-
+echo "---- HDFS SSH connection completed. ----"
 $HADOOP_HOME/bin/hdfs namenode -format
+echo "---- HDFS Starting ... ----"
 $HADOOP_HOME/sbin/start-dfs.sh
+echo "---- HDFS Started. ----"

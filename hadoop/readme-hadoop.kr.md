@@ -14,45 +14,21 @@ container 설치 과정은 [Hdfs on Docker]()를 참고합니다.
 
 ```bash
 sudo -i
-docker run -itd --privileged --name hdfs --hostname hdfs --rm shwsun/hdfs:single 
-docker exec -it hdfs /bin/bash 
-
-# in hdfs container 
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-export HADOOP_HOME=/hadoop/hadoop-3.2.2
-cd $HADOOP_HOME
-mkdir input
-cp etc/hadoop/*.xml input
-bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.2.jar grep input output 'dfs[a-z.]+'
-cat output/*
-# rm -rdf input output
+docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single:1.0 
+# hdfs 실행에 3~4분 시간 걸린다. 
+# 아래 명령으로 확인해서 data node 가 표시되면,  hdfs://172.17.0.3:9000 으로 준비 완료. 
+docker exec -it hdfs-single jps
 ```
 
-pseudo-dist 로 설정한 경우에는 local 방식으로 접근시 에러 발생한다.  
-  
-bin/hdfs dfs -ls hdfs://127.0.0.1:9000 은 정상적으로 처리  
- -> hdfs://172.17.0.3:9000 은 연결 거절된다.  
-bin/hdfs dfs -ls hdfs://172.17.0.3:9000 
-   
-xml 설정 변경해서 외부 연결 가능하게 변경하고 다시 테스트  
-```bash
-export HADOOP_HOME=/hadoop/hadoop-3.2.2
-cd $HADOOP_HOME
-sbin/stop-dfs.sh
-cat <<EOF|tee $HADOOP_HOME/etc/hadoop/core-site.xml
-<configuration>
-    <property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://172.17.0.3:9000</value>
-    </property>
-</configuration>
-EOF
-
-sbin/start-dfs.sh
-```
+> pseudo-dist 로 설정한 경우에는 local 방식으로 접근시 에러 발생한다.  
 
 #### 원격 client spark 에서 hdfs 접근 확인  
 ```scala
 val textDF = spark.read.textFile("hdfs://172.17.0.3:9000/user/root/output")
 textDF.show()
+```
+```python
+spark.read.text("hdfs://172.17.0.3:9000/user/root/input").show()
+# /user/root/input 이 존재하지 않기 때문에 에러 발생하는 것이 정상.
+# 확인 후, 데이터를 쓰고 읽어본다.  
 ```
