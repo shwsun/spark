@@ -13,10 +13,11 @@ docker run -it -u root --name hue -p 8088:8888 gethue/hue:latest
 1. hive 설치 파일 다운로드 및 압축 해제 
 ```bash
 # docker exec -it hdfs-single /bin/bash 
-# wget https://dlcdn.apache.org/hive/hive-2.3.9/apache-hive-2.3.9-bin.tar.gz
-wget https://dlcdn.apache.org/hive/hive-2.3.9/apache-hive-3.1.2-bin.tar.gz
+export HIVE_VER=2.3.9 # 3.1.2
+wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
+#wget https://dlcdn.apache.org/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz
 mkdir /hive
-tar -xvf apache-hive-3.1.2-bin.tar.gz -C /hive
+tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /hive
 ```
 2. 환경변수 설정 
  - .bashrc 
@@ -24,10 +25,11 @@ tar -xvf apache-hive-3.1.2-bin.tar.gz -C /hive
 cat <<EOF |tee -a ~/.bashrc
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop/hadoop-3.2.2
-export HIVE_HOME=/hive/apache-hive-3.1.2-bin
+export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
 export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin:\$HIVE_HOME/bin
 EOF
 source ~/.bashrc 
+echo $PATH
 ```
 
 ```bash
@@ -41,41 +43,43 @@ source ~/.bashrc
 - 설치 스크립트   
 ```bash
 # 1. hive-env.sh 설정 파일 
-echo "HADOOP_HOME=/hadoop/hadoop-3.2.2" > $HIVE_HOME/conf/hive-env.sh
+echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 # 2. hive-site.xml 파일 생성. hive-default.xml.template -> hive-site.xml 
-cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
-<configuration>
-  <property>
-       <name>hive.metastore.warehouse.dir</name>
-       <value>/user/hive/warehouse</value>
-  </property>
-  <property>
-       <name>hive.cli.print.header</name>
-       <value>true</value>
-  </property>
-  <property>
-    <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-  </property>
+cp $HIVE_HOME/conf/hive-default.xml.template hive-site.xml
+# # 
+# cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
+# <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+# <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+# <configuration>
+#   <property>
+#        <name>hive.metastore.warehouse.dir</name>
+#        <value>/user/hive/warehouse</value>
+#   </property>
+#   <property>
+#        <name>hive.cli.print.header</name>
+#        <value>true</value>
+#   </property>
+#   <property>
+#     <name>javax.jdo.option.ConnectionURL</name>
+#     <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+#   </property>
 
-  <property>
-    <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>org.apache.derby.jdbc.EmbeddedDriver</value>
-  </property>
+#   <property>
+#     <name>javax.jdo.option.ConnectionDriverName</name>
+#     <value>org.apache.derby.jdbc.EmbeddedDriver</value>
+#   </property>
 
-  <property>
-    <name>javax.jdo.option.ConnectionUserName</name>
-    <value>user</value>
-  </property>
+#   <property>
+#     <name>javax.jdo.option.ConnectionUserName</name>
+#     <value>user</value>
+#   </property>
 
-  <property>
-    <name>javax.jdo.option.ConnectionPassword</name>
-    <value>password</value>
-  </property>
-</configuration>
-EOF
+#   <property>
+#     <name>javax.jdo.option.ConnectionPassword</name>
+#     <value>password</value>
+#   </property>
+# </configuration>
+# EOF
 
 # 3. 하이브용 디렉토리 생성 및 확인 
 hdfs dfs -mkdir -p /user/hive/warehouse
@@ -88,10 +92,15 @@ hdfs dfs -ls -R /user/hive
 # hadoop과 hive guava versiob 충돌 해결하기 위해 hadoop lib로 덮어쓰기  
 rm $HIVE_HOME/lib/guava-14.0.1.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
-$HIVE_HOME/bin/schematool -dbType derby -initSchema -userName user --passWord password
+# 스키마 초기화 한 폴더에서 hive 명령 실행해야 한다. 
+$HIVE_HOME/bin/schematool -dbType derby -initSchema
+# relative path 에러 발생 시 초기화 경로 관련 설정을 추가 
+# In the hive-site.xml, replace ${system:java.io.tmpdir}/${system:user.name} by /tmp/mydir as what has been told in
+
+#$HIVE_HOME/bin/schematool -dbType derby -initSchema -userName user --passWord password
 # metastore 정보 확인 
-hive --service schemaTool -dbType derby -upgradeSchema
-hive --service schemaTool -dbType derby -info -userName user --passWord password
+# hive --service schemaTool -dbType derby -upgradeSchema
+# hive --service schemaTool -dbType derby -info -userName user --passWord password
 # No SuchMethod error 
 # You have 2 incompatible versions of guava on your classpath. Maybe the Hadoop/Spark version or something else you're using is not compatible with this Hive version.
 # $ rm /opt/shared/apache-hive-3.1.2-bin/lib/guava-19.0.jar
@@ -100,10 +109,15 @@ hive --service schemaTool -dbType derby -info -userName user --passWord password
 # 6. hive 서버 실행  
 # Running HiveServer2 and Beeline
 $HIVE_HOME/bin/hiveserver2
-$HIVE_HOME/bin/beeline -u jdbc:hive2://$HS2_HOST:$HS2_PORT
-$HIVE_HOME/bin/beeline -u jdbc:hive2://172.17.0.3:10000
-!connect jdbc:hive2://<host>:<port>/<db>;auth=noSasl
-!connect jdbc:hive2://172.17.0.3:10000;auth=noSasl
+# $HIVE_HOME/bin/beeline -u jdbc:hive2://$HS2_HOST:$HS2_PORT
+# $HIVE_HOME/bin/beeline -u jdbc:hive2://172.17.0.3:10000/user
+# $HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000
+# !connect jdbc:hive2://<host>:<port>/<db>;auth=noSasl
+# !connect jdbc:hive2://172.17.0.3:10000/default
+# !connect jdbc:hive2://localhost:10000/default
+$HIVE_HOME/bin/beeline -u jdbc:derby:metastore_db;databaseName=metastore_db;create=true
+!connect jdbc:derby:metastore_db;databaseName=metastore_db;create=true
+
 # sample HiveQL 
 # create database test-db;
 # show databases;
