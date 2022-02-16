@@ -5,5 +5,6 @@ USER root
 RUN mkdir -p /install-files 
 WORKDIR install-files
 COPY install-hadoop-single.sh /install-files/
-RUN chmod 755 /install-files/install-hadoop-single.sh;/install-files/install-hadoop-single.sh;
-CMD /bin/bash
+RUN chmod 755 /install-files/install-hadoop-single.sh
+#;/install-files/install-hadoop-single.sh;
+CMD /install-files/install-hadoop-single.sh
