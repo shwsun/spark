@@ -36,44 +36,61 @@ echo $PATH
    
 - 설치 스크립트   
 ```bash
+# 0. 네트웍 설정  
+cat <<EOF |tee -a /etc/hosts
+spark-client 172.17.0.2
+hadoop    172.17.0.3 
+rdb     172.17.0.4
+hue     172.17.0.5
+EOF
 # 1. hive-env.sh 설정 파일 
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
+##### 2 임베디드 메타스토어 방식 설정 
 # 2. hive-site.xml 파일 생성. hive-default.xml.template -> hive-site.xml 
-cp $HIVE_HOME/conf/hive-default.xml.template $HIVE_HOME/conf/hive-site.xml
-# # 
-# cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
-# <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-# <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
-# <configuration>
-#   <property>
-#        <name>hive.metastore.warehouse.dir</name>
-#        <value>/user/hive/warehouse</value>
-#   </property>
-#   <property>
-#        <name>hive.cli.print.header</name>
-#        <value>true</value>
-#   </property>
-#   <property>
-#     <name>javax.jdo.option.ConnectionURL</name>
-#     <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-#   </property>
+#cp $HIVE_HOME/conf/hive-default.xml.template $HIVE_HOME/conf/hive-site.xml 
+cat $HIVE_HOME/conf/hive-default.xml.template |sed 's/<\/configuration>/ /g'|sed 's/&#8;/ /g' > $HIVE_HOME/conf/hive-site.xml
+cat <<EOF |tee -a $HIVE_HOME/conf/hive-site.xml 
+  <property>
+    <name>system:java.io.tmpdir</name>
+    <value>/tmp/hive/java</value>
+  </property>
+  <property>
+    <name>system:user.name</name>
+    <value>\${user.name}</value>
+  </property>
+</configuration>
+EOF
+cat  $HIVE_HOME/conf/hive-site.xml 
 
-#   <property>
-#     <name>javax.jdo.option.ConnectionDriverName</name>
-#     <value>org.apache.derby.jdbc.EmbeddedDriver</value>
-#   </property>
+##### 2 리모트 메타스토어 방식 설정 
+cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+                <name>hive.metastore.local</name>
+                <value>false</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionURL</name>
+                <value>jdbc:postgresql://rdb:5432/metastore_db</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionDriverName</name>
+                <value>org.postgresql.Driver</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionUserName</name>
+                <value>postgres</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnctionPassword</name>
+                <value>1234</value>
+        </property>
+</configuration>
+EOF
 
-#   <property>
-#     <name>javax.jdo.option.ConnectionUserName</name>
-#     <value>user</value>
-#   </property>
 
-#   <property>
-#     <name>javax.jdo.option.ConnectionPassword</name>
-#     <value>password</value>
-#   </property>
-# </configuration>
-# EOF
 
 # 3. 하이브용 디렉토리 생성 및 확인 
 hdfs dfs -mkdir -p /user/hive/warehouse
@@ -97,8 +114,11 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 아래에서 hiveserver2, beeline 등을 실행할 때, 실행하는 경로 하위에 존재하는 데이터베이스를 이용해 연결하게 된다.
 # 따라서, 다른 경로에서 명령을 실행하면, 잘못된 메타스토어에 연결을 시도해서 에러가 발생한다.  
 #mkdir -p /hive-meta;cd /hive-meta
+# 임베디드 방식 
 cd $HIVE_HOME
 $HIVE_HOME/bin/schematool -dbType derby -initSchema
+## 리모트 방식 
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
 # relative path 에러 발생 시 초기화 경로 관련 설정을 추가 
 # In the hive-site.xml, replace ${system:java.io.tmpdir}/${system:user.name} by /tmp/mydir as what has been told in
 # metastore 정보 확인 
@@ -108,18 +128,23 @@ $HIVE_HOME/bin/schematool -dbType derby -initSchema
 # Running HiveServer2 and Beeline
 #cd /hive-meta;$HIVE_HOME/bin/hiveserver2
 $HIVE_HOME/bin/hiveserver2
-# $HIVE_HOME/bin/beeline -u jdbc:hive2://$HS2_HOST:$HS2_PORT
-# $HIVE_HOME/bin/beeline -u jdbc:hive2://172.17.0.3:10000/default
-# $HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000
-# !connect jdbc:hive2://<host>:<port>/<db>;auth=noSasl
-#cd /hive-meta;$HIVE_HOME/bin/beeline -u jdbc:derby:metastore_db;databaseName=metastore_db;create=true
+# 7. client 연결  
+# 로컬 연결  
+# WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+$HIVE_HOME/bin/beeline -u jdbc:hive2://
+# 임베디드 메타스토어 연결
 $HIVE_HOME/bin/beeline -u jdbc:derby:metastore_db;databaseName=metastore_db;create=true
+## 리모트 연겨 
+$HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://172.17.0.4:5432/metastore_db
+# hive-site에 메타스토어 url 을 javax.jdo.option.ConnectionURL 에 지정한 경우에는 해당 값으로 연결
+# $HIVE_HOME/bin/beeline -u jdbc:derby://master:1527/metastore_db;create=true
 
 #!connect jdbc:derby:metastore_db;databaseName=metastore_db;create=true
 
 # sample HiveQL 
 # create table test_first(id int);
 # insert into test_first(id) values(222);
+# insert into test_first select EXPLODE(SPLIT("1,2,3",","));
 # select * from test_first;
 # !q
 
@@ -134,88 +159,125 @@ $HIVE_HOME/hcatalog/sbin/webhcat_server.sh
 ```
 2.x 에서는 init schema 실행한 경로에서 hiveserver2를 실행해야만 beeline이 정상 연결된다.  
 3.1.2 에서는 실행 경로 상관없이 beeline이 정상 연결되지만, 여전히 derby url로만 연결된다.  
+
   
-thrift(10000) 설정과 hadoop user 설정 등 확인해 보고 다시 실행해 본다.  
+---  
+## 원격 RDB metastore 연동 
 ```bash
-#hadoop core-site 추가 property
-<property>
-<name>hadoop.proxyuser.dikshant.groups</name>
-<value>*</value>
-</property>
-<property>
-<name>hadoop.proxyuser.dikshant.hosts</name>
-<value>*</value>
-</property>
-<property>
-<name>hadoop.proxyuser.server.hosts</name>
-<value>*</value>
-</property>
-<property>
-<name>hadoop.proxyuser.server.groups</name>
-<value>*</value>
-</property>
+docker run --name rdb -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres:13
+docker exec -u postgres -it rdb  /bin/bash
+# in container 
+psql
+create database metastore_db owner=postgres;
+create schema authorization postgres;
+\l
+\q
 ```
-위의 dikshant 이용해서 아래와 같이 연결해 본다.  
+
 ```bash
-beeline -n dikshant -u jdbc:hive2://localhost:10000
-```
-  
-- beeline -u jdbc:hive2://  
-hive-site.xml 에 아래와 같은 내용 추가  
-```bash
-# 치환
-#sed 's/addrass/address/' list.txt
-# 삭제 
-#sed '/addrass/d' list.txt
-# 실행 
-cat $HIVE_HOME/conf/hive-site.xml | sed 's/</configuration>/#insert_new_prop/g'| > $HIVE_HOME/conf/hive-site.xml
-cat << EOF |tee -a $HIVE_HOME/conf/hive-site.xml 
-  <property>
-    <name>system:java.io.tmpdir</name>
-    <value>/tmp/hive/java</value>
-  </property>
-  <property>
-    <name>system:user.name</name>
-    <value>${user.name}</value>
-  </property>
+cat <<EOF |tee -a /etc/hosts
+spark-client 172.17.0.2
+hadoop    172.17.0.3 
+rdb     172.17.0.4
+hue     172.17.0.5
+EOF
+# kill hiveserver2 beeline  
+cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+                <name>hive.metastore.local</name>
+                <value>false</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionURL</name>
+                <value>jdbc:postgresql://rdb:5432/metastore_db</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionDriverName</name>
+                <value>org.postgresql.Driver</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionUserName</name>
+                <value>postgres</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnctionPassword</name>
+                <value>1234</value>
+        </property>
 </configuration>
 EOF
+
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
+
+$HIVE_HOME/bin/hiveserver2
+
+$HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://172.17.0.4:5432/metastore_db
+# beeline> select table_schema, table_name from information_schema.tables;
 ```
-```xml
-  <property>
-    <name>system:java.io.tmpdir</name>
-    <value>/tmp/hive/java</value>
-  </property>
-  <property>
-    <name>system:user.name</name>
-    <value>${user.name}</value>
-  </property>
-```
+
+
 ---  
+# HUE  
+- hue db creation 
+```sql
+create database hue_d with lc_collate='en_US.utf8';
+create user hue_u with password '1234';
+grant all privileges on database hue_d to hue_u;
+```
+
+hue db 설정 변경 
+```bash
+docker run -it -u root --name hue -p 8088:8888 gethue/hue:latest /bin/bash
+# docker run -it -u root --name hue -p 8088:8888 shwsun/hue /bin/bash
+cat <<EOF |tee -a /etc/hosts
+spark-client 172.17.0.2
+hadoop    172.17.0.3 
+rdb     172.17.0.4
+hue     172.17.0.5
+EOF
+
+vi desktop/conf/hue.ini
+```
+```ini
+[desktop]
+[[database]]
+host=rdb  # 172.17.0.4
+engine=postgresql_psycopg2
+user=hue_u
+password=1234
+name=hue_d
+
+[beeswax]
+hive_server_host=hadoop
+; hive_server_host=172.17.0.3
+
+[notebook]
+[[interpreters]]
+[[[hive]]]
+name=Hive
+interface=hiveserver2
+
+[[[postgresql]]]
+name = postgresql
+interface=sqlalchemy
+options='{"url": "postgresql://hue_u:1234@rdb:5432/hue_d"}'
+; options='{"url": "postgresql://hue_u:1234@172.17.0.4:5432/hue_d"}'
+```
+  
+```bash
+docker commit hue shwsun/hue
+docker login -u shwsun 
+# 
+docker push shwsun/hue
+docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
+```
 
 
 > run hue container 
 ```bash
-docker run -it -p 8888:8888 gethue/hue:latest
-docker run -it -u root --name hue -p 8088:8888 gethue/hue:latest
+docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
 #http://34.125.237.158:8088/
 ```
   
-# build Hue docker 
-```bash
-# hue apt install 진행하기 위해 root로 로그인  
-# docker run hue -> login root -> intall & config -> commit -> push custom hue image 
-# docker exec -it hue -u root /bin/bash 
-
-docker build https://github.com/cloudera/hue.git#release-4.10.0 -t gethue/hue:4.10.0 -f tools/docker/hue/Dockerfile
-docker tag gethue/hue:4.10.0 gethue/hue:latest
-docker images
-docker login -u gethue
-docker push gethue/hue
-docker push gethue/hue:4.10.0
-
-docker build https://github.com/cloudera/hue.git#release-4.10.0 -t gethue/nginx:4.10.0 -f tools/docker/nginx/Dockerfile;
-docker tag gethue/nginx:4.10.0 gethue/nginx:latest
-docker push gethue/nginx
-docker push gethue/nginx:4.10.0
-```

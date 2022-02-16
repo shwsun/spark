@@ -51,6 +51,8 @@ docker run -itd --privileged --name spark-client --hostname spark-client --rm -p
 # token 확인 
 docker exec -it spark-client jupyter server list
 ```
+
+
 5. hdfs-single run   
 ```bash
 docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single:1.0 
@@ -58,3 +60,29 @@ docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shws
 # 아래 명령으로 확인해서 data node 가 표시되면,  hdfs://172.17.0.3:9000 으로 준비 완료. 
 docker exec -it hdfs-single jps
 ```
+6. hive 외부 metastore 사용하는 경우. metastore rdb 실행  
+```bash
+docker run --name rdb -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres
+# sql 접속해서 metastore_db 생성... 
+```
+7. rdb 연결하도록 hive 재실행  
+
+8. Hue 실행  
+  
+---  
+# network config  
+hdfs, hive, hue, postgre(hue meta, hive meta, rdb), jupyter-client 간의 원활한 통신을 위해 내부 네트웍을 아래와 같이 설정  
+/etc/hosts 또는 도커 컴포즈로 생성  
+```h
+spark-client 172.17.0.2
+hadoop    172.17.0.3 
+rdb     172.17.0.4
+hue     172.17.0.5
+```
+  
+# RDB - Postgre sql  
+hive metastore로 사용할 rdb로 postgre를 아래와 같이 실행한다.  
+```bash
+```
+
+
