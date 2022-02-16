@@ -21,12 +21,13 @@ export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/b
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 # 2. hive-site.xml 파일 생성. hive-default.xml.template -> hive-site.xml 
 cp $HIVE_HOME/conf/hive-default.xml.template $HIVE_HOME/conf/hive-site.xml
-# 3. 하이브용 디렉토리 생성 및 확인 
-hdfs dfs -mkdir -p /user/hive/warehouse
-hdfs dfs -ls -R /user/hive
-# 4. 쓰기 권한 추가 및 확인  
-hdfs dfs -chmod g+w /user/hive/warehouse
-hdfs dfs -ls -R /user/hive
+# docker 생성 시점에는 아직 hadoop run하지 않은 상태
+# # 3. 하이브용 디렉토리 생성 및 확인 
+# hdfs dfs -mkdir -p /user/hive/warehouse
+# hdfs dfs -ls -R /user/hive
+# # 4. 쓰기 권한 추가 및 확인  
+# hdfs dfs -chmod g+w /user/hive/warehouse
+# hdfs dfs -ls -R /user/hive
 # 5. guava version 맞추기    
 rm $HIVE_HOME/lib/guava-19.0.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
