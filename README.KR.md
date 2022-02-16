@@ -66,8 +66,19 @@ docker run --name rdb -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres
 # sql 접속해서 metastore_db 생성... 
 ```
 7. rdb 연결하도록 hive 재실행  
+```bash
+# kill hiveserver2 
+# update hive-site.xml - 
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
+$HIVE_HOME/bin/hiveserver2
+```
+hive-site.xml 수정은 다음 안내 페이지 참고  
+[hive-site.xml 수정](hadoop/hive/readme-hive.kr.md)  
 
 8. Hue 실행  
+```bash
+docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
+```
   
 ---  
 # network config  

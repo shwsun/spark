@@ -213,7 +213,7 @@ $HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --pass
 
 $HIVE_HOME/bin/hiveserver2
 
-$HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://172.17.0.4:5432/metastore_db
+$HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metastore_db
 # beeline> select table_schema, table_name from information_schema.tables;
 ```
 
