@@ -5,5 +5,5 @@ USER root
 #RUN mkdir -p /install-files 
 WORKDIR install-files
 COPY install-hive-single.sh /install-files/
-RUN chmod 755 /install-files/*.sh;/install-files/install-hadoop-single.sh;/install-files/install-hive-single.sh
-CMD /bin/bash
+RUN chmod 755 /install-files/*.sh
+CMD /install-files/install-hadoop-single.sh;/install-files/install-hive-single.sh;/bin/bash
