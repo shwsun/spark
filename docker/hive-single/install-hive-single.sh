@@ -1,82 +1,34 @@
 # install-hadoop-single.sh 
-# in spark-hdfs 
-# sudo -i 
-apt-get update 
-apt-get install -y wget ssh pdsh
-# apt install -y ssh
-# apt install -y pdsh
+echo "---- Hive installation started. ----"
+export HIVE_VER=3.1.2 # 2.3.9
+wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
+mkdir /hive
+tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /hive
 
-# install java 
-apt-get install -y openjdk-8-jdk
-# set to the root of your Java installation
-# need to move export sentence into .bashrc to share this env var setting 
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin/
-
-# hadoop 설치 파일 준비  
-# mkdir /install-files
-# cd /install-files
-# hadoop 3.2.2 (3.2.0)
-wget https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
-mkdir -p /hadoop
-tar -xvf hadoop-3.2.2.tar.gz -C /hadoop
-HADOOP_HOME=/hadoop/hadoop-3.2.2
-# check hadoop installed
-# /hadoop/hadoop-3.2.2/bin/hadoop
-
-#### HDFS Distribution mode setting ####  
-cat << EOF |tee $HADOOP_HOME/etc/hadoop/core-site.xml  
-<configuration>
-    <property> 
-        <name>fs.defaultFS</name>
-        <value>hdfs://172.17.0.3:9000</value>
-    </property>
-</configuration>
-EOF
-#  
-cat <<EOF |tee $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-<configuration>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
-</configuration>
-EOF
-
-echo "[core-site, hdfs-site] setting for Pseudo-Distributed mode completed"
-
-# in hadoop-env.sh  
-cat <<EOF |tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+cat <<EOF |tee -a ~/.bashrc
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop/hadoop-3.2.2
-export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
-
-export HDFS_NAMENODE_USER=root
-export HDFS_DATANODE_USER=root
-export HDFS_SECONDARYNAMENODE_USER=root
-export YARN_RESOURCEMANAGER_USER=root
-export YARN_NODEMANAGER_USER=root
-
-export PDSH_RCMD_TYPE=ssh
+export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin:\$HIVE_HOME/bin
 EOF
+#source ~/.bashrc 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/hadoop/hadoop-3.2.2
+export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/bin
 
-
-# start ssh 
-mkdir -p /shells
-cat <<EOF |tee /shells/init-ssh.sh
-#ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-chmod 0600 ~/.ssh/authorized_keys
-
-/etc/init.d/ssh start
-EOF
-
-echo "---- HDFS configuration completed. ----"
-chmod 755 /shells/init-ssh.sh
-/shells/init-ssh.sh
-echo "---- HDFS SSH connection completed. ----"
-$HADOOP_HOME/bin/hdfs namenode -format
-echo "---- HDFS Starting ... ----"
-$HADOOP_HOME/sbin/start-dfs.sh
-echo "---- HDFS Started. ----"
+# 1. hive-env.sh 설정 파일 
+echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
+# 2. hive-site.xml 파일 생성. hive-default.xml.template -> hive-site.xml 
+cp $HIVE_HOME/conf/hive-default.xml.template $HIVE_HOME/conf/hive-site.xml
+# 3. 하이브용 디렉토리 생성 및 확인 
+hdfs dfs -mkdir -p /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 4. 쓰기 권한 추가 및 확인  
+hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 5. guava version 맞추기    
+rm $HIVE_HOME/lib/guava-19.0.jar
+cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
+# 6. init schema 
+echo "---- Ready to init schama ----"
