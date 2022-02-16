@@ -7,7 +7,8 @@ docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm -p 1
 # 아래 명령을 주기적으로 실행해서 name node 등이 목록에 표시되면 hdfs 준비된 것.
 docker exec -it hdfs-single jps 
 ```
-
+![HDFS 서버 실행 완료 확인 방법](imgs/hdfs-single-ready-check.png)  
+  
 ---  
 
 hdfs single 도커 이미지를 재사용하지 않고 직접 생성하려면 아래와 같이 진행합니다.  
