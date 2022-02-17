@@ -103,7 +103,7 @@ docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
 ---  
 # postgre hive jdbc connector 
 ```bash
-cd /install_files
+cd /install-files
 wget https://jdbc.postgresql.org/download/postgresql-42.2.23.jar  
 mv postgresql-42.2.23.jar /usr/share/java/postgresql-jdbc.jar
 chmod 644 /usr/share/java/postgresql-jdbc.jar

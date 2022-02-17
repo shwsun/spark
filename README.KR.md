@@ -54,14 +54,15 @@ docker exec -it spark-client jupyter server list
 
 5. hive-single run   
 ```bash
-docker run -itd --privileged --name hive-s --hostname hive-s -p 10000:10000 --rm shwsun/hive-single
+#docker run -itd --privileged --name hive-s --hostname hive-s -p 10000:10000 --rm shwsun/hive-single
+docker run -itd --privileged --name hive-s --hostname hive-s --rm shwsun/hive-single
 # detach 모드로 실행했기 때문에 hdfs 설치/실행 전에 도커 실행은 완료된다. 
 # 아래 명령을 주기적으로 실행해서 name node 등이 목록에 표시되면 hdfs 준비된 것.
 docker exec -it hive-s jps 
 ```
 6. hive 외부 metastore 사용하는 경우. metastore rdb 실행  
 ```bash
-docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres:13
+docker run --name rdb -p 10000:10000 -e POSTGRES_PASSWORD=1234 -d  postgres:13
 # psql console 
 # ## Hive Metastore 생성 
 docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
