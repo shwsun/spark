@@ -45,6 +45,11 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
                 <value>1234</value>
         </property>
         <property>
+            <name>hive.metastore.uris</name>
+            <value>thrift://hadoop:9083</value>
+            <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
+        </property>
+        <property>
                 <name>hive.server2.thrift.bind.host</name>
                 <value>hadoop</value>
         </property>

@@ -61,7 +61,7 @@ docker exec -it hive-s jps
 ```
 6. hive 외부 metastore 사용하는 경우. metastore rdb 실행  
 ```bash
-docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres
+docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres:13
 # psql console 
 # ## Hive Metastore 생성 
 docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
