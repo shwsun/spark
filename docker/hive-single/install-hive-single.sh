@@ -17,13 +17,6 @@ export HADOOP_HOME=/hadoop/hadoop-3.2.2
 export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/bin
 
-# 0. 네트웍 설정  
-cat <<EOF |tee -a /etc/hosts
-spark-client 172.17.0.2
-hadoop    172.17.0.3 
-rdb     172.17.0.4
-hue     172.17.0.5
-EOF
 # 1. hive-env.sh 설정 파일 
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 ##### 2 리모트 메타스토어 방식 설정 

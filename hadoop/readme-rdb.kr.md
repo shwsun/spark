@@ -10,15 +10,14 @@ Hive metastore로 사용할 DB를 설치하는 방법을 설명한다.
 ## 실행  
 ```bash
 docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres
+# psql console 
+# ## Hive Metastore 생성 
+docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
+docker exec -u postgres -it rdb psql -c "create schema authorization postgres;"
+docker exec -u postgres -it rdb psql -c "\l"
 ```
 
 ---  
-## Hive Metastore 생성  
-```sql
-create database metastore_db owner=postgres;
-create schema authorization postgres;
-\l
-```
 
 postgre용 hive-site.xml 설정  
 rdb : 172.17.0.4  
