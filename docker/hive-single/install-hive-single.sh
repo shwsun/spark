@@ -17,19 +17,61 @@ export HADOOP_HOME=/hadoop/hadoop-3.2.2
 export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/bin
 
+# 0. 네트웍 설정  
+cat <<EOF |tee -a /etc/hosts
+spark-client 172.17.0.2
+hadoop    172.17.0.3 
+rdb     172.17.0.4
+hue     172.17.0.5
+EOF
 # 1. hive-env.sh 설정 파일 
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
-# 2. hive-site.xml 파일 생성. hive-default.xml.template -> hive-site.xml 
-cp $HIVE_HOME/conf/hive-default.xml.template $HIVE_HOME/conf/hive-site.xml
+##### 2 리모트 메타스토어 방식 설정 
+cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+                <name>hive.metastore.local</name>
+                <value>false</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionURL</name>
+                <value>jdbc:postgresql://rdb:5432/metastore_db</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionDriverName</name>
+                <value>org.postgresql.Driver</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionUserName</name>
+                <value>postgres</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnctionPassword</name>
+                <value>1234</value>
+        </property>
+</configuration>
+EOF
+
+
 # docker 생성 시점에는 아직 hadoop run하지 않은 상태
-# # 3. 하이브용 디렉토리 생성 및 확인 
-# hdfs dfs -mkdir -p /user/hive/warehouse
-# hdfs dfs -ls -R /user/hive
-# # 4. 쓰기 권한 추가 및 확인  
-# hdfs dfs -chmod g+w /user/hive/warehouse
-# hdfs dfs -ls -R /user/hive
+# 3. 하이브용 디렉토리 생성 및 확인 
+hdfs dfs -mkdir -p /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 4. 쓰기 권한 추가 및 확인  
+hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
 # 5. guava version 맞추기    
 rm $HIVE_HOME/lib/guava-19.0.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. init schema 
 echo "---- Ready to init schama ----"
+## 리모트 방식 
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
+# 7. hive 서버 실행  
+$HIVE_HOME/bin/hiveserver2
+echo "---- hiveserver2 started ----"
+
+
+
