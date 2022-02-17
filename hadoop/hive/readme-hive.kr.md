@@ -123,6 +123,7 @@ $HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --pass
 # In the hive-site.xml, replace ${system:java.io.tmpdir}/${system:user.name} by /tmp/mydir as what has been told in
 # metastore 정보 확인 
 # hive --service schemaTool -dbType derby -info -userName user --passWord password
+$HIVE_HOME/bin/schemaTool -dbType postgres -info -userName postgres --passWord 1234
 
 # 6. hive 서버 실행  
 # Running HiveServer2 and Beeline
@@ -188,7 +189,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 <configuration>
         <property>
                 <name>hive.metastore.local</name>
-                <value>false</value>
+                <value>true</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionURL</name>
@@ -215,6 +216,7 @@ $HIVE_HOME/bin/hiveserver2
 
 $HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metastore_db
 # beeline> select table_schema, table_name from information_schema.tables;
+$HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000
 ```
 
 

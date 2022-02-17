@@ -26,11 +26,11 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 <configuration>
         <property>
                 <name>hive.metastore.local</name>
-                <value>false</value>
+                <value>true</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionURL</name>
-                <value>jdbc:postgresql://rdb:5432/metastore_db</value>
+                <value>jdbc:postgresql://rdb:5432/metastore_db?createDatabaseIfNotExist=true</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionDriverName</name>
@@ -43,6 +43,22 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
                 <value>1234</value>
+        </property>
+        <property>
+                <name>hive.server2.thrift.bind.host</name>
+                <value>hadoop</value>
+        </property>
+        <property>
+                <name>hive.server2.thrift.port</name>
+                <value>10000</value>
+        </property>
+        <property>
+            <name>system:java.io.tmpdir</name>
+            <value>/tmp/hive/java</value>
+        </property>
+        <property>
+            <name>system:user.name</name>
+            <value>\${user.name}</value>
         </property>
 </configuration>
 EOF
