@@ -52,30 +52,23 @@ docker run -itd --privileged --name spark-client --hostname spark-client --rm -p
 docker exec -it spark-client jupyter server list
 ```
 
-
-5. hdfs-single run   
+5. hive-single run   
 ```bash
-docker run -itd --privileged --name hdfs-single --hostname hdfs-single --rm shwsun/hdfs-single:1.0 
-# hdfs 실행에 3~4분 시간 걸린다. 
-# 아래 명령으로 확인해서 data node 가 표시되면,  hdfs://172.17.0.3:9000 으로 준비 완료. 
-docker exec -it hdfs-single jps
+docker run -itd --privileged --name hive-s --hostname hive-s -p 10000:10000 --rm shwsun/hive-single
+# detach 모드로 실행했기 때문에 hdfs 설치/실행 전에 도커 실행은 완료된다. 
+# 아래 명령을 주기적으로 실행해서 name node 등이 목록에 표시되면 hdfs 준비된 것.
+docker exec -it hive-s jps 
 ```
 6. hive 외부 metastore 사용하는 경우. metastore rdb 실행  
 ```bash
-docker run --name rdb -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres
-# sql 접속해서 metastore_db 생성... 
+docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres
+# psql console 
+# ## Hive Metastore 생성 
+docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
+docker exec -u postgres -it rdb psql -c "create schema authorization postgres;"
+docker exec -u postgres -it rdb psql -c "\l"
 ```
-7. rdb 연결하도록 hive 재실행  
-```bash
-# kill hiveserver2 
-# update hive-site.xml - 
-$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
-$HIVE_HOME/bin/hiveserver2
-```
-hive-site.xml 수정은 다음 안내 페이지 참고  
-[hive-site.xml 수정](hadoop/hive/readme-hive.kr.md)  
-
-8. Hue 실행  
+7. Hue 실행  
 ```bash
 docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
 ```
@@ -85,10 +78,10 @@ docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
 hdfs, hive, hue, postgre(hue meta, hive meta, rdb), jupyter-client 간의 원활한 통신을 위해 내부 네트웍을 아래와 같이 설정  
 /etc/hosts 또는 도커 컴포즈로 생성  
 ```h
-spark-client 172.17.0.2
-hadoop    172.17.0.3 
-rdb     172.17.0.4
-hue     172.17.0.5
+172.17.0.2 spark-client 
+172.17.0.3 hadoop    
+172.17.0.4 rdb     
+172.17.0.5 hue     
 ```
   
 # RDB - Postgre sql  

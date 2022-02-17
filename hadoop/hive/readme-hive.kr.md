@@ -38,10 +38,10 @@ echo $PATH
 ```bash
 # 0. 네트웍 설정  
 cat <<EOF |tee -a /etc/hosts
-spark-client 172.17.0.2
-hadoop    172.17.0.3 
-rdb     172.17.0.4
-hue     172.17.0.5
+172.17.0.2 spark-client 
+172.17.0.3 hadoop    
+172.17.0.4 rdb
+172.17.0.5 hue
 EOF
 # 1. hive-env.sh 설정 파일 
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
@@ -176,10 +176,10 @@ create schema authorization postgres;
 
 ```bash
 cat <<EOF |tee -a /etc/hosts
-spark-client 172.17.0.2
-hadoop    172.17.0.3 
-rdb     172.17.0.4
-hue     172.17.0.5
+172.17.0.2 spark-client 
+172.17.0.3 hadoop    
+172.17.0.4 rdb
+172.17.0.5 hue
 EOF
 # kill hiveserver2 beeline  
 cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
@@ -220,22 +220,21 @@ $HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metasto
 
 ---  
 # HUE  
-- hue db creation 
-```sql
-create database hue_d with lc_collate='en_US.utf8';
-create user hue_u with password '1234';
-grant all privileges on database hue_d to hue_u;
+- hue db creation  
+```bash
+docker exec -u postgres -it rdb psql -c "create database hue_d with lc_collate='en_US.utf8';"
+docker exec -u postgres -it rdb psql -c "create user hue_u with password '1234';"
+docker exec -u postgres -it rdb psql -c "grant all privileges on database hue_d to hue_u;"
 ```
 
 hue db 설정 변경 
 ```bash
-docker run -it -u root --name hue -p 8088:8888 gethue/hue:latest /bin/bash
-# docker run -it -u root --name hue -p 8088:8888 shwsun/hue /bin/bash
+docker run -it -u root --name hue --hostname hue -p 8088:8888 gethue/hue:latest /bin/bash
+# docker run -it -u root --name hue --hostname hue -p 8088:8888 shwsun/hue /bin/bash
 cat <<EOF |tee -a /etc/hosts
-spark-client 172.17.0.2
-hadoop    172.17.0.3 
-rdb     172.17.0.4
-hue     172.17.0.5
+172.17.0.2      spark-client 
+172.17.0.3      hadoop    
+172.17.0.4      rdb
 EOF
 
 vi desktop/conf/hue.ini
@@ -267,17 +266,13 @@ options='{"url": "postgresql://hue_u:1234@rdb:5432/hue_d"}'
 ```
   
 ```bash
-docker commit hue shwsun/hue
+docker commit hue shwsun/hue:latest
 docker login -u shwsun 
 # 
-docker push shwsun/hue
-docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
-```
-
-
-> run hue container 
-```bash
-docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
+docker push shwsun/hue:latest
+docker run -it --name hue --hostname hue -p 8088:8888 shwsun/hue:latest ./startup.sh
+# docker run -it --name hue --hostname hue -p 8088:8888 shwsun/hue:latest /bin/bash
 #http://34.125.237.158:8088/
 ```
-  
+
+
