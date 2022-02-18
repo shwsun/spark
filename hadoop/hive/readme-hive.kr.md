@@ -122,8 +122,8 @@ $HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --pass
 # relative path 에러 발생 시 초기화 경로 관련 설정을 추가 
 # In the hive-site.xml, replace ${system:java.io.tmpdir}/${system:user.name} by /tmp/mydir as what has been told in
 # metastore 정보 확인 
-# hive --service schemaTool -dbType derby -info -userName user --passWord password
-$HIVE_HOME/bin/schematool -dbType postgres -info -userName meta_u --passWord 1234
+# hive --service schemaTool -dbType derby -info -userName user -passWord password
+$HIVE_HOME/bin/schematool -dbType postgres -info -userName meta_u -passWord md581dc9bdb52d04dc20036dbd8313ed055
 
 # 6. hive 서버 실행  
 # Running HiveServer2 and Beeline

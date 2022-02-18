@@ -77,10 +77,11 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres -passWord 1234
+#$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres -passWord 1234
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema 
 # 7. hive 서버 실행  
 $HIVE_HOME/bin/hiveserver2
-$HIVE_HOME/bin/hive --service metastore 
+#$HIVE_HOME/bin/hive --service metastore 
 echo "---- hiveserver2 started ----"
 
 
