@@ -26,23 +26,23 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 <configuration>
         <property>
                 <name>hive.metastore.local</name>
-                <value>true</value>
+                <value>false</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionURL</name>
-                <value>jdbc:postgresql://rdb:5432/metastore_db?createDatabaseIfNotExist=true</value>
+                <value>jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionDriverName</name>
-                <value>org.postgresql.Driver</value>
+                <value>org.mariadb.jdbc.Driver</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionUserName</name>
-                <value>postgres</value>
+                <value>hive</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
-                <value>1234</value>
+                <value>hive</value>
         </property>
         <property>
             <name>hive.metastore.uris</name>
@@ -77,8 +77,8 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-#$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres -passWord 1234
-$HIVE_HOME/bin/schematool -dbType postgres -initSchema 
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres -passWord 1234
+#$HIVE_HOME/bin/schematool -dbType postgres -initSchema 
 # 7. hive 서버 실행  
 $HIVE_HOME/bin/hiveserver2
 #$HIVE_HOME/bin/hive --service metastore 

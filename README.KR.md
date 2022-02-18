@@ -70,8 +70,13 @@ docker exec -u postgres -it rdb psql -c "create database metastore_db owner=post
 docker exec -u postgres -it rdb psql -c "create schema authorization postgres;"
 docker exec -u postgres -it rdb psql -c "\l"
 
-psql -d meta_u -U md581dc9bdb52d04dc20036dbd8313ed055
+psql -d metastore_db -U postgres
 psql#> \password ==> set password
+
+
+docker run --detach --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive  mariadb:10.5
+
+
 ```
 7. Hue 실행  
 ```bash

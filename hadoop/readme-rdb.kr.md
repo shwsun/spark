@@ -7,6 +7,8 @@ Hive metastore로 사용할 DB를 설치하는 방법을 설명한다.
  - hue metadata  
  - 독립 RDB  
 > ***중요 : 인증모드 변경해야 metastore 등 정상 접속된다. pg_hba.conf ***  
+/usr/share/postgresql/13  
+echo "host all postgres 172.17.0.0/24 trust\n" > /usr/share/postgresql/13/pg_hba.conf
 ## 실행  
 ```bash
 docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres:13
@@ -110,4 +112,23 @@ cp postgresql-42.2.23.jar $HIVE_HOME/lib/postgresql-jdbc.jar
 mv postgresql-42.2.23.jar /usr/share/java/postgresql-jdbc.jar
 chmod 644 /usr/share/java/postgresql-jdbc.jar
 ln -s /usr/share/java/postgresql-jdbc.jar $HIVE_HOME/lib/postgresql-jdbc.jar
+```
+
+---  
+# maria db 
+```bash
+mysql -u root -p
+
+hive user 생성
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+GRANT ALL ON *.* TO 'hive'@LOCALHOST IDENTIFIED BY 'hive';
+FLUSH PRIVILEGES;
+
+exit
+
+hive 유저로 접속
+
+mysql- u hive -p
+
+hive database 생성create database metastore_db;
 ```
