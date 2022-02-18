@@ -4,7 +4,7 @@ pseudo-distribution mode로 작동합니다.
 
 ## 생성해 둔 이미지 실행하기  
 ```bash
-docker run -itd --privileged --name hive-s --hostname hive-s -p 10000:10000 --rm shwsun/hive-single
+docker run -itd --privileged --name hive-s --hostname hive-s --rm shwsun/hive-single
 # detach 모드로 실행했기 때문에 hdfs 설치/실행 전에 도커 실행은 완료된다. 
 # 아래 명령을 주기적으로 실행해서 name node 등이 목록에 표시되면 hdfs 준비된 것.
 docker exec -it hive-s jps 

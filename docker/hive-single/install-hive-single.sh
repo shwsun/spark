@@ -42,7 +42,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
-                <value>1234</value>
+                <value>md581dc9bdb52d04dc20036dbd8313ed055</value>
         </property>
         <property>
             <name>hive.metastore.uris</name>
@@ -60,6 +60,9 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 </configuration>
 EOF
 
+# for postgre md5 password generation 
+#echo -n "1234" | md5sum | awk '{print $1}' 
+# md581dc9bdb52d04dc20036dbd8313ed055
 
 # docker 생성 시점에는 아직 hadoop run하지 않은 상태
 # 3. 하이브용 디렉토리 생성 및 확인 
@@ -74,7 +77,7 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName meta_u --passWord 1234
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName meta_u --passWord md581dc9bdb52d04dc20036dbd8313ed055
 # 7. hive 서버 실행  
 $HIVE_HOME/bin/hiveserver2
 $HIVE_HOME/bin/hive --service metastore 

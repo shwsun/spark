@@ -65,8 +65,9 @@ docker exec -it hive-s jps
 docker run --name rdb -p 10000:10000 -e POSTGRES_PASSWORD=1234 -d  postgres:13
 # psql console 
 # ## Hive Metastore 생성 
-docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
-docker exec -u postgres -it rdb psql -c "create schema authorization postgres;"
+docker exec -u postgres -it rdb psql -c "create user meta_u with password '1234';"
+docker exec -u postgres -it rdb psql -c "create database metastore_db owner=meta_u;"
+docker exec -u postgres -it rdb psql -c "create schema authorization meta_u;"
 docker exec -u postgres -it rdb psql -c "\l"
 ```
 7. Hue 실행  
