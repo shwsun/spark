@@ -119,9 +119,10 @@ ln -s /usr/share/java/postgresql-jdbc.jar $HIVE_HOME/lib/postgresql-jdbc.jar
 ```bash
 mysql -u root -p
 
-hive user 생성
+#hive user 생성
 CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
-GRANT ALL ON *.* TO 'hive'@LOCALHOST IDENTIFIED BY 'hive';
+#GRANT ALL ON *.* TO 'hive'@LOCALHOST IDENTIFIED BY 'hive';
+GRANT ALL ON *.* TO 'hive'@'%' IDENTIFIED BY 'hive';
 FLUSH PRIVILEGES;
 
 exit
@@ -130,5 +131,6 @@ hive 유저로 접속
 
 mysql- u hive -p
 
-hive database 생성create database metastore_db;
+hive database 생성
+create database metastore_db;
 ```
