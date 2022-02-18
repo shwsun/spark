@@ -38,11 +38,11 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionUserName</name>
-                <value>meta_u</value>
+                <value>postgres</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
-                <value>md581dc9bdb52d04dc20036dbd8313ed055</value>
+                <value>1234</value>
         </property>
         <property>
             <name>hive.metastore.uris</name>
@@ -77,7 +77,7 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName meta_u --passWord md581dc9bdb52d04dc20036dbd8313ed055
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres -passWord 1234
 # 7. hive 서버 실행  
 $HIVE_HOME/bin/hiveserver2
 $HIVE_HOME/bin/hive --service metastore 

@@ -6,7 +6,7 @@ Hive metastore로 사용할 DB를 설치하는 방법을 설명한다.
  - hive metastore 
  - hue metadata  
  - 독립 RDB  
-
+> ***중요 : 인증모드 변경해야 metastore 등 정상 접속된다. pg_hba.conf ***  
 ## 실행  
 ```bash
 docker run --name rdb -e POSTGRES_PASSWORD=1234 -d postgres:13
