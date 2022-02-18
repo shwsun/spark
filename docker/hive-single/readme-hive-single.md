@@ -15,6 +15,9 @@ docker exec -it hive-s jps
 docker exec -it hive-s /bin/bash
 $HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metastore_db
 beeline -n postgres -p 1234 -u jdbc:hive2://hadoop:10000
+
+# metastore 조사 
+$HIVE_HOME/bin/schematool -dbType mysql -info -userName hive -passWord hive
 ```
   
 ## Hive 환경 생성하기  

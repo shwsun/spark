@@ -117,11 +117,18 @@ ln -s /usr/share/java/postgresql-jdbc.jar $HIVE_HOME/lib/postgresql-jdbc.jar
 ---  
 # maria db 
 ```bash
+cd /install-files
+wget https://downloads.mariadb.com/Connectors/java/connector-java-2.7.3/mariadb-java-client-2.7.3.jar
+chmod 644 mariadb-java-client-2.7.3.jar
+cp mariadb-java-client-2.7.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
+
+
 mysql -u root -p
 
 #hive user 생성
 CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
 #GRANT ALL ON *.* TO 'hive'@LOCALHOST IDENTIFIED BY 'hive';
+#GRANT ALL ON *.* TO 'hive'@'172.17.0.3' IDENTIFIED BY mysql_native_password  'hive';
 GRANT ALL ON *.* TO 'hive'@'%' IDENTIFIED BY 'hive';
 FLUSH PRIVILEGES;
 
@@ -129,8 +136,12 @@ exit
 
 hive 유저로 접속
 
-mysql- u hive -p
+mysql -u hive@172.17.0.3 -p
 
 hive database 생성
 create database metastore_db;
+
+use metastore_db;
+select host, user, password from user;
+
 ```
