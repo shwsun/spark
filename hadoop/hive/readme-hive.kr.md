@@ -221,6 +221,8 @@ EOF
 $HIVE_HOME/bin/schematool -dbType postgres -initSchema -userName postgres --passWord 1234
 
 $HIVE_HOME/bin/hiveserver2
+# metastore run 
+hive --service metastore
 
 $HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metastore_db
 # beeline> select table_schema, table_name from information_schema.tables;

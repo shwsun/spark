@@ -38,7 +38,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionUserName</name>
-                <value>postgres</value>
+                <value>meta_u</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
