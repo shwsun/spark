@@ -207,6 +207,14 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
                 <name>javax.jdo.option.ConnctionPassword</name>
                 <value>1234</value>
         </property>
+        <property> 
+                <name>hive.hwi.war.file</name> 
+                <value>lib/hive-hwi-0.11.0.war</value> 
+        </property> 
+        <property> 
+                <name>hive.metastore.uris</name> 
+                <value>thrift://hadoop:9083</value> 
+        </property>
 </configuration>
 EOF
 

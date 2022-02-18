@@ -97,4 +97,26 @@ scala, java : code-server
 python : jupyter  
  
 
+---  
+### code-server service 등록  
+```bash
+vi /etc/systemd/system/<service name>.service
 
+# <service name>.service
+[Unit]
+Description=Test Service
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/<dir>
+ExecStart=/<dir>/<fn>.sh
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+# Register the Service
+systemctl daemon-reload
+systemctl enable <service name>
+systemctl start <service name>
+systemctl status <service name>
+```
