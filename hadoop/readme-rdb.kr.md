@@ -145,3 +145,16 @@ use metastore_db;
 select host, user, password from user;
 
 ```
+
+as root 
+```sql
+CREATE DATABASE metastore_db;
+ALTER DATABASE metastore_db OWNER TO hive;
+GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'localhost' IDENTIFIED BY 'hive';
+GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'172.17.0.3' IDENTIFIED BY 'hive';
+GRANT ALL ON *.* TO 'hive'@'%' IDENTIFIED BY 'hive';
+FLUSH PRIVILEGES;
+
+-- character set 확인 
+show variables like 'c%';
+```

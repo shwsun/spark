@@ -100,23 +100,24 @@ python : jupyter
 ---  
 ### code-server service 등록  
 ```bash
-vi /etc/systemd/system/<service name>.service
+#code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
+vi /etc/systemd/system/code-server.service
 
 # <service name>.service
 [Unit]
-Description=Test Service
+Description=Code-Server Service
 [Service]
-Type=simple
-User=ubuntu
-WorkingDirectory=/<dir>
-ExecStart=/<dir>/<fn>.sh
+User=root
+WorkingDirectory=/spark-git/spark
+ExecStart=/usr/bin/code-server \
+  --bind-addr 0.0.0.0:80
 Restart=always
 [Install]
 WantedBy=multi-user.target
 
 # Register the Service
 systemctl daemon-reload
-systemctl enable <service name>
-systemctl start <service name>
-systemctl status <service name>
+systemctl enable code-server@"--bind-addr 0.0.0.0:80" 
+systemctl start code-server
+systemctl status code-server
 ```

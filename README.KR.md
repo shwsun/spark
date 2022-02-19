@@ -40,11 +40,14 @@ Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명
 1. spark-env start 
 2. ssh spark-env 
 3. code-server start 
-```bash
+code-server 자동 실행되도록 서비스로 등록했음.  
+http://<code-server host url>/  
+
+<!-- ```bash
 code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
 cat ~/.config/code-server/config.yaml 
 # 연결 후 /spark-git/spark로 오픈 폴더 변경  
-```
+``` -->
 4. spark-client jupyter run   
 ```bash
 docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888:8888 -p 4040-4050:4040-4050 -v /spark-git/spark/spark-local/notebooks:/notebooks shwsun/jupyter-spark:1.2
@@ -74,7 +77,7 @@ psql -d metastore_db -U postgres
 psql#> \password ==> set password
 
 
-docker run --detach --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive  mariadb:10.5
+docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d mariadb:10.5
 
 
 ```

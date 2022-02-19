@@ -30,7 +30,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionURL</name>
-                <value>jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true</value>
+                <value>jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true&useUnicode=true&charset=utf8</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionDriverName</name>
@@ -74,6 +74,12 @@ hdfs dfs -ls -R /user/hive
 # 5. guava version 맞추기    
 rm $HIVE_HOME/lib/guava-19.0.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
+# 6. jdbc driver classpath 등록  
+pushd /install-files
+wget https://downloads.mariadb.com/Connectors/java/connector-java-2.7.3/mariadb-java-client-2.7.3.jar
+chmod 644 mariadb-java-client-2.7.3.jar
+cp mariadb-java-client-2.7.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
+popd 
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
