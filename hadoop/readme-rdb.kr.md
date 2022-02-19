@@ -146,15 +146,28 @@ select host, user, password from user;
 
 ```
 
-as root 
+```bash
+mysql -u root -p
+```
 ```sql
 CREATE DATABASE metastore_db;
 ALTER DATABASE metastore_db OWNER TO hive;
-GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'localhost' IDENTIFIED BY 'hive';
-GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'172.17.0.3' IDENTIFIED BY 'hive';
+-- GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'localhost' IDENTIFIED BY 'hive';
+-- GRANT ALL PRIVILEGES ON metastore_db.* TO 'hive'@'172.17.0.3' IDENTIFIED BY 'hive';
 GRANT ALL ON *.* TO 'hive'@'%' IDENTIFIED BY 'hive';
 FLUSH PRIVILEGES;
 
 -- character set 확인 
 show variables like 'c%';
+```
+
+### maria db 원격 접속 속성 편집 
+```bash
+docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -it mariadb:10.5 /bin/bash
+vi /etc/mysql/mariadb.conf.d/50-server.cnf 
+#bind-address            = 127.0.0.1 -> 0.0.0.0
+
+docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d shwsun/hdfs-maria
+docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d mariadb:10.2.37-bionic
+docker run --name some-mariadb -v /my/custom:/etc/mysql/conf.d -e MARIADB_ROOT_PASSWORD=my-secret-pw -d mariadb:latest
 ```

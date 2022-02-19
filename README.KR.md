@@ -77,7 +77,7 @@ psql -d metastore_db -U postgres
 psql#> \password ==> set password
 
 
-docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d mariadb:10.5
+docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d mariadb:10.2.37-bionic
 
 
 ```
