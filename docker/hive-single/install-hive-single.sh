@@ -38,7 +38,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionUserName</name>
-                <value>root</value>
+                <value>hive</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnctionPassword</name>
