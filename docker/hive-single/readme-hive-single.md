@@ -13,8 +13,8 @@ docker exec -it hive-s jps
 ## CLI 실행  
 ```bash
 docker exec -it hive-s /bin/bash
-$HIVE_HOME/bin/beeline -n postgres -p 1234 -u jdbc:postgresql://rdb:5432/metastore_db
-beeline -n postgres -p 1234 -u jdbc:hive2://hadoop:10000
+$HIVE_HOME/bin/beeline -n hive -p hive -u jdbc:mariadb://rdb:3306/metastore_db
+beeline -n hive -p hive -u jdbc:hive2://hadoop:10000
 
 # metastore 조사 
 $HIVE_HOME/bin/schematool -dbType mysql -info -userName hive -passWord hive

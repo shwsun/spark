@@ -83,10 +83,10 @@ popd
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
+#$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
 #$HIVE_HOME/bin/schematool -dbType postgres -initSchema 
 # 7. hive 서버 실행  
-$HIVE_HOME/bin/hiveserver2
+#$HIVE_HOME/bin/hiveserver2
 #$HIVE_HOME/bin/hive --service metastore 
 echo "---- hiveserver2 started ----"
 
