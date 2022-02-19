@@ -30,7 +30,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionURL</name>
-                <value>jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true&passwordCharacterEncoding=utf8;</value>
+                <value>jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true&amp;passwordCharacterEncoding=utf8</value>
         </property>
         <property>
                 <name>javax.jdo.option.ConnectionDriverName</name>
