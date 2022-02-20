@@ -167,9 +167,19 @@ SELECT Host,User,plugin,authentication_string FROM mysql.user;
 -- mysql -u root -p
 create database metastore_db;
 use metastore_db;
-CREATE USER 'hive'@'%' IDENTIFIED BY 'hive'; 
+-- 'hive'@'%' user already exist
+--CREATE USER 'hive'@'%' IDENTIFIED BY 'hive'; 
 GRANT ALL PRIVILEGES ON *.* TO 'hive'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
+-- password change  
+update user set password=PASSWORD('') where user='hive';
+
+mysqladmin -u root -p password ''
+```
+```bash
+schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true&passwordCharacterEncoding=utf8 
+
+schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db
 ```
 
 ### maria db 원격 접속 속성 편집 
