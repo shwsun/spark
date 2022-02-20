@@ -21,7 +21,7 @@ export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/b
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 ##### 2 리모트 메타스토어 방식 설정 
 cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
         <property>
