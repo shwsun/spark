@@ -176,11 +176,18 @@ update user set password=PASSWORD('') where user='hive';
 
 mysqladmin -u root -p password ''
 ```
+
+
+> 여러 곳에서 username/password를 이용해 접속하게 되는데, 이 과정에서 'authentication faile(password=yes)' 에러가 발생하면,  
+> 아래와 같은 문장으로 metastore_db에 직접 url과 id/pwd를 입력해 정상 연결 여부를 확인해 본다.  
 ```bash
 schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db?createDatabaseIfNotExist=true&passwordCharacterEncoding=utf8 
-
+# 아래 명령은 hive-site의 url과 id/pwd를 사용한다. 이게 실패하면, 직접 지정해서 정보가 정확한 지 확인 
+schematool -dbType mysql -initSchema 
 schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db
+
 ```
+
 
 ### maria db 원격 접속 속성 편집 
 ```bash

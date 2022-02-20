@@ -44,21 +44,21 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
                 <name>javax.jdo.option.ConnctionPassword</name>
                 <value>hive</value>
         </property>
-        <property>
-            <name>hive.metastore.uris</name>
-            <value>thrift://localhost:9083</value>
-            <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
-        </property>
-        <property>
-            <name>system:java.io.tmpdir</name>
-            <value>/tmp/hive/java</value>
-        </property>
-        <property>
-            <name>system:user.name</name>
-            <value>\${user.name}</value>
-        </property>
 </configuration>
 EOF
+        # <property>
+        #     <name>hive.metastore.uris</name>
+        #     <value>thrift://localhost:9083</value>
+        #     <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
+        # </property>
+        # <property>
+        #     <name>system:java.io.tmpdir</name>
+        #     <value>/tmp/hive/java</value>
+        # </property>
+        # <property>
+        #     <name>system:user.name</name>
+        #     <value>\${user.name}</value>
+        # </property>
 
 # for postgre md5 password generation 
 #echo -n "1234" | md5sum | awk '{print $1}' 
