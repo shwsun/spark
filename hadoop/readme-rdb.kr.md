@@ -187,7 +187,7 @@ schematool -dbType mysql -initSchema
 schematool -dbType mysql -initSchema -url jdbc:mariadb://rdb:3306/metastore_db?passwordCharacterEncoding=utf8 
 schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db
 schematool -dbType mysql -initSchema -url jdbc:mariadb://rdb:3306/metastore_db?passwordCharacterEncoding=utf8mb4
-schematool -dbType mysql -initSchema -url jdbc:mariadb://rdb:3306/metastore_db?passwordCharacterEncoding=ascii
+schematool -dbType mysql -initSchema -url jdbc:mariadb://rdb:3306/metastore_db?passwordCharacterEncoding=latin1
 schematool -dbType mysql -initSchema -userName hive -passWord hive -url jdbc:mariadb://rdb:3306/metastore_db?passwordCharacterEncoding=utf8 
 
 ```
