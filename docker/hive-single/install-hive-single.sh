@@ -76,9 +76,10 @@ rm $HIVE_HOME/lib/guava-19.0.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. jdbc driver classpath 등록  
 pushd /install-files
-wget https://downloads.mariadb.com/Connectors/java/connector-java-2.7.3/mariadb-java-client-2.7.3.jar
-chmod 644 mariadb-java-client-2.7.3.jar
-cp mariadb-java-client-2.7.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
+#wget https://downloads.mariadb.com/Connectors/java/connector-java-2.7.3/mariadb-java-client-2.7.3.jar
+wget https://dlm.mariadb.com/1936500/Connectors/java/connector-java-3.0.3/mariadb-java-client-3.0.3.jar
+chmod 644 mariadb-java-client-3.0.3.jar
+cp mariadb-java-client-3.0.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
 popd 
 # 6. init schema 
 echo "---- Ready to init schama ----"
