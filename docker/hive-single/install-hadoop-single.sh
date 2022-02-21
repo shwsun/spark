@@ -17,10 +17,10 @@ PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin/
 # mkdir /install-files
 # cd /install-files
 # hadoop 3.2.2 (3.2.0)
-wget https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
+wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 mkdir -p /hadoop
-tar -xvf hadoop-3.2.2.tar.gz -C /hadoop
-HADOOP_HOME=/hadoop/hadoop-3.2.2
+tar -xvf hadoop-3.3.1.tar.gz -C /hadoop
+HADOOP_HOME=/hadoop/hadoop-3.3.1
 # check hadoop installed
 # /hadoop/hadoop-3.2.2/bin/hadoop
 
@@ -48,7 +48,7 @@ echo "[core-site, hdfs-site] setting for Pseudo-Distributed mode completed"
 # in hadoop-env.sh  
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-export HADOOP_HOME=/hadoop/hadoop-3.2.2
+export HADOOP_HOME=/hadoop/hadoop-3.3.1
 export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
 
 export HDFS_NAMENODE_USER=root
