@@ -79,15 +79,19 @@ service mysql start
 mysql -u root -p  
 CREATE DATABASE metastore_db;
 USE metastore_db;
-SOURCE /hive/apache-hive-2.1.1-bin/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;
+SOURCE /hive/apache-hive-3.1.2-bin/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;
 CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
 GRANT all on *.* to 'hive'@localhost identified by 'hive';
-grant all privileges on hive.* to 'hive'@'%' with grant option;
+#grant all privileges on hive.* to 'hive'@'%' with grant option;
 flush privileges;
 exit
 
-set global validate_password.policy=LOW;
-set global validate_password.length=4;
+
+install plugin validate_password soname 'validate_password.so';
+SHOW VARIABLES LIKE 'validate_password%';
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+SELECT host, user, authentication_string password FROM mysql.user WHERE user='root';
 
 
 <name>javax.jdo.option.ConnectionURL</name>

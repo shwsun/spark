@@ -34,7 +34,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
             <name>javax.jdo.option.ConnectionDriverName</name>
-            <value>org.mysql.jdbc.Driver</value>
+            <value>com.mysql.cj.jdbc.Driver</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionUserName</name>
@@ -46,12 +46,12 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
             <name>hive.exec.local.scratchdir</name>
-            <value>/tmp/${user.name}</value>
+            <value>/tmp/\${user.name}</value>
             <description>Local scratch space for Hive jobs</description>
         </property>
         <property>
             <name>hive.downloaded.resources.dir</name>
-            <value>/tmp/${user.name}_resources</value>
+            <value>/tmp/\${user.name}_resources</value>
             <description>Temporary local directory for added resources in the remote file system.</description>
         </property>
 </configuration>
@@ -73,8 +73,13 @@ pushd /install-files
 # wget https://dlm.mariadb.com/1936500/Connectors/java/connector-java-3.0.3/mariadb-java-client-3.0.3.jar
 # chmod 644 mariadb-java-client-3.0.3.jar
 # cp mariadb-java-client-3.0.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
-apt-get install libmysql-java
-ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
+# apt-get install libmysql-java
+# ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
+
+wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
+dpkg -i mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
+#tar -zxvf mysql-connector-java-8.0.27.tar.gz 
+cp /usr/share/java/mysql-connector-java-8.0.27.jar $HIVE_HOME/lib/
 popd 
 # 6. init schema 
 echo "---- Ready to init schama ----"
