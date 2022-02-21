@@ -76,13 +76,19 @@ hdfs dfs -chmod 777 /tmp/hive
 # mysql 
 apt-get install -y mysql-server
 service mysql start
+service mysql restart
+
 mysql -u root -p  
 CREATE DATABASE metastore_db;
 USE metastore_db;
 SOURCE /hive/apache-hive-3.1.2-bin/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;
+
+SELECT host, user, authentication_string password FROM mysql.user;
 CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
-GRANT all on *.* to 'hive'@localhost identified by 'hive';
-#grant all privileges on hive.* to 'hive'@'%' with grant option;
+CREATE USER 'hive'@'localhost' IDENTIFIED BY 'hive';
+#GRANT all on *.* to 'hive'@localhost identified by 'hive';
+grant all privileges on *.* to 'hive'@'%' with grant option;
+grant all privileges on metastore_db.* to 'hive'@'localhost' with grant option;
 flush privileges;
 exit
 
@@ -152,6 +158,97 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
             <value>/tmp/${user.name}_resources</value>
             <description>Temporary local directory for added resources in the remote file system.</description>
         </property>
+
+        <property>
+            <name>beeline.hs2.connection.user</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>beeline.hs2.connection.password</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>hive.server2.enable.doAs</name>
+            <value>false</value>
+        </property>
+        <property>
+            <name>hive.server2.authentication</name>
+            <value>NONE</value>
+        </property>
+
+        <property>
+            <name>hive.server2.enable.impersonation</name>
+            <description>Enable user impersonation for HiveServer2</description>
+            <value>true</value>
+        </property> 
+ <!-- update, delete 등을 지원하기 위하여 필요함 -->
+        <property>
+            <name>hive.support.concurrency</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.enforce.bucketing</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.exec.dynamic.partition.mode</name>
+            <value>nonstrict</value>
+        </property>
+        <property>
+            <name>hive.txn.manager</name>
+            <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+        </property>
+        <property>
+            <name>hive.compactor.initiator.on</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.compactor.worker.threads</name>
+            <value>4</value>
+        </property>
 </configuration>
 EOF
 ```
+
+---  
+# mysql metastore 초기화  
+
+```bash
+# mysql 
+apt-get install -y mysql-server
+service mysql start
+#service mysql restart
+
+cat <<EOF |tee /install-files/metastore-creation.sh
+install plugin validate_password soname 'validate_password.so';
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+
+CREATE DATABASE metastore_db;
+GRANT ALL privileges on *.* to 'hive'@'%' with GRANT option;
+flush privileges;
+EOF
+
+mysql -u root -p"\n" < /install-files/metastore-creation.sh
+
+
+CREATE DATABASE metastore_db;
+USE metastore_db;
+SOURCE /hive/apache-hive-3.1.2-bin/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;
+
+SELECT host, user, authentication_string password FROM mysql.user;
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+CREATE USER 'hive'@'localhost' IDENTIFIED BY 'hive';
+#GRANT all on *.* to 'hive'@localhost identified by 'hive';
+grant all privileges on *.* to 'hive'@'%' with grant option;
+grant all privileges on metastore_db.* to 'hive'@'localhost' with grant option;
+flush privileges;
+exit
+
+
+install plugin validate_password soname 'validate_password.so';
+SHOW VARIABLES LIKE 'validate_password%';
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+SELECT host, user, authentication_string password FROM mysql.user WHERE user='root';

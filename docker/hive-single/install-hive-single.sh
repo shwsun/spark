@@ -21,7 +21,7 @@ export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/b
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 ##### 2 리모트 메타스토어 방식 설정 
 cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
         <property>
@@ -34,7 +34,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         </property>
         <property>
             <name>javax.jdo.option.ConnectionDriverName</name>
-            <value>com.mysql.cj.jdbc.Driver</value>
+            <value>com.mysql.jdbc.Driver</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionUserName</name>
@@ -54,6 +54,55 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
             <value>/tmp/\${user.name}_resources</value>
             <description>Temporary local directory for added resources in the remote file system.</description>
         </property>
+
+<!-- hiveserver2 -->
+        <property>
+            <name>beeline.hs2.connection.user</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>beeline.hs2.connection.password</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>hive.server2.enable.doAs</name>
+            <value>false</value>
+        </property>
+        <property>
+            <name>hive.server2.authentication</name>
+            <value>NONE</value>
+        </property>
+
+        <property>
+            <name>hive.server2.enable.impersonation</name>
+            <description>Enable user impersonation for HiveServer2</description>
+            <value>true</value>
+        </property> 
+ <!-- update, delete 등을 지원하기 위하여 필요함 -->
+        <property>
+            <name>hive.support.concurrency</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.enforce.bucketing</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.exec.dynamic.partition.mode</name>
+            <value>nonstrict</value>
+        </property>
+        <property>
+            <name>hive.txn.manager</name>
+            <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+        </property>
+        <property>
+            <name>hive.compactor.initiator.on</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.compactor.worker.threads</name>
+            <value>4</value>
+        </property>        
 </configuration>
 EOF
 
@@ -81,13 +130,31 @@ dpkg -i mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
 #tar -zxvf mysql-connector-java-8.0.27.tar.gz 
 cp /usr/share/java/mysql-connector-java-8.0.27.jar $HIVE_HOME/lib/
 popd 
+
+# ---- mysql install & run 
+# mysql 
+apt-get install -y mysql-server
+service mysql start
+#service mysql restart
+cat <<EOF |tee /install-files/metastore-creation.sh
+install plugin validate_password soname 'validate_password.so';
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+CREATE DATABASE metastore_db;
+GRANT ALL privileges on *.* to 'hive'@'%' with GRANT option;
+flush privileges;
+EOF
+
+mysql -u root -p"\n" < /install-files/metastore-creation.sh
+
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-#$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
+$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
 #$HIVE_HOME/bin/schematool -dbType mysql -initSchema 
 # 7. hive 서버 실행  
-#$HIVE_HOME/bin/hiveserver2
+$HIVE_HOME/bin/hiveserver2
 #$HIVE_HOME/bin/hive --service metastore 
 echo "---- hiveserver2 started ----"
 

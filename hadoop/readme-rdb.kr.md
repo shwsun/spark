@@ -205,4 +205,24 @@ docker run --name rdb -v /spark-git/spark/hadoop/mariadb/conf:/etc/mysql/mariadb
 
 # 원격 연결 테스트 
 mysql -u hive -U
+
+
+update user set password=password('hive');
 ```
+[client]
+default-character-set = utf8
+
+[mysqld]
+init_connect="SET collation_connection = utf8_general_ci"
+init_connect="SET NAMES utf8"
+default-character-set = utf8
+character-set-server = utf8 
+collation-server = utf8_general_ci 
+
+[mysql]
+default-character-set = utf8
+
+[mysqldump]
+default-character-set = utf8 
+
+
