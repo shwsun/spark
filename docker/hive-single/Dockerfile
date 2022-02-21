@@ -1,4 +1,4 @@
-FROM shwsun/hdfs-single:1.1
+FROM ubuntu:18.04  
 
 # /home 디렉토리
 USER root

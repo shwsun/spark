@@ -31,6 +31,12 @@ docker login -u shwsun
 docker push shwsun/hive-single
 ```
 
+
+
+
+
+
+
 ---  
 # 구버전 설치 테스트  
 ```bash
