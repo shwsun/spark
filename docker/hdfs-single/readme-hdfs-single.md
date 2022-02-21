@@ -33,4 +33,6 @@ sbin/start-dfs.sh
 ```bash
 cd hdfs-single 
 docker build -t shwsun/hdfs-single .
+
+docker run -itd --privileged --name hadoop --hostname hadoop --rm -p 10000:10000 shwsun/hdfs-single
 ```

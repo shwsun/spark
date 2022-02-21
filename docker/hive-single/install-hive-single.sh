@@ -25,44 +25,37 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
         <property>
-                <name>hive.metastore.local</name>
-                <value>false</value>
+            <name>hive.metastore.local</name>
+            <value>false</value>
         </property>
         <property>
-                <name>javax.jdo.option.ConnectionURL</name>
-                <value>jdbc:mariadb://rdb:3306/metastore_db</value>
+            <name>javax.jdo.option.ConnectionURL</name>
+            <value>jdbc:mysql://localhost/metastore_db?createDatabaseIfNotExist=true</value>
         </property>
         <property>
-                <name>javax.jdo.option.ConnectionDriverName</name>
-                <value>org.mariadb.jdbc.Driver</value>
+            <name>javax.jdo.option.ConnectionDriverName</name>
+            <value>org.mysql.jdbc.Driver</value>
         </property>
         <property>
-                <name>javax.jdo.option.ConnectionUserName</name>
-                <value>hive</value>
+            <name>javax.jdo.option.ConnectionUserName</name>
+            <value>hive</value>
         </property>
         <property>
-                <name>javax.jdo.option.ConnctionPassword</name>
-                <value>hive</value>
+            <name>javax.jdo.option.ConnctionPassword</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>hive.exec.local.scratchdir</name>
+            <value>/tmp/${user.name}</value>
+            <description>Local scratch space for Hive jobs</description>
+        </property>
+        <property>
+            <name>hive.downloaded.resources.dir</name>
+            <value>/tmp/${user.name}_resources</value>
+            <description>Temporary local directory for added resources in the remote file system.</description>
         </property>
 </configuration>
 EOF
-        # <property>
-        #     <name>hive.metastore.uris</name>
-        #     <value>thrift://localhost:9083</value>
-        #     <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
-        # </property>
-        # <property>
-        #     <name>system:java.io.tmpdir</name>
-        #     <value>/tmp/hive/java</value>
-        # </property>
-        # <property>
-        #     <name>system:user.name</name>
-        #     <value>\${user.name}</value>
-        # </property>
-
-# for postgre md5 password generation 
-#echo -n "1234" | md5sum | awk '{print $1}' 
-# md581dc9bdb52d04dc20036dbd8313ed055
 
 # docker 생성 시점에는 아직 hadoop run하지 않은 상태
 # 3. 하이브용 디렉토리 생성 및 확인 
@@ -77,9 +70,11 @@ cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
 # 6. jdbc driver classpath 등록  
 pushd /install-files
 #wget https://downloads.mariadb.com/Connectors/java/connector-java-2.7.3/mariadb-java-client-2.7.3.jar
-wget https://dlm.mariadb.com/1936500/Connectors/java/connector-java-3.0.3/mariadb-java-client-3.0.3.jar
-chmod 644 mariadb-java-client-3.0.3.jar
-cp mariadb-java-client-3.0.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
+# wget https://dlm.mariadb.com/1936500/Connectors/java/connector-java-3.0.3/mariadb-java-client-3.0.3.jar
+# chmod 644 mariadb-java-client-3.0.3.jar
+# cp mariadb-java-client-3.0.3.jar $HIVE_HOME/lib/mariadb-java-client.jar
+apt-get install libmysql-java
+ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
 popd 
 # 6. init schema 
 echo "---- Ready to init schama ----"
