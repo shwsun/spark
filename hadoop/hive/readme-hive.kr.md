@@ -234,9 +234,9 @@ $HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000
 # HUE  
 - hue db creation  
 ```bash
-docker exec -u postgres -it rdb psql -c "create database hue_d with lc_collate='en_US.utf8';"
-docker exec -u postgres -it rdb psql -c "create user hue_u with password '1234';"
-docker exec -u postgres -it rdb psql -c "grant all privileges on database hue_d to hue_u;"
+docker exec -u postgres -it hive-metastore-postgresql psql -c "create database hue_d with lc_collate='en_US.utf8';"
+docker exec -u postgres -it hive-metastore-postgresql psql -c "create user hue_u with password '1234';"
+docker exec -u postgres -it hive-metastore-postgresql psql -c "grant all privileges on database hue_d to hue_u;"
 ```
 
 hue db 설정 변경 
@@ -283,6 +283,8 @@ docker login -u shwsun
 # 
 docker push shwsun/hue:latest
 docker run -it --name hue --hostname hue -p 8088:8888 shwsun/hue:latest ./startup.sh
+docker run -it --name hue --hostname hue -p 8088:8888 --net hive-comp_default shwsun/hue:latest ./startup.sh
+
 # docker run -it --name hue --hostname hue -p 8088:8888 shwsun/hue:latest /bin/bash
 #http://34.125.237.158:8088/
 ```
