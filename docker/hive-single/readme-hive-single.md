@@ -14,7 +14,8 @@ docker exec -it hadoop jps
 ```bash
 docker exec -it hive-s /bin/bash
 $HIVE_HOME/bin/beeline -n hive -p hive -u jdbc:mariadb://rdb:3306/metastore_db
-beeline -n hive -p hive -u jdbc:hive2://hadoop:10000
+beeline -n hive -p hive -u jdbc:hive2://localhost:10000
+$HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000/metastore_db;user=hive;password=hive
 
 # metastore 조사 
 $HIVE_HOME/bin/schematool -dbType mysql -info -userName hive -passWord hive
