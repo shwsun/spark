@@ -30,6 +30,7 @@ fs_defaultfs=hdfs://namenode:8020
 webhdfs_url=http://namenode:50070/webhdfs/v1
 ; ### yarn RM 사용하려면 
 ; # $HADOOP_HOME/bin/yarn --daemon start resourcemanager
+; yarn resourcemanager start &
 ; [[yarn_clusters]]
 ; [[[default]]]
 ; ## resourcemanager_host=localhost
