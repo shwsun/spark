@@ -18,7 +18,7 @@ hue=> \q
 
 hue docker 
 ```bash
-docker run -it -p 8088:8888 gethue/hue:latest /bin/bash
+docker run -it --name hue-tmp -u root -p 8089:8888 gethue/hue:latest /bin/bash
 
 vi desktop/conf/hue.ini
 

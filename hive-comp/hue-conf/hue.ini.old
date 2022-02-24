@@ -1,0 +1,38 @@
+[desktop]
+secret_key=
+http_host=0.0.0.0
+http_port=8888
+time_zone=America/Los_Angeles
+django_debug_mode=false
+http_500_debug_mode=false
+default_hdfs_superuser=hduser
+[[database]]
+host=hive-metastore-postgresql
+engine=postgresql_psycopg2
+user=hue
+password=1234
+name=hue
+[beeswax]
+hive_server_host=hive-server
+thrift_version=7
+[notebook]
+[[interpreters]]
+[[[hive]]]
+name=Hive
+interface=hiveserver2
+[[[postgresql]]]
+name = postgresql
+interface=sqlalchemy
+options='{"url": "postgresql://hue:1234@hive-metastore-postgresql:5432/hue"}'
+[hadoop]
+[[[default]]]
+fs_defaultfs=hdfs://namenode:8020
+webhdfs_url=http://namenode:50070/webhdfs/v1
+; ### yarn RM 사용하려면 
+; # $HADOOP_HOME/bin/yarn --daemon start resourcemanager
+; [[yarn_clusters]]
+; [[[default]]]
+; ## resourcemanager_host=localhost
+; resourcemanager_host=resourcemanager
+; # URL of the ResourceManager API
+; resourcemanager_api_url=http://namenode:8088
