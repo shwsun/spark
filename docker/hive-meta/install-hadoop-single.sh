@@ -29,7 +29,7 @@ cat << EOF |tee $HADOOP_HOME/etc/hadoop/core-site.xml
 <configuration>
     <property> 
         <name>fs.defaultFS</name>
-        <value>hdfs://hadoop:9000</value>
+        <value>hdfs://nn:9000</value>
     </property>
 </configuration>
 EOF
@@ -59,7 +59,8 @@ export YARN_NODEMANAGER_USER=root
 
 export PDSH_RCMD_TYPE=ssh
 EOF
-
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export HADOOP_HOME=/hadoop/hadoop-3.3.1
 
 # start ssh 
 mkdir -p /shells

@@ -26,24 +26,39 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 <configuration>
         <property>
             <name>hive.metastore.local</name>
-            <value>false</value>
+            <value>true</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:mysql://localhost/metastore_db?createDatabaseIfNotExist=true</value>
+            <value>jdbc:mysql://rdb/metastore?characterEncoding=UTF-8&amp;useSSL=false&amp;user=root&amp;password=hive</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionDriverName</name>
             <value>com.mysql.jdbc.Driver</value>
         </property>
-        <property>
-            <name>javax.jdo.option.ConnectionUserName</name>
-            <value>hive</value>
-        </property>
-        <property>
-            <name>javax.jdo.option.ConnctionPassword</name>
-            <value>hive</value>
-        </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+    <description>Username to use against metastore database</description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hive</value>
+    <description>password to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>hive.server2.thrift.client.user</name>
+    <value>hive</value>
+    <description>Username to use against thrift client</description>
+  </property>
+  <property>
+    <name>hive.server2.thrift.client.password</name>
+    <value>hive</value>
+    <description>Password to use against thrift client</description>
+  </property>
+
         <property>
             <name>hive.exec.local.scratchdir</name>
             <value>/tmp/\${user.name}</value>
@@ -76,7 +91,7 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
         <property>
             <name>hive.server2.enable.impersonation</name>
             <description>Enable user impersonation for HiveServer2</description>
-            <value>true</value>
+            <value>false</value>
         </property> 
  <!-- update, delete 등을 지원하기 위하여 필요함 -->
         <property>
@@ -106,12 +121,12 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 
 <property>
   <name>beeline.hs2.jdbc.url.tcpUrl</name>
-  <value>jdbc:hive2://localhost:10000/metastore_db;user=hive;password=hive</value>
+  <value>jdbc:hive2://meta:10000/metastore;user=hive;password=hive</value>
 </property>
  
 <property>
   <name>beeline.hs2.jdbc.url.httpUrl</name>
-  <value>jdbc:hive2://localhost:10000/metastore_db;user=hive;password=hive;transportMode=http;httpPath=cliservice</value>
+  <value>jdbc:hive2://meta:11000/metastore;user=hive;password=hive;transportMode=http;httpPath=cliservice</value>
 </property>
  
 <property>
@@ -140,36 +155,40 @@ pushd /install-files
 # apt-get install libmysql-java
 # ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
 
-wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
-dpkg -i mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
+# wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
+# dpkg -i mysql-connector-java_8.0.27-1ubuntu18.04_all.deb
+# cp /usr/share/java/mysql-connector-java-8.0.27.jar $HIVE_HOME/lib/
+
 #tar -zxvf mysql-connector-java-8.0.27.tar.gz 
-cp /usr/share/java/mysql-connector-java-8.0.27.jar $HIVE_HOME/lib/
+wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-5.1.49.tar.gz
+tar -zxvf mysql-connector-java-5.1.49.tar.gz
+cp mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar $HIVE_HOME/lib/
+
 popd 
+# # ---- mysql install & run 
+# # mysql 
+# apt-get install -y mysql-server
+# service mysql start
+# #service mysql restart
+# cat <<EOF |tee /install-files/metastore-creation.sh
+# install plugin validate_password soname 'validate_password.so';
+# set global validate_password_policy=LOW;
+# set global validate_password_length=4;
+# CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+# CREATE DATABASE metastore_db;
+# GRANT ALL privileges on *.* to 'hive'@'%' with GRANT option;
+# flush privileges;
+# EOF
 
-# ---- mysql install & run 
-# mysql 
-apt-get install -y mysql-server
-service mysql start
-#service mysql restart
-cat <<EOF |tee /install-files/metastore-creation.sh
-install plugin validate_password soname 'validate_password.so';
-set global validate_password_policy=LOW;
-set global validate_password_length=4;
-CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
-CREATE DATABASE metastore_db;
-GRANT ALL privileges on *.* to 'hive'@'%' with GRANT option;
-flush privileges;
-EOF
-
-mysql -u root -p"\n" < /install-files/metastore-creation.sh
+# mysql -u root -p"\n" < /install-files/metastore-creation.sh
 
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
-$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
+#$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
 #$HIVE_HOME/bin/schematool -dbType mysql -initSchema 
 # 7. hive 서버 실행  
-$HIVE_HOME/bin/hiveserver2
+#$HIVE_HOME/bin/hiveserver2
 #$HIVE_HOME/bin/hive --service metastore 
 echo "---- hiveserver2 started ----"
 
