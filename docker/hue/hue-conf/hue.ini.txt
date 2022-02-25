@@ -1,0 +1,156 @@
+[desktop]
+secret_key=
+http_host=0.0.0.0
+http_port=8888
+time_zone=America/Los_Angeles
+django_debug_mode=false
+http_500_debug_mode=false
+
+[[django_admins]]
+[[custom]]
+[[auth]]
+idle_session_timeout=-1
+[[[jwt]]]
+[[ldap]]
+[[[users]]]
+[[[groups]]]
+[[[ldap_servers]]]
+[[vcs]]
+[[database]]
+[[session]]
+[[smtp]]
+host=localhost
+port=25
+user=
+password=
+tls=no
+[[knox]]
+[[kerberos]]
+[[oauth]]
+[[oidc]]
+[[metrics]]
+[[slack]]
+[[tracing]]
+[[task_server]]
+[[gc_accounts]]
+[[[default]]]
+[[raz]]
+[notebook]
+[[interpreters]]
+# [[[postgresql]]]
+#   name = postgresql
+#   interface=sqlalchemy
+#   options='{"url": "postgresql://hue:hue@host:5432/hue"}'
+# [[[sparksql]]]
+#   name = Spark Sql
+#   interface=sqlalchemy
+#   options='{"url": "hive://user:password@localhost:10000/database"}'
+# [[[sparksql]]]
+#   name=SparkSql
+#   interface=livy
+# [[[spark]]]
+#   name=Scala
+#   interface=livy
+# [[[pyspark]]]
+#   name=PySpark
+#   interface=livy
+###########################################################################
+# Settings to configure your Analytics Dashboards
+###########################################################################
+[dashboard]
+[[engines]]
+###########################################################################
+# Settings to configure your Hadoop cluster.
+###########################################################################
+[hadoop]
+# Configuration for HDFS NameNode
+# ------------------------------------------------------------------------
+[[hdfs_clusters]]
+  # HA support by using HttpFs
+[[[default]]]
+# Enter the filesystem uri
+fs_defaultfs=hdfs://localhost:8020
+[[yarn_clusters]]
+[[[default]]]
+submit_to=True
+
+###########################################################################
+# Settings to configure Beeswax with Hive
+###########################################################################
+[beeswax]
+## hive_server_host=localhost
+## hive_server_http_port=10001
+## hive_metastore_host=localhost
+[[ssl]]
+
+###########################################################################
+# Settings to configure Metastore
+###########################################################################
+[metastore]
+# Flag to turn on the new version of the create table wizard.
+## enable_new_create_table=true
+
+
+
+[impala]
+[[ssl]]
+
+###########################################################################
+# Settings to configure the Spark application.
+###########################################################################
+
+[spark]
+# The Livy Server URL.
+## livy_server_url=http://localhost:8998
+
+###########################################################################
+# Settings to configure the Oozie app
+###########################################################################
+
+[oozie]
+
+
+
+[filebrowser]
+[pig]
+[sqoop]
+[proxy]
+[hbase]
+[search]
+[libsolr]
+[indexer]
+[jobsub]
+[jobbrowser]
+[[query_store]]
+[zookeeper]
+
+[[clusters]]
+
+[[[default]]]
+[useradmin]
+[[password_policy]]
+[liboozie]
+[aws]
+[[aws_accounts]]
+[azure]
+[[azure_accounts]]
+# Default Azure account
+[[[default]]]
+[[adls_clusters]]
+[[[default]]]
+[[abfs_clusters]]
+[[[default]]]
+[libsentry]
+[libzookeeper]
+[librdbms]
+[[databases]]
+[libsaml]
+[liboauth]
+[kafka]
+[[kafka]]
+[metadata]
+[[manager]]
+[[optimizer]]
+[[catalog]]
+[[navigator]]
+[[prometheus]]

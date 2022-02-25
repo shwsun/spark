@@ -26,3 +26,12 @@ grep ^bind-address /etc/mysql/my.cnf
 # bind-address 0.0.0.0
 ```
 
+## Hue database 생성  
+```sql
+set global validate_password_policy=LOW;
+set global validate_password_length=3;
+CREATE USER 'hue'@'%' IDENTIFIED BY 'pwd_hue';
+CREATE DATABASE hue;
+GRANT ALL privileges on hue.* to 'hue'@'%' with GRANT option;
+flush privileges;
+```
