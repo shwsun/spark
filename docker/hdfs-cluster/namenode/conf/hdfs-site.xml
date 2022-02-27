@@ -4,6 +4,8 @@
 
 <property><name>dfs.namenode.name.dir</name><value>file:///hdfs/name</value></property>
 <property><name>dfs.permissions.enabled</name><value>false</value></property>
+<property><name>dfs.replication</name><value>1</value></property>
+
 <property><name>dfs.webhdfs.enabled</name><value>true</value></property>
 <property><name>dfs.namenode.rpc-bind-host</name><value>0.0.0.0</value></property>
 <property><name>dfs.namenode.servicerpc-bind-host</name><value>0.0.0.0</value></property>

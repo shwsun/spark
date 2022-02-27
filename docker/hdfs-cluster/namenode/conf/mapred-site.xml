@@ -2,4 +2,5 @@
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
+<property><name>mapreduce.framework.name</name><value>yarn</value></property>
 </configuration>
