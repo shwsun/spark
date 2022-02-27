@@ -110,14 +110,14 @@ Description=Code-Server Service
 User=root
 WorkingDirectory=/spark-git/spark
 ExecStart=/usr/bin/code-server \
-  --bind-addr 0.0.0.0:80
+  --bind-addr 0.0.0.0:8888
 Restart=always
 [Install]
 WantedBy=multi-user.target
 
 # Register the Service
 systemctl daemon-reload
-systemctl enable code-server@"--bind-addr 0.0.0.0:80" 
+systemctl enable code-server@"--bind-addr 0.0.0.0:8888" 
 systemctl start code-server
 systemctl status code-server
 ```
