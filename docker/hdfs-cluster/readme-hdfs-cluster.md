@@ -31,11 +31,27 @@ EOF
 ## 클러스터 실행  
 namenode, datanode 생성이 끝나면 아래와 같이 실행  
 ```bash
-# namenode의 ssh key를 datanode로 복사  
-docker cp namenode:/root/.ssh/authorized_keys /spark-git/spark/docker/hdfs-cluster/authorized_keys
-docker cp /spark-git/spark/docker/hdfs-cluster/authorized_keys datanode:/root/.ssh/authorized_keys
-docker exec -u root -it datanode /etc/init.d/ssh start
+# # namenode의 ssh key를 datanode로 복사  
+# docker cp namenode:/root/.ssh/authorized_keys /spark-git/spark/docker/hdfs-cluster/authorized_keys
+# docker cp /spark-git/spark/docker/hdfs-cluster/authorized_keys datanode:/root/.ssh/authorized_keys
+# docker exec -u root -it datanode /etc/init.d/ssh start
+# cd docker/hdfs-cluster
+# chmod 755 ./sync_key_after_up.sh
+./sync_key_after_up.sh
 # node start 
 docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
+# yarn start
 docker exec -u root -it namenode /hadoop/sbin/start-yarn.sh 
+#$HADOOP_HOME/bin/mapred --daemon start historyserver
 ```
+
+모든 DataNode에서 수행할 것  
+```bash
+rm -rf $HADOOP_HOME/data/datanode/*  
+```
+  
+Web UI  
+NameNode (http://server01:9870)  
+ResourceManager (http://server01:8088)  
+MapReduce JobHistory Server (http://server01:19888)  
+

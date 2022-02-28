@@ -10,12 +10,12 @@
 <property><name>yarn.resourcemanager.store.class</name><value>org.apache.hadoop.yarn.server.resourcemanager.recovery.FileSystemRMStateStore</value></property>
 <property><name>yarn.resourcemanager.system-metrics-publisher.enabled</name><value>true</value></property>
 <property><name>yarn.nodemanager.remote-app-log-dir</name><value>/app-logs</value></property>
-<property><name>yarn.resourcemanager.resource.tracker.address</name><value>resourcemanager:8031</value></property>
+<property><name>yarn.resourcemanager.resource.tracker.address</name><value>namenode:8031</value></property>
 <property><name>yarn.resourcemanager.hostname</name><value>namenode</value></property>
 <property><name>yarn.timeline-service.hostname</name><value>historyserver</value></property>
 <property><name>yarn.log.server.url</name><value>http://historyserver:8188/applicationhistory/logs/</value></property>
-<property><name>yarn.resourcemanager.scheduler.address</name><value>resourcemanager:8030</value></property>
-<property><name>yarn.resourcemanager.address</name><value>resourcemanager:8032</value></property>
+<property><name>yarn.resourcemanager.scheduler.address</name><value>namenode:8030</value></property>
+<property><name>yarn.resourcemanager.address</name><value>namenode:8032</value></property>
 <property><name>yarn.resourcemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>

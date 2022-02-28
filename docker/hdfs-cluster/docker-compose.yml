@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  namenode:
+    image: shwsun/nn:snapshot
+    container_name: namenode
+    hostname: namenode
+    volumes:
+      - /hdfs/namenode:/hdfs/name
+    environment:
+      - CLUSTER_NAME=hive
+    ports:
+      - "50070:50070"
+      - "8088:8088"
+    tty: true
+
+  datanode:
+    image: shwsun/dn:snapshot
+    container_name: datanode
+    hostname: datanode
+    volumes:
+      - /hdfs/datanode:/hdfs/data
+    depends_on:
+      - namenode
+    ports:
+      - "50075:50075"
+    tty: true

@@ -23,6 +23,11 @@ mv /hadoop-3.2.2 /hadoop
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+cat <<EOF |tee -a ~/.bashrc
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=$HADOOP_HOME
+export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin
+EOF
 # check hadoop installed
 # /hadoop/hadoop-3.2.2/bin/hadoop
 
@@ -48,23 +53,19 @@ export PDSH_RCMD_TYPE=ssh
 EOF
 
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
-namenode
 datanode
 EOF
 # start ssh 
 mkdir -p /shells
 cat <<EOF |tee /shells/init-ssh.sh
-# #ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-# echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-# chmod 0600 ~/.ssh/authorized_keys
-
-# /etc/init.d/ssh start
+#ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+# mkdir -p ~/.ssh
 # cp /install-files/authorized_keys ~/.ssh/authorized_keys
-mkdir -p ~/.ssh
 
 chmod 0600 ~/.ssh/authorized_keys
-/etc/init.d/ssh start
+# /etc/init.d/ssh start
 EOF
 
 echo "---- HDFS configuration completed. ----"

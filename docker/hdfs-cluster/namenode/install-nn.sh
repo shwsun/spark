@@ -51,7 +51,6 @@ export PDSH_RCMD_TYPE=ssh
 EOF
 
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
-namenode
 datanode
 EOF
 # start ssh 
@@ -60,10 +59,11 @@ cat <<EOF |tee /shells/init-ssh.sh
 #ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+# mkdir -p ~/.ssh
 # cp /install-files/authorized_keys ~/.ssh/authorized_keys
 
 chmod 0600 ~/.ssh/authorized_keys
-/etc/init.d/ssh start
+# /etc/init.d/ssh start
 EOF
 # scp -rp ~/.ssh/authorized_keys root@datanode:~/.ssh/authorized_keys 
 # ssh datanode 
@@ -73,7 +73,7 @@ echo "---- HDFS configuration completed. ----"
 chmod 755 /shells/init-ssh.sh
 /shells/init-ssh.sh
 echo "---- HDFS SSH connection completed. ----"
-$HADOOP_HOME/bin/hdfs namenode -format
+$HADOOP_HOME/bin/hdfs namenode -format -force
 echo "---- HDFS Starting ... ----"
 # $HADOOP_HOME/sbin/start-dfs.sh
 # $HADOOP_HOME/bin/hdfs --daemon start namenode
