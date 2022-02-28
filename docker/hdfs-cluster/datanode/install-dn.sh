@@ -52,9 +52,9 @@ export YARN_NODEMANAGER_USER=root
 export PDSH_RCMD_TYPE=ssh
 EOF
 
-cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
-datanode
-EOF
+# cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
+# datanode
+# EOF
 # start ssh 
 mkdir -p /shells
 cat <<EOF |tee /shells/init-ssh.sh

@@ -2,7 +2,7 @@ version: '3'
 services:
 
   namenode:
-    image: shwsun/nn:snapshot
+    image: shwsun/nn
     container_name: namenode
     hostname: namenode
     volumes:
@@ -14,14 +14,38 @@ services:
       - "8088:8088"
     tty: true
 
-  datanode:
-    image: shwsun/dn:snapshot
-    container_name: datanode
-    hostname: datanode
+  dn01:
+    image: shwsun/dn
+    container_name: dn01
+    hostname: dn01
     volumes:
-      - /hdfs/datanode:/hdfs/data
+      - /hdfs/dn01:/hdfs/data
     depends_on:
       - namenode
-    ports:
-      - "50075:50075"
+    # ports:
+    #   - "50075:50075"
+    tty: true
+
+  dn02:
+    image: shwsun/dn
+    container_name: dn02
+    hostname: dn02
+    volumes:
+      - /hdfs/dn02:/hdfs/data
+    depends_on:
+      - namenode
+    # ports:
+    #   - "50075:50075"
+    tty: true
+
+  dn03:
+    image: shwsun/dn
+    container_name: dn03
+    hostname: dn03
+    volumes:
+      - /hdfs/dn03:/hdfs/data
+    depends_on:
+      - namenode
+    # ports:
+    #   - "50075:50075"
     tty: true

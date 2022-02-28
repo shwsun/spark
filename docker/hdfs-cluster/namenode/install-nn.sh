@@ -22,12 +22,18 @@ tar -xvf hadoop-3.2.2.tar.gz -C /
 mv /hadoop-3.2.2 /hadoop
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop
+export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 # check hadoop installed
 # /hadoop/hadoop-3.2.2/bin/hadoop
 cat <<EOF |tee -a ~/.bashrc
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=$HADOOP_HOME
+export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native
 export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin
 EOF
 
@@ -51,7 +57,10 @@ export PDSH_RCMD_TYPE=ssh
 EOF
 
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
-datanode
+dn01
+dn02
+dn03
+
 EOF
 # start ssh 
 mkdir -p /shells
