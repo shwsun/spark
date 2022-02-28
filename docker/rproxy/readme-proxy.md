@@ -23,6 +23,14 @@ docker run -it --name rproxy -p 80:80 -d shwsun/rproxy
 
 ```
 
+## proxy 설정 수정하기 
+로컬 파일에서 수정한 설정값을 컨테이너에 직접 반영하는 방법  
+```bash
+docker cp default.conf rproxy:/etc/nginx/conf.d/default.conf
+docker exec -it rproxy nginx -s reload
+```
+
+
 ## 서비스 등록하기  
 ```bash
 #code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
