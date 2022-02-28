@@ -1,5 +1,7 @@
 # namenode의 ssh key를 datanode로 복사  
 # 모든 서버의 ~/.ssh/id_rsa 파일의 내용을 합쳐서 각각의 서버의 ~/.ssh/authorized_keys 파일에 추가
+echo "==> Clear old data directory."
+docker exec -u root -it namenode rm -f /root/.ssh/knownhosts
 echo "==> Copy ssh key into workers."
 docker cp namenode:/root/.ssh/id_rsa.pub ./tmp-share/key_pub
 cat ./tmp-share/key_pub > ./tmp-share/id_rsa.pub

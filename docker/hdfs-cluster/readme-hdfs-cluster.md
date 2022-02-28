@@ -29,6 +29,7 @@ EOF
 ```
 
 ## 클러스터 실행  
+> 호스트에 /hdfs/namenode, /hdfs/dn01, /hdfs/dn02, /hdfs/dn03 을 볼륨 공유한다.   
 namenode, datanode 생성이 끝나면 아래와 같이 실행  
 ```bash
 # # namenode의 ssh key를 datanode로 복사  
@@ -37,6 +38,8 @@ namenode, datanode 생성이 끝나면 아래와 같이 실행
 # docker exec -u root -it datanode /etc/init.d/ssh start
 # cd docker/hdfs-cluster
 # chmod 755 ./sync_key_after_up.sh
+
+# hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
 ./sync_key_after_up.sh
 # node start 
 docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
