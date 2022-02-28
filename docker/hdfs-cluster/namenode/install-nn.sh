@@ -41,6 +41,7 @@ cat <<EOF |tee $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export HADOOP_HOME=$HADOOP_HOME
 export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
+export HADOOP_PID_DIR=$HADOOP_HOME/pids
 export HDFS_NAMENODE_USER=root
 export HDFS_DATANODE_USER=root
 export HDFS_SECONDARYNAMENODE_USER=root
@@ -56,10 +57,10 @@ EOF
 # start ssh 
 mkdir -p /shells
 cat <<EOF |tee /shells/init-ssh.sh
-# #ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-# echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-cp /install-files/authorized_keys ~/.ssh/authorized_keys
+#ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+# cp /install-files/authorized_keys ~/.ssh/authorized_keys
 
 chmod 0600 ~/.ssh/authorized_keys
 /etc/init.d/ssh start

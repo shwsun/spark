@@ -54,11 +54,16 @@ EOF
 # start ssh 
 mkdir -p /shells
 cat <<EOF |tee /shells/init-ssh.sh
-#ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-chmod 0600 ~/.ssh/authorized_keys
+# #ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+# echo -e 'y\n' | ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+# chmod 0600 ~/.ssh/authorized_keys
 
+# /etc/init.d/ssh start
+# cp /install-files/authorized_keys ~/.ssh/authorized_keys
+mkdir -p ~/.ssh
+
+chmod 0600 ~/.ssh/authorized_keys
 /etc/init.d/ssh start
 EOF
 
