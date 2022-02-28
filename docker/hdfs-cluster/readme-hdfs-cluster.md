@@ -40,6 +40,8 @@ namenode, datanode 생성이 끝나면 아래와 같이 실행
 # chmod 755 ./sync_key_after_up.sh
 
 # hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
+# rm -rdf /hdfs/
+# knownetworks 삭제 
 ./sync_key_after_up.sh
 # node start 
 docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
