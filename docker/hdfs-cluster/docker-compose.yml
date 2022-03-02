@@ -62,8 +62,22 @@ services:
     # volumes:
     #   - /hdfs/dn03:/hdfs/data
     # depends_on:
-    #   - namenode
+    #   - dn03
     # ports:
     #   - "8044:8042"
+    # #   - "50075:50075"
+    tty: true
+
+  hue:
+    image: shwsun/hue
+    container_name: hue
+    hostname: hue
+    # volumes:
+    #   - /hdfs/dn03:/hdfs/data
+    command: ./startup.sh
+    depends_on:
+      - rdb
+    ports:
+      - "8890:8888"
     # #   - "50075:50075"
     tty: true

@@ -40,7 +40,8 @@ namenode, datanode 생성이 끝나면 아래와 같이 실행
 # chmod 755 ./sync_key_after_up.sh
 
 # cd hdfs-cluster
-# rm -rdf /hdfs/
+# 
+rm -rdf /hdfs/
 docker-compose up
 # hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
 # knownetworks 삭제 
