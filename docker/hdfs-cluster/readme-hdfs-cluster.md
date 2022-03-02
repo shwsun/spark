@@ -39,8 +39,10 @@ namenode, datanode 생성이 끝나면 아래와 같이 실행
 # cd docker/hdfs-cluster
 # chmod 755 ./sync_key_after_up.sh
 
-# hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
+# cd hdfs-cluster
 # rm -rdf /hdfs/
+docker-compose up
+# hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
 # knownetworks 삭제 
 ./sync_key_after_up.sh
 # node start 
@@ -48,6 +50,9 @@ docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh
 # yarn start
 docker exec -u root -it namenode /hadoop/sbin/start-yarn.sh 
 #$HADOOP_HOME/bin/mapred --daemon start historyserver
+
+docker exec -u root -it namenode jps
+docker exec -u root -it dn01 jps
 ```
 
 모든 DataNode에서 수행할 것  
@@ -59,4 +64,15 @@ Web UI
 NameNode (http://server01:9870)  
 ResourceManager (http://server01:8088)  
 MapReduce JobHistory Server (http://server01:19888)  
+
+- host 에서 proxy 포트포워딩 위해 host의 /etc/hosts 에 docker network 정보 등록  
+--> namenode, dn01, dn02, dn03 ip를 등록
+```bash
+docker network inspect hdfs-cluster_default
+vi /etc/hosts
+172.21.0.2 namenode
+172.21.0.3 dn01
+172.21.0.4 dn02
+172.21.0.5 dn03
+```
 

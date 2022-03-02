@@ -12,6 +12,8 @@ services:
     ports:
       - "50070:50070"
       - "8088:8088"
+      - "9870:9870"
+      - "19888:19888"
     tty: true
 
   dn01:
@@ -22,7 +24,8 @@ services:
       - /hdfs/dn01:/hdfs/data
     depends_on:
       - namenode
-    # ports:
+    ports:
+      - "8042:8042"
     #   - "50075:50075"
     tty: true
 
@@ -34,7 +37,8 @@ services:
       - /hdfs/dn02:/hdfs/data
     depends_on:
       - namenode
-    # ports:
+    ports:
+      - "8042:8042"
     #   - "50075:50075"
     tty: true
 
@@ -46,6 +50,7 @@ services:
       - /hdfs/dn03:/hdfs/data
     depends_on:
       - namenode
-    # ports:
+    ports:
+      - "8042:8042"
     #   - "50075:50075"
     tty: true

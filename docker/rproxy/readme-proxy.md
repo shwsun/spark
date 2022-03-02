@@ -58,5 +58,18 @@ systemctl start rproxy
 systemctl status rproxy
 ```
 
+##  
+클러스터 내부 서비스 프락시 사용하기  
+아래와 같이 클러스터 내부 ip를 vm host 내부에 등록  
+```bash
+vi /etc/hosts
+172.21.0.2 namenode
+172.21.0.3 dn01
+172.21.0.4 dn02
+172.21.0.5 dn03
+```
+
+
+
 ## 패스워드 인증 추가하기  
 
