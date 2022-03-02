@@ -2,6 +2,7 @@
 - 이미지 빌드  
 ```bash
 docker build -t mysql-tmp .
+docker build -t shwsun/mysql-hue .
 ```
 
 - 사용하기  
@@ -24,15 +25,16 @@ docker build -t mysql-tmp .
 docker run -it --name mysql -d mysql-tmp 
 docker exec -it mysql /bin/bash
 # tagging 
-docker commit mysql-tmp 
-docker tag mysql-tmp shwsun/mysql-hue
+docker commit mysql
+docker tag mysql shwsun/mysql-hue
 # push 
 docker push shwsun/mysql-hue
 # init & run 
 docker stop mysql
 docker rm mysql 
-docker run -it --name mysql -d shwsun/mysql-hue 
-docker exec -it mysql /bin/bash  
+docker run -it -u root -e MYSQL_ROOT_PASSWORD=\ --name mysql -d shwsun/mysql-hue 
+docker run -it -u root -e MYSQL_ROOT_PASSWORD=root --name mysql2 -d shwsun/mysql-hue 
+docker exec -it mysql2 /bin/bash  
 
 
 # hive
@@ -42,6 +44,11 @@ docker exec -it mysql /bin/bash
 # grep ^bind-address /etc/mysql/my.cnf 
 # vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # bind-address 0.0.0.0
+
+docker run -u root -e MYSQL_ROOT_PASSWORD=root -it --name mysql --net hdfs-cluster_default shwsun/mysql-hue 
+docker run -u root -e MYSQL_ROOT_PASSWORD=root -it --name mysql2 --net hdfs-cluster_default -d shwsun/mysql-hue
+docker exec -u root -it mysql2 /bin/bash
+# vi /etc/mysql/my.cnf
 ```
 
 ## Hue database 생성  

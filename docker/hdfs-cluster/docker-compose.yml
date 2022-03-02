@@ -38,7 +38,7 @@ services:
     depends_on:
       - namenode
     ports:
-      - "8042:8042"
+      - "8043:8042"
     #   - "50075:50075"
     tty: true
 
@@ -51,6 +51,19 @@ services:
     depends_on:
       - namenode
     ports:
-      - "8042:8042"
+      - "8044:8042"
     #   - "50075:50075"
+    tty: true
+
+  rdb:
+    image: shwsun/mysql-hue
+    container_name: rdb
+    hostname: rdb
+    # volumes:
+    #   - /hdfs/dn03:/hdfs/data
+    # depends_on:
+    #   - namenode
+    # ports:
+    #   - "8044:8042"
+    # #   - "50075:50075"
     tty: true

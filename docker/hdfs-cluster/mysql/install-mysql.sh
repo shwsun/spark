@@ -1,8 +1,9 @@
 # install-mysql.sh 
 apt-get update 
-apt-get install -y wget 
+#apt-get install -y wget 
 # mysql 
 apt-get install -y mysql-server
+sed -i 's/bind-address/bind-address = 0.0.0.0 #/' /etc/mysql/mysql.conf.d/mysqld.cnf
 service mysql start
 #service mysql restart
 
@@ -31,5 +32,6 @@ GRANT ALL privileges on *.* to 'hue_u'@'%' with GRANT option;
 flush privileges;
 EOF
 mysql -u root -p"\n" < /install-files/hue_db-creation.sh
-# vi /etc/mysql/mysql.conf.d/mysqld.cnf
+echo "===== hue_db created. ====="
+# vi /etc/mysql/conf.d/mysqld.cnf
 # bind-address 0.0.0.0

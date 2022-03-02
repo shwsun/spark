@@ -74,5 +74,21 @@ vi /etc/hosts
 172.21.0.3 dn01
 172.21.0.4 dn02
 172.21.0.5 dn03
+172.21.0.6 rdb
+172.21.0.7 hue
 ```
+  
 
+--- 
+# RDB 설치하기  
+hue db, rdb, (hive metastore) 역할을 할 RDB를 설치  
+
+---  
+# Hue 연동하기  
+
+  
+---  
+# Hive 설치하기  
+hadoop 설치가 완료되면, 이 중 hive job을 던지는 역할을 할 node 1대를 선정해서 해당 노드에 hive를 설치한다.  
+
+--- 

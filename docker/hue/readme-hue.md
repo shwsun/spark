@@ -10,7 +10,7 @@
 Hue container , Hive 서버 연동하기 위한 설정 생성하기    
 ```bash
 # 설정 편집하기  
-docker run -it -u root --name hue-tmp --net hive-comp_default -p 8889:8888 gethue/hue:latest /bin/bash
+docker run -it -u root --name hue-tmp --net hdfs-cluster_default -p 8889:8888 gethue/hue:latest /bin/bash
 
 # 편집 저장하기  
 docker cp hue-conf/hue.ini hue-tmp:/usr/share/hue/desktop/conf/hue.ini
