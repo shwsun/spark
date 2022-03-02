@@ -26,6 +26,7 @@ docker run -it --name rproxy -p 80:80 -d shwsun/rproxy
 ## proxy 설정 수정하기 
 로컬 파일에서 수정한 설정값을 컨테이너에 직접 반영하는 방법  
 ```bash
+# rproxy 경로에서 실행 
 docker cp default.conf rproxy:/etc/nginx/conf.d/default.conf
 docker exec -it rproxy nginx -s reload
 ```
@@ -57,4 +58,5 @@ systemctl start rproxy
 systemctl status rproxy
 ```
 
+## 패스워드 인증 추가하기  
 

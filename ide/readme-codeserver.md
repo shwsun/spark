@@ -99,6 +99,13 @@ python : jupyter
 
 ---  
 ### code-server service 등록  
+서비스 등록 전에 nginx 실행 설정을 conf 파일에 설정해 둔다.  
+그렇지 않으면, 서비스 실행 시, 명령줄 옵션에 추가해야해서 지저분하다.  
+또한, 사용자 인증은 사용자별 인증이 불가능한 코드서버 인증 대신에 R-Proxy로 사용하고 있는 Nginx 인증을 사용하도록 추가 설정한다.  
+
+
+- 설정 파일 : cat ~/.config/code-server/config.yaml  
+
 ```bash
 #code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
 vi /etc/systemd/system/code-server.service
@@ -120,4 +127,25 @@ systemctl daemon-reload
 systemctl enable code-server@"--bind-addr 0.0.0.0:8888" 
 systemctl start code-server
 systemctl status code-server
+```
+
+---  
+code-server proxy로 사용할 nginx 베어메탈 설치하기  
+# Nginx  
+```bash
+apt-get install -y nginx
+# conf 기본 설정 수정. 인클루드 사용하게. 
+vi /etc/nginx/nginx.conf
+# in http entity
+include /etc/nginx/sites-available/*.conf; 
+#// sites-enabled 디렉토리에서 서버 블록을 찾도록 지시
+#server_names_hash_bucket_size 64; 
+#// 도메인이름 분석하는데 할당되는 메모리 양
+
+vi /etc/nginx/sites-available/code.conf
+ln -s /etc/nginx/sites-available/code.conf /etc/nginx/sites-enabled/code.conf
+
+
+systemctl daemon-reload
+systemctl restart nginx
 ```
