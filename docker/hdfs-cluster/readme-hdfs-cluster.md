@@ -285,6 +285,21 @@ create external table if not exists employee (
 row format delimited
 fields terminated by ','
 lines terminated by '\n'
-stored as textfile location 'hdfs://namenode:8020/user/hive/warehouse/testdb.db/employee';
+stored as textfile location 'hdfs://namenode:9000/user/hive/warehouse/testdb.db/employee';
+```
+external 테이블을 생성한 후에 
+Filebrowser 에서 /user/hive/warehouse/testdb.db/employee 경로에 employee.csv 파일을 업로드 한 후 셀렉트 해 본다.  
+
+
+hive table은 mapreduce 설정이 된 상태에 작동한다.  
+아래 명령 실행하고 insert 하면 에러 발생.  
+mapreduce.framework.name
+```sql
+create table if not exists intbl (
+  eid int,
+  ename string);
+
+insert into intbl values(1, 'a');
+-- Error while processing statement: FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask. Cannot initialize Cluster. Please check your configuration for mapreduce.framework.name and the correspond server addresses.
 ```
 --- 
