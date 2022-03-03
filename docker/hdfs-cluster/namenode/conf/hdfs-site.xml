@@ -14,4 +14,8 @@
 <property><name>dfs.namenode.https-bind-host</name><value>0.0.0.0</value></property>
 <property><name>dfs.client.use.datanode.hostname</name><value>true</value></property>
 <property><name>dfs.datanode.use.datanode.hostname</name><value>true</value></property>
+
+<property><name>hadoop.proxyuser.hue.hosts</name><value>*</value></property>
+<property><name>hadoop.proxyuser.hue.groups</name><value>*</value></property>
+
 </configuration>

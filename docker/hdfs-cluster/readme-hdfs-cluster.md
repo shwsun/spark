@@ -12,7 +12,7 @@ docker run -itd --privileged --name datanode --rm -p 8088:8088 -v /hdfs/datanode
 docker exec -it namenode jps
 
 
-
+cd datanode
 docker build -t shwsun/dn . 
 docker run -it --privileged --name datanode --hostname datanode --rm -v /hdfs/datanode:/hdfs/data shwsun/dn
 docker exec -it datanode jps
@@ -23,8 +23,9 @@ docker run -it --privileged --name datanode --rm -v /hdfs/datanode:/hdfs/data sh
 
 ```bash
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
-namenode
-datanode
+dn01
+dn02
+dn03
 EOF
 ```
 

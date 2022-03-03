@@ -3,6 +3,7 @@
 echo "==> Clear old data directory."
 docker exec -u root -it namenode rm -f /root/.ssh/known_hosts
 echo "==> Copy ssh key into workers."
+mkdir -p ./tmp-share
 docker cp namenode:/root/.ssh/id_rsa.pub ./tmp-share/key_pub
 cat ./tmp-share/key_pub > ./tmp-share/id_rsa.pub
 docker cp dn01:/root/.ssh/id_rsa.pub ./tmp-share/key_pub
