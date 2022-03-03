@@ -33,35 +33,24 @@ EOF
 > 호스트에 /hdfs/namenode, /hdfs/dn01, /hdfs/dn02, /hdfs/dn03 을 볼륨 공유한다.   
 namenode, datanode 생성이 끝나면 아래와 같이 실행  
 ```bash
-# # namenode의 ssh key를 datanode로 복사  
-# docker cp namenode:/root/.ssh/authorized_keys /spark-git/spark/docker/hdfs-cluster/authorized_keys
-# docker cp /spark-git/spark/docker/hdfs-cluster/authorized_keys datanode:/root/.ssh/authorized_keys
-# docker exec -u root -it datanode /etc/init.d/ssh start
-# cd docker/hdfs-cluster
-# chmod 755 ./sync_key_after_up.sh
-
-# cd hdfs-cluster
-# 
-rm -rdf /hdfs/
-docker-compose up
-# hdfs/data 와 namenode:/knownhosts 삭제하고 실행해야 한다. 
-# knownetworks 삭제 
-./sync_key_after_up.sh
-# node start 
-docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
-# yarn start
-docker exec -u root -it namenode /hadoop/sbin/start-yarn.sh 
-#$HADOOP_HOME/bin/mapred --daemon start historyserver
-
-docker exec -u root -it namenode jps
-docker exec -u root -it dn01 jps
+# 아래와 같은 작업을 실행하는데, 간단하게 호출 스크립트 만들어 둠. 
+# # cd hdfs-cluster
+# rm -rdf /hdfs/
+# docker-compose up
+# ./sync_key_after_up.sh
+# # node start 
+# docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
+# # yarn start
+# docker exec -u root -it namenode /hadoop/sbin/start-yarn.sh 
+# #$HADOOP_HOME/bin/mapred --daemon start historyserver
+cd /spark-git/spark/docker/hdfs-cluster 
+./up.sh
+# up 결과 확인 후 아래 실행.
+./restart.sh
 ```
 
-모든 DataNode에서 수행할 것  
-```bash
-rm -rf $HADOOP_HOME/data/datanode/*  
-```
-  
+---  
+
 Web UI  
 NameNode (http://server01:9870)  
 ResourceManager (http://server01:8088)  
@@ -86,11 +75,216 @@ vi /etc/hosts
 hue db, rdb, (hive metastore) 역할을 할 RDB를 설치  
 
 ---  
-# Hue 연동하기  
+# Hue - HDFS Browser 연동하기  
+Hue 실행을 root로 했다면, 아래와 같이 hue가 기본 접근하는 hdfs 경로 설정.  
+이 설정은 `core-site.xml`의 `hadoop.proxyuser.<hue user>.hosts` 설정값과 같아야 한다.  
+hue 계정이 'root' 이면, `hadoop.proxyuser.root.hosts` 로 property 추가해야 한다는 말.  
 
+> [Errno 2] File /user/root not found
+```bash
+docker exec -it namenode hdfs dfs -mkdir -p /user/root
+docker exec -it namenode hdfs dfs -chown -R root:supergroup /user
+docker exec -it namenode hdfs dfs -chown -R root:supergroup /user/root
+docker exec -it namenode hdfs dfs -chmod 755 /user
+docker exec -it namenode hdfs dfs -chmod 755 /user/root
+```
   
 ---  
 # Hive 설치하기  
 hadoop 설치가 완료되면, 이 중 hive job을 던지는 역할을 할 node 1대를 선정해서 해당 노드에 hive를 설치한다.  
 
+## Hive metastore db 추가  
+```sql
+-- docker exec -it -u root rdb mysql
+install plugin validate_password soname 'validate_password.so';
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive';
+
+CREATE DATABASE metastore;
+GRANT ALL privileges on metastore.* to 'hive'@'%' with GRANT option;
+flush privileges;
+exit;
+```
+
+```bash
+docker exec -it dn01 /bin/bash  
+
+export HIVE_VER=3.1.2 # 2.3.9
+wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
+mkdir /hive
+tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /hive
+
+cat <<EOF |tee -a ~/.bashrc
+export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+export PATH=\$PATH:\$HIVE_HOME/bin
+EOF
+
+source ~/.bashrc
+# 1. hive-env.sh 설정 파일
+echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
+
+##### 2 리모트 메타스토어 방식 설정 
+cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+            <name>hive.metastore.local</name>
+            <value>false</value>
+        </property>
+        <property>
+            <name>javax.jdo.option.ConnectionURL</name>
+            <value>jdbc:mysql://rdb/metastore?characterEncoding=UTF-8&amp;useSSL=false&amp;user=hive&amp;password=hive</value>
+        </property>
+        <property>
+            <name>javax.jdo.option.ConnectionDriverName</name>
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+    <description>Username to use against metastore database</description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hive</value>
+    <description>password to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>hive.server2.thrift.client.user</name>
+    <value>hive</value>
+    <description>Username to use against thrift client</description>
+  </property>
+  <property>
+    <name>hive.server2.thrift.client.password</name>
+    <value>hive</value>
+    <description>Password to use against thrift client</description>
+  </property>
+
+        <property>
+            <name>hive.exec.local.scratchdir</name>
+            <value>/tmp/\${user.name}</value>
+            <description>Local scratch space for Hive jobs</description>
+        </property>
+        <property>
+            <name>hive.downloaded.resources.dir</name>
+            <value>/tmp/\${user.name}_resources</value>
+            <description>Temporary local directory for added resources in the remote file system.</description>
+        </property>
+
+<!-- hiveserver2 -->
+        <property>
+            <name>beeline.hs2.connection.user</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>beeline.hs2.connection.password</name>
+            <value>hive</value>
+        </property>
+        <property>
+            <name>hive.server2.enable.doAs</name>
+            <value>false</value>
+        </property>
+        <property>
+            <name>hive.server2.authentication</name>
+            <value>NONE</value>
+        </property>
+
+        <property>
+            <name>hive.server2.enable.impersonation</name>
+            <description>Enable user impersonation for HiveServer2</description>
+            <value>false</value>
+        </property> 
+ <!-- update, delete 등을 지원하기 위하여 필요함 -->
+        <property>
+            <name>hive.support.concurrency</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.enforce.bucketing</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.exec.dynamic.partition.mode</name>
+            <value>nonstrict</value>
+        </property>
+        <property>
+            <name>hive.txn.manager</name>
+            <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+        </property>
+        <property>
+            <name>hive.compactor.initiator.on</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>hive.compactor.worker.threads</name>
+            <value>4</value>
+        </property>     
+
+<property>
+  <name>beeline.hs2.jdbc.url.tcpUrl</name>
+  <value>jdbc:hive2://dn01:10000/metastore;user=hive;password=hive</value>
+</property>
+ 
+<property>
+  <name>beeline.hs2.jdbc.url.httpUrl</name>
+  <value>jdbc:hive2://dn01:11000/metastore;user=hive;password=hive;transportMode=http;httpPath=cliservice</value>
+</property>
+ 
+<property>
+  <name>beeline.hs2.jdbc.url.default</name>
+  <value>tcpUrl</value>
+</property>   
+</configuration>
+EOF
+
+# 3. 하이브용 디렉토리 생성 및 확인 
+hdfs dfs -mkdir -p /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 4. 쓰기 권한 추가 및 확인  
+hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 5. guava version 맞추기    
+rm $HIVE_HOME/lib/guava-19.0.jar
+cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
+# 6. jdbc driver classpath 등록  
+pushd /install-files
+wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-5.1.49.tar.gz
+tar -zxvf mysql-connector-java-5.1.49.tar.gz
+cp mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar $HIVE_HOME/lib/
+popd 
+
+# 6. init schema 
+echo "---- Ready to init schama ----"
+## 리모트 방식 
+#$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
+$HIVE_HOME/bin/schematool -dbType mysql -initSchema 
+# 7. hive 서버 실행  
+$HIVE_HOME/bin/hiveserver2
+#$HIVE_HOME/bin/hive --service metastore 
+echo "---- hiveserver2 started ----"
+```
+  
+### hue hive 에서 연동 결과 테스트   
+```sql
+create database if not exists testdb;
+use testdb;
+create external table if not exists employee (
+  eid int,
+  ename string,
+  age int,
+  jobtype string,
+  storeid int,
+  storelocation string,
+  salary bigint,
+  yrsofexp int
+)
+row format delimited
+fields terminated by ','
+lines terminated by '\n'
+stored as textfile location 'hdfs://namenode:8020/user/hive/warehouse/testdb.db/employee';
+```
 --- 

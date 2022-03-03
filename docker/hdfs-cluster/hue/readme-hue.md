@@ -11,7 +11,7 @@ Hue container , Hive 서버 연동하기 위한 설정 생성하기
 ```bash
 # 설정 편집하기  
 docker run -it -u root --name hue-tmp --net hdfs-cluster_default -p 8889:8888 gethue/hue:latest /bin/bash
-
+docker run -it -u root --name hue-tmp -p 8889:8888 shwsun/hue /bin/bash
 # 편집 저장하기  
 docker cp hue-conf/hue.ini hue-tmp:/usr/share/hue/desktop/conf/hue.ini
 
@@ -54,3 +54,11 @@ hue=> \q
 ## 연동 Hue 실행하기  
 ```bash
 ```
+
+## Hue <-> Filebrowser 에러  
+403 error : `User: root is not allowed to impersonate root`    
+hdfs dfs -mkdir -p /user/root
+hdfs dfs -chown -R root:supergroup /user
+hdfs dfs -chown -R root:supergroup /user/root
+hdfs dfs -chmod 755 /user
+hdfs dfs -chmod 755 /user/root
