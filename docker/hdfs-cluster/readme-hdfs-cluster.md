@@ -2,6 +2,61 @@
 1. namenode hdfs 실행  
 2. datanode hdfs 실행  
 
+
+## cluster 실행하기 간단  
+```bash
+# 1. cluster root로 이동
+cd /spark-git/spark/docker/hdfs-cluster 
+# 2. cluster up
+./up.sh &
+# 3. up 결과 확인 후 hadoop start 실행.
+./restart.sh 
+# 4. hive start 실행. ??
+docker exec -it dn01 /bin/bash 
+ -> /install-files/run-hive.sh
+# 5. hue 실행  
+docker rm hue
+docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
+```
+  
+## 정상 작동 여부 테스트  
+1. hive external 
+- external table 생성 및 데이터 파일 적재  
+```sql
+create database if not exists testdb;
+use testdb;
+
+create external table if not exists employee (
+  eid int,
+  ename string,
+  age int,
+  jobtype string,
+  storeid int,
+  storelocation string,
+  salary bigint,
+  yrsofexp int
+)
+row format delimited
+fields terminated by ','
+lines terminated by '\n'
+stored as textfile location 'hdfs://namenode:9000/user/hive/warehouse/testdb.db/employee';
+
+select * from employee;
+```
+- Hue 에서 파일브라우저로 employee.csv 파일을 testbd.db/employee 경로에 업로드 한다.  
+- 파일 업로드 이후 데이터 다시 조회 
+  
+2. hive map reduce job  
+managed table을 만들어서 yarn 작동을 확인한다.  
+```sql
+create table if not exists intbl (
+  eid int,
+  ename string);
+
+insert into intbl values(1, 'a');
+```
+---   
+
 ```bash
 docker build -t shwsun/nn . 
 docker run -it --privileged --name namenode --hostname namenode --rm -p 8088:8088 -v /hdfs/namenode:/hdfs/name shwsun/nn

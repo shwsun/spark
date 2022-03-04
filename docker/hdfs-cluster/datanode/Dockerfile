@@ -9,4 +9,5 @@ COPY *.sh /install-files/
 COPY conf/*.xml /install-files/conf/
 RUN chmod 755 /install-files/*.sh
 RUN /install-files/init-network.sh;/install-files/install-dn.sh;
+RUN /install-files/install-hive.sh
 CMD /bin/bash
