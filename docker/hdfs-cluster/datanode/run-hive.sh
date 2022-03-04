@@ -9,9 +9,12 @@ echo "---- Ready to init schama ----"
 # 3. 하이브용 디렉토리 생성 및 확인 
 $HADOOP_EXE_HOME/hdfs dfs -mkdir -p /user/hive/warehouse
 $HADOOP_EXE_HOME/hdfs dfs -ls -R /user/hive
+# hue 기본 계정용 
+$HADOOP_EXE_HOME/hdfs dfs -mkdir -p /user/root
 # 4. 쓰기 권한 추가 및 확인  
 $HADOOP_EXE_HOME/hdfs dfs -chmod g+w /user/hive/warehouse
 $HADOOP_EXE_HOME/hdfs dfs -ls -R /user/hive
+$HADOOP_EXE_HOME/hdfs dfs -chmod g+w /user/root
 #$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
 $HIVE_HOME/bin/schematool -dbType mysql -initSchema 
 # 7. hive 서버 실행  
