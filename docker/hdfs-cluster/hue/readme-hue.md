@@ -20,7 +20,7 @@ docker commit hue-tmp shwsun/hue
 docker login -u shwsun 
 docker push shwsun/hue
 
-docker run -it --privileged -u root --name hue --net hdfs-cluster_default -p 8890:8888 shwsun/hue ./startup.sh
+docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 shwsun/hue ./startup.sh
 docker run -it --privileged -u root --name hue --net hive-comp_default -p 8888:8888 gethue/hue:latest ./startup.sh
 
 docker run -it --privileged -u root --name hue-tmp -p 8888:8888 shwsun/hue /bin/bash

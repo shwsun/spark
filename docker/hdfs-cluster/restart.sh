@@ -6,6 +6,7 @@
 ./sync_key_after_up.sh
 # node start 
 echo "====  ssh key synched. ===="
+docker exec -u root -it namenode /hadoop//bin/hdfs namenode -format -force
 docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
 docker exec -u root -it namenode jps
 docker exec -u root -it dn01 jps

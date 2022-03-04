@@ -6,5 +6,6 @@ RUN mkdir -p /install-files
 WORKDIR install-files
 COPY *.sh /install-files/
 RUN chmod 755 /install-files/*.sh
-CMD /install-files/init-network.sh;/install-files/install-mysql.sh;/bin/bash
+RUN /install-files/init-network.sh;/install-files/install-mysql.sh;
+CMD service mysql start;/bin/bash
 #CMD /install-files/init-network.sh;/bin/bash

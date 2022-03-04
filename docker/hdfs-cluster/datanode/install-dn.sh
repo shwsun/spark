@@ -76,7 +76,7 @@ chmod 755 /shells/init-ssh.sh
 /shells/init-ssh.sh
 echo "---- HDFS SSH connection completed. ----"
 # $HADOOP_HOME/bin/hdfs namenode -format
-echo "---- HDFS Starting ... ----"
+echo "---- HDFS Datanode Prepared. ----"
 # $HADOOP_HOME/sbin/start-dfs.sh
 # $HADOOP_HOME/bin/hdfs --daemon start datanode
 # echo "---- HDFS Datanode Started. ----"

@@ -109,8 +109,8 @@ exit;
 
 ```bash
 docker exec -it dn01 /bin/bash  
-
-export HIVE_VER=3.1.2 # 2.3.9
+####### install hive 
+export HIVE_VER=3.1.2 
 wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
 mkdir /hive
 tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /hive
@@ -119,12 +119,13 @@ cat <<EOF |tee -a ~/.bashrc
 export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
 export PATH=\$PATH:\$HIVE_HOME/bin
 EOF
-
 source ~/.bashrc
+
 # 1. hive-env.sh 설정 파일
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 
 ##### 2 리모트 메타스토어 방식 설정 
+# 하나에만 설치하면 되지만, 편의상 모든 데이터 노드에 설치했다.  
 cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml 
 <?xml version="1.0" encoding="UTF-8" ?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -226,12 +227,12 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 
 <property>
   <name>beeline.hs2.jdbc.url.tcpUrl</name>
-  <value>jdbc:hive2://dn01:10000/metastore;user=hive;password=hive</value>
+  <value>jdbc:hive2://${hostname}:10000/metastore;user=hive;password=hive</value>
 </property>
  
 <property>
   <name>beeline.hs2.jdbc.url.httpUrl</name>
-  <value>jdbc:hive2://dn01:11000/metastore;user=hive;password=hive;transportMode=http;httpPath=cliservice</value>
+  <value>jdbc:hive2://${hostname}:11000/metastore;user=hive;password=hive;transportMode=http;httpPath=cliservice</value>
 </property>
  
 <property>
@@ -241,12 +242,6 @@ cat <<EOF |tee $HIVE_HOME/conf/hive-site.xml
 </configuration>
 EOF
 
-# 3. 하이브용 디렉토리 생성 및 확인 
-hdfs dfs -mkdir -p /user/hive/warehouse
-hdfs dfs -ls -R /user/hive
-# 4. 쓰기 권한 추가 및 확인  
-hdfs dfs -chmod g+w /user/hive/warehouse
-hdfs dfs -ls -R /user/hive
 # 5. guava version 맞추기    
 rm $HIVE_HOME/lib/guava-19.0.jar
 cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
@@ -257,9 +252,16 @@ tar -zxvf mysql-connector-java-5.1.49.tar.gz
 cp mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar $HIVE_HOME/lib/
 popd 
 
+#### run hive 
 # 6. init schema 
 echo "---- Ready to init schama ----"
 ## 리모트 방식 
+# 3. 하이브용 디렉토리 생성 및 확인 
+hdfs dfs -mkdir -p /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
+# 4. 쓰기 권한 추가 및 확인  
+hdfs dfs -chmod g+w /user/hive/warehouse
+hdfs dfs -ls -R /user/hive
 #$HIVE_HOME/bin/schematool -dbType mysql -initSchema -userName hive -passWord hive
 $HIVE_HOME/bin/schematool -dbType mysql -initSchema 
 # 7. hive 서버 실행  
