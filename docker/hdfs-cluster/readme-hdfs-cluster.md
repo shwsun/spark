@@ -7,14 +7,16 @@
 ```bash
 # 1. cluster root로 이동
 cd /spark-git/spark/docker/hdfs-cluster 
-# 2. cluster up
-./up.sh &
-# 3. up 결과 확인 후 hadoop start 실행.
+# 2. cluster up (new console)
+./up.sh 
+# 3. up 결과 확인 후 hadoop start 실행.  
 ./restart.sh 
-# 4. hive start 실행. ??
+# 4. hive start 실행. ??. (new console)  
 docker exec -it dn01 /bin/bash 
  -> /install-files/run-hive.sh
-# 5. hue 실행  
+# 5. hue 실행 http://35.188.152.238:8890/
+cd /spark-git/spark/docker/hdfs-cluster/hue
+#docker build -t shwsun/hue .
 docker rm hue
 docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
 ```

@@ -3,11 +3,12 @@
 ```bash
 docker build -t mysql-tmp .
 docker build -t shwsun/mysql-hue .
+docker push shwsun/mysql-hue
 ```
 
 - 사용하기  
 ```bash
-docker run -it --name mysql -d mysql-tmp 
+docker run -it --name mysql -d shwsun/mysql-hue
 docker exec -it mysql /bin/bash
 ```
 

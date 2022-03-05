@@ -10,9 +10,10 @@
 Hue container , Hive 서버 연동하기 위한 설정 생성하기    
 ```bash
 # 설정 편집하기  
-docker run -it -u root --name hue-tmp --net hdfs-cluster_default -p 8889:8888 gethue/hue:latest /bin/bash
+docker run -it -u root --name hue-tmp -p 8889:8888 -d gethue/hue:latest 
 
 # 편집 저장하기  
+cd /spark-git/spark/docker/hdfs-cluster/hue
 docker cp hue-conf/hue.ini hue-tmp:/usr/share/hue/desktop/conf/hue.ini
 
 # 설정 변경 저장 
@@ -20,13 +21,9 @@ docker commit hue-tmp shwsun/hue
 docker login -u shwsun 
 docker push shwsun/hue
 
-docker run -it --privileged -u root --name hue --net hive-comp_default -p 8888:8888 shwsun/hue ./startup.sh
-docker run -it --privileged -u root --name hue --net hive-comp_default -p 8888:8888 gethue/hue:latest ./startup.sh
-
-docker run -it --privileged -u root --name hue-tmp -p 8888:8888 shwsun/hue /bin/bash
-docker cp hue-conf/hue.ini hue-tmp:/usr/share/hue/desktop/conf/hue.ini
-
+docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 shwsun/hue ./startup.sh
 ```
+  
 현재 hadoop cluster가 yarn 을 실행하지 않은 상태라, Hue에서 Job 을 연동하려면 namenode 에서 아래와 같이 yarn Resource Manager를 실행해야 함.  
 ```bash
 #in namenode 
