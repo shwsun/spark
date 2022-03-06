@@ -1,3 +1,3 @@
 rm -rdf /hdfs/
 echo "==== /hdfs/ cleared. ===="
-docker-compose up
+docker-compose up 

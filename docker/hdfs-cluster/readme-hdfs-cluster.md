@@ -9,10 +9,11 @@
 cd /spark-git/spark/docker/hdfs-cluster 
 # 2. cluster up (new console)
 # 2.1 run hue 
-./up.sh 
+# docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
+./shell/cluster-up.sh 
 # 3. up 결과 확인 후 hadoop start 실행.  
 # 3.1 initschema & run hiveserver2 (new console)
-./restart.sh 
+./shell/restart-all.sh 
 # 3.1 namenode docker 접속해서 history server 실행해야 docker exec로 실행 안된다.  
 # history server 실행 후 사라져도 hue 정상 작동하는 현상 파악 필요.
 # MR 작업 중 hdfs 별도 마운트하지 않아서, 공간 부족 발생하기도 한다. -> 여러번 실행하면 실행 됨. 
@@ -368,3 +369,35 @@ insert into intbl values(1, 'a');
 -- Error while processing statement: FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask. Cannot initialize Cluster. Please check your configuration for mapreduce.framework.name and the correspond server addresses.
 ```
 --- 
+# Spark Yarn 설치  
+slaves 설정
+$SPARK_HOME/conf/slaves 파일
+server02
+server03
+server04
+server05
+spark-env.sh 설정
+$SPARK_HOME/conf/spark-env.sh 파일
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export SPARK_MASTER_HOST=master
+export HADOOP_HOME=/usr/local/hadoop
+export YARN_CONF_DIR=\$HADOOP_HOME/etc/hadoop
+export HADOOP_CONF_DIR=\$HADOOP_HOME/etc/hadoop
+spark-defaults.conf 설정
+$SPARK_HOME/conf/spark-defaults.conf 파일
+spark.master yarn
+spark.eventLog.enabled true
+spark.eventLog.dir file:///usr/local/spark/eventLog
+spark.history.fs.logDirectory file:///usr/local/spark/eventLog
+> mkdir -p $SPARK_HOME/eventLog
+Spark 시작
+Master 노드에서만 수행하면 된다.
+hadoop 시작
+> $HADOOP_HOME/bin/hdfs namenode -format -force
+> $HADOOP_HOME/sbin/start-dfs.sh
+> $HADOOP_HOME/sbin/start-yarn.sh
+> $HADOOP_HOME/bin/mapred --daemon start historyserver
+spark 시작
+> $SPARK_HOME/sbin/start-all.sh
+> $SPARK_HOME/sbin/start-history-server.sh
+

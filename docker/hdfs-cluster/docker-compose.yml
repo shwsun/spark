@@ -2,11 +2,11 @@ version: '3'
 services:
 
   namenode:
-    image: shwsun/nn
+    image: shwsun/hive-spark
     container_name: namenode
     hostname: namenode
     volumes:
-      - /hdfs/namenode:/hdfs/name
+      - /hdfs/namenode:/hdfs/node
     environment:
       - CLUSTER_NAME=hive
     ports:
@@ -17,11 +17,11 @@ services:
     tty: true
 
   dn01:
-    image: shwsun/dn
+    image: shwsun/hive-spark
     container_name: dn01
     hostname: dn01
     volumes:
-      - /hdfs/dn01:/hdfs/data
+      - /hdfs/dn01:/hdfs/node
     depends_on:
       - namenode
     ports:
@@ -30,11 +30,11 @@ services:
     tty: true
 
   dn02:
-    image: shwsun/dn
+    image: shwsun/hive-spark
     container_name: dn02
     hostname: dn02
     volumes:
-      - /hdfs/dn02:/hdfs/data
+      - /hdfs/dn02:/hdfs/node
     depends_on:
       - namenode
     ports:
@@ -43,11 +43,11 @@ services:
     tty: true
 
   dn03:
-    image: shwsun/dn
+    image: shwsun/hive-spark
     container_name: dn03
     hostname: dn03
     volumes:
-      - /hdfs/dn03:/hdfs/data
+      - /hdfs/dn03:/hdfs/node
     depends_on:
       - namenode
     ports:
@@ -68,16 +68,14 @@ services:
     # #   - "50075:50075"
     tty: true
 
-  hue:
-    image: shwsun/hue
-    container_name: hue
-    hostname: hue
-    # volumes:
-    #   - /hdfs/dn03:/hdfs/data
-    command: ./startup.sh
-    depends_on:
-      - rdb
-    ports:
-      - "8890:8888"
-    # #   - "50075:50075"
-    tty: true
+  # hue:
+  #   image: shwsun/hue
+  #   container_name: hue
+  #   hostname: hue
+  #   #restart: on-failure
+  #   command: bash -c "sleep 5;./startup.sh"
+  #   depends_on:
+  #     - "rdb"
+  #   ports:
+  #     - "8890:8888"
+  #   tty: true

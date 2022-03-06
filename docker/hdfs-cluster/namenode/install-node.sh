@@ -56,6 +56,7 @@ export YARN_NODEMANAGER_USER=root
 export PDSH_RCMD_TYPE=ssh
 EOF
 
+# workers 를 전달받아서 여러개 생성할 수 있게 변경 필요
 cat <<EOF |tee $HADOOP_HOME/etc/hadoop/workers
 dn01
 dn02
@@ -82,8 +83,8 @@ echo "---- HDFS configuration completed. ----"
 chmod 755 /shells/init-ssh.sh
 /shells/init-ssh.sh
 echo "---- HDFS SSH connection completed. ----"
-$HADOOP_HOME/bin/hdfs namenode -format -force
-echo "---- HDFS Prepared. ----"
+# $HADOOP_HOME/bin/hdfs namenode -format -force
+# echo "---- HDFS Prepared. ----"
 # $HADOOP_HOME/sbin/start-dfs.sh
 # $HADOOP_HOME/bin/hdfs --daemon start namenode
 # echo "---- HDFS Namenode Started. ----"
