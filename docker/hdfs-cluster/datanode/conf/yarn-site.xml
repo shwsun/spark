@@ -30,6 +30,6 @@
 <property><name>yarn.resourcemanager.resource-tracker.address</name><value>namenode:8025</value></property>
 <property><name>yarn.resourcemanager.scheduler.address</name><value>namenode:8030</value></property>
 <property><name>yarn.resourcemanager.admin.address</name><value>namenode:8141</value></property>
-<property><name>yarn.timeline-service.hostname</name><value>historyserver</value></property>
-<property><name>yarn.log.server.url</name><value>http://historyserver:8188/applicationhistory/logs/</value></property>
+<property><name>yarn.timeline-service.hostname</name><value>namenode</value></property>
+<!-- <property><name>yarn.log.server.url</name><value>http://historyserver:8188/applicationhistory/logs/</value></property> -->
 </configuration>
