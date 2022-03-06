@@ -18,3 +18,4 @@ docker exec -u root -it namenode jps
 docker exec -u root -it dn01 jps
 # yarn hitory server : 19888
 docker exec -u root -it namenode /hadoop/bin/mapred --daemon start historyserver
+docker exec -u root -it namenode jps
