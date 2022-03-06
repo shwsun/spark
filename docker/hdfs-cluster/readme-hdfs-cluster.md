@@ -8,8 +8,10 @@
 # 1. cluster root로 이동
 cd /spark-git/spark/docker/hdfs-cluster 
 # 2. cluster up (new console)
+# 2.1 run hue 
 ./up.sh 
 # 3. up 결과 확인 후 hadoop start 실행.  
+# 3.1 initschema & run hiveserver2 (new console)
 ./restart.sh 
 # 3.1 namenode docker 접속해서 history server 실행해야 docker exec로 실행 안된다.  
 # history server 실행 후 사라져도 hue 정상 작동하는 현상 파악 필요.
@@ -17,13 +19,12 @@ cd /spark-git/spark/docker/hdfs-cluster
 # - volume mount 시점 확인하고(hdfs로 보면 공간 많은 걸로 보이지만 실제 df로 보면 공간 거의 없음.)
 # - 가능하면, hdfs용 볼륨은 별도로 할당한다.  hdfs mount 후 같은 경로에 unmanaged 접근한 경우 공간 관리 안 될 듯... 
 # 4. hive start 실행. ??. (new console)  
-docker exec -it dn01 /bin/bash 
- -> /install-files/run-hive.sh
-# 5. hue 실행 http://34.136.54.74/:8890/
-cd /spark-git/spark/docker/hdfs-cluster/hue
-#docker build -t shwsun/hue .
-docker rm hue
-docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
+# docker exec -it dn01 /bin/bash /install-files/run-hive.sh
+# # 5. hue 실행 http://34.136.54.74/:8890/
+# cd /spark-git/spark/docker/hdfs-cluster/hue
+# #docker build -t shwsun/hue .
+# docker rm hue
+# docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
 ```
   
 ## 정상 작동 여부 테스트  

@@ -19,3 +19,5 @@ docker exec -u root -it dn01 jps
 # yarn hitory server : 19888
 docker exec -u root -it namenode /hadoop/bin/mapred --daemon start historyserver
 docker exec -u root -it namenode jps
+# run hiveserver2 in dn01  
+docker exec -it dn01 /bin/bash /install-files/run-hive.sh
