@@ -14,7 +14,7 @@ cd /spark-git/spark/docker/hdfs-cluster
 # 4. hive start 실행. ??. (new console)  
 docker exec -it dn01 /bin/bash 
  -> /install-files/run-hive.sh
-# 5. hue 실행 http://35.188.152.238:8890/
+# 5. hue 실행 http://34.136.54.74/:8890/
 cd /spark-git/spark/docker/hdfs-cluster/hue
 #docker build -t shwsun/hue .
 docker rm hue
