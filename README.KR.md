@@ -21,85 +21,38 @@ Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명
 ---  
 # 실행 순서  
 이 프로젝트는 아래와 같은 순서로 진행합니다.  
-1. 실행 환경(machine) 준비  
- - 로컬 VM 환경  
- - GCP 환경  
- - code-server 
-2. Spark local mode 최소(pyspark + Jupyter) 실행  
-3. pyspark 최소 설치로 원격 spark cluster 사용하기  
-4. Spark local mode + Hdfs + Hive 실행  
-5. Spark Cluster mode 간단 설치(Docker-compose. bitnami container image)  
-6. Spark cluster에 kafka 추가  
-7. Spark cluster에 Ignite 추가  
-8. Spark Cluster + Hdfs + Hive 직접 구성  
-9. Oozie 추가  
-10. Zeppelin 추가  
+1. 개발환경 준비 : code-server  
+2. hdfs + hive + spark cluster 준비   
+3. spark 개발환경으로 hue 연동   
+4. spark 개발환경으로 jupyter lab 연동  
+
   
 ---  
-# GCP spark-env 실행하기  
-1. spark-env start 
-2. ssh spark-env 
-3. code-server start 
-code-server 자동 실행되도록 서비스로 등록했음.  
-http://<code-server host url>/  
-
-<!-- ```bash
-code-server --bind-addr 0.0.0.0:80 > /dev/null 2>&1 &  
-cat ~/.config/code-server/config.yaml 
-# 연결 후 /spark-git/spark로 오픈 폴더 변경  
-``` -->
-4. spark-client jupyter run   
+# Code-Server 설치하기  
+개발환경 자체를 `code-server`를 이용해 편집하기 위해 host machine에 직접 설치합니다.   
+GCP 에서 VM 을 생성해 사용하는 경우, GCP SSH 콘솔에서 아래와 같이 실행합니다.  
 ```bash
-docker run -itd --privileged --name spark-client --hostname spark-client --rm -p 8888:8888 -p 4040-4050:4040-4050 -v /spark-git/spark/spark-local/notebooks:/notebooks shwsun/jupyter-spark:1.2
-# token 확인 
-docker exec -it spark-client jupyter server list
+sudo -i
+curl -fsSL https://code-server.dev/install.sh | sh
 ```
-
-5. hive-single run   
+코드서버가 정상 작동하는 지 실행하기 위해 실행해 봅니다.  
 ```bash
-#docker run -itd --privileged --name hive-s --hostname hive-s -p 10000:10000 --rm shwsun/hive-single
-docker run -itd --privileged --name hive-s --hostname hive-s --rm shwsun/hive-single
-# detach 모드로 실행했기 때문에 hdfs 설치/실행 전에 도커 실행은 완료된다. 
-# 아래 명령을 주기적으로 실행해서 name node 등이 목록에 표시되면 hdfs 준비된 것.
-docker exec -it hive-s jps 
+code-server > /dev/null 2>&1 &
+# 아래와 같이 코드 서버 설정을 확인할 수 있습니다. 
+cat ~/.config/code-server/config.yaml
 ```
-6. hive 외부 metastore 사용하는 경우. metastore rdb 실행  
+지정한 포트로 실행하고 외부 접속을 허용하기 위해 아래와 같이 설정을 변경하고 서비스로 등록합니다.   
+코드서버 포트가 GCP 방화벽에 열려 있어야 합니다.  
 ```bash
-docker run --name rdb -p 10000:10000 -e POSTGRES_PASSWORD=1234 -d  postgres:13
-# psql console 
-# ## Hive Metastore 생성 
-docker exec -u postgres -it rdb psql -c "create user postgres with password '1234';"
-docker exec -u postgres -it rdb psql -c "create database metastore_db owner=postgres;"
-docker exec -u postgres -it rdb psql -c "create schema authorization postgres;"
-docker exec -u postgres -it rdb psql -c "\l"
-
-psql -d metastore_db -U postgres
-psql#> \password ==> set password
-
-
-docker run --name rdb --env MARIADB_USER=hive --env MARIADB_PASSWORD=hive --env MARIADB_ROOT_PASSWORD=hive -d mariadb:10.2.37-bionic
-
-
+sudo -i
+vi ~/.config/code-server/config.yaml
+# 
+bind-addr: 0.0.0.0:8888
+auth: password
+password: <password_you_want>
+cert: false
+# 기존 코드 서버 실행 프로세스 죽이기
+kill -9 ...
+# 서비스 등록 
+systemctl enable --now code-server@$USER
 ```
-7. Hue 실행  
-```bash
-docker run -it --name hue -p 8088:8888 shwsun/hue ./startup.sh
-```
-  
----  
-# network config  
-hdfs, hive, hue, postgre(hue meta, hive meta, rdb), jupyter-client 간의 원활한 통신을 위해 내부 네트웍을 아래와 같이 설정  
-/etc/hosts 또는 도커 컴포즈로 생성  
-```h
-172.17.0.2 spark-client 
-172.17.0.3 hadoop    
-172.17.0.4 rdb     
-172.17.0.5 hue     
-```
-  
-# RDB - Postgre sql  
-hive metastore로 사용할 rdb로 postgre를 아래와 같이 실행한다.  
-```bash
-```
-
-
