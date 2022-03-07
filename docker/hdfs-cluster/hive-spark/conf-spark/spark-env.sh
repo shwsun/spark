@@ -1,5 +1,9 @@
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export SPARK_MASTER_HOST=master
-export HADOOP_HOME=/usr/local/hadoop
-export YARN_CONF_DIR=\$HADOOP_HOME/etc/hadoop
-export HADOOP_CONF_DIR=\$HADOOP_HOME/etc/hadoop
+export HADOOP_HOME=/hadoop
+export SPARK_HOME=/spark
+export SPARK_MASTER_HOST=spark-master
+export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin
+export SPARK_DIST_CLASSPATH=$(hadoop classpath)

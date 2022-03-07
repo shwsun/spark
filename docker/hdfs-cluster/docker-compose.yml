@@ -79,3 +79,17 @@ services:
     ports:
       - "8890:8888"
     tty: true
+
+  spark-master:
+    image: shwsun/hive-spark
+    container_name: spark-master
+    hostname: spark-master
+    command: bash "/spark/sbin/start-all.sh;./install-jupyter.sh;/bin/bash"
+    volumes:
+      - /spark-git/spark/spark-local/notebooks:/notebooks
+    depends_on:
+      - namenode
+    ports:
+      - "8889:8888"
+      - "4040-4049:4040-4049"
+    tty: true

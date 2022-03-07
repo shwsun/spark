@@ -6,11 +6,11 @@
 ## cluster 실행하기 간단  
 ```bash
 # 1. cluster root로 이동
-cd /spark-git/spark/docker/hdfs-cluster 
+cd /spark-git/spark/docker/hdfs-cluster/shell 
 # 2. cluster up (new console)
 # 2.1 run hue 
 # docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
-./shell/cluster-up.sh 
+./cluster-up.sh 
 # 3. up 결과 확인 후 hadoop start 실행.  
 # 3.1 initschema & run hiveserver2 (new console)
 cd /spark-git/spark/docker/hdfs-cluster/shell
@@ -402,3 +402,21 @@ spark 시작
 > $SPARK_HOME/sbin/start-all.sh
 > $SPARK_HOME/sbin/start-history-server.sh
 
+---  
+# Spark master 
+## start 
+
+## jupyter  
+- install  
+```bash
+apt-get install -y python3-pip iputils-ping
+ln /usr/bin/pip3 /usr/bin/pip  
+pip install jupyterlab
+```
+   
+- run  
+```bash
+mkdir -p /notebooks
+jupyter lab --allow-root --ip='*' --notebook-dir='/notebooks' --workspace='/notebooks' > /dev/null 2>&1 &
+jupyter server list 
+```
