@@ -38,7 +38,7 @@ export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin
 EOF
 
 #### HDFS cluster mode namenode setting ####  
-cp /install-files/conf/*.xml $HADOOP_HOME/etc/hadoop/
+cp /install-files/conf-hadoop/*.xml $HADOOP_HOME/etc/hadoop/
 
 echo "[core-site, hdfs-site] setting for Pseudo-Distributed mode completed"
 

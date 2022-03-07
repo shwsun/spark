@@ -16,7 +16,7 @@ echo "HADOOP_HOME=$HADOOP_HOME"
 # 1. hive-env.sh 설정 파일
 echo "HADOOP_HOME=$HADOOP_HOME" > $HIVE_HOME/conf/hive-env.sh
 # 2. hive-site.xml 설정 : {{hostname}} 을 실제 host name으로 치환  
-cp /install-files/conf/hive-site.xml $HIVE_HOME/conf/
+cp /install-files/conf-hive/hive-site.xml $HIVE_HOME/conf/
 sed -i 's/{{hostname}}/${hostname}/' $HIVE_HOME/conf/hive-site.xml 
 # 5. guava version 맞추기    
 rm $HIVE_HOME/lib/guava-19.0.jar

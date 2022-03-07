@@ -13,7 +13,8 @@ cd /spark-git/spark/docker/hdfs-cluster
 ./shell/cluster-up.sh 
 # 3. up 결과 확인 후 hadoop start 실행.  
 # 3.1 initschema & run hiveserver2 (new console)
-./shell/restart-all.sh 
+cd /spark-git/spark/docker/hdfs-cluster/shell
+./restart-all.sh 
 # 3.1 namenode docker 접속해서 history server 실행해야 docker exec로 실행 안된다.  
 # history server 실행 후 사라져도 hue 정상 작동하는 현상 파악 필요.
 # MR 작업 중 hdfs 별도 마운트하지 않아서, 공간 부족 발생하기도 한다. -> 여러번 실행하면 실행 됨. 
