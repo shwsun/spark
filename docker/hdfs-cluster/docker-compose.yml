@@ -84,7 +84,8 @@ services:
     image: shwsun/hive-spark
     container_name: spark-master
     hostname: spark-master
-    command: bash "/spark/sbin/start-all.sh;./install-jupyter.sh;/bin/bash"
+    #command: bash 
+    command: bash -c "./install-jupyter.sh"
     volumes:
       - /spark-git/spark/spark-local/notebooks:/notebooks
     depends_on:

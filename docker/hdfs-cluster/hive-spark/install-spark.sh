@@ -8,14 +8,14 @@ mv /spark-3.1.3-bin-without-hadoop /spark
 cat <<EOF |tee -a ~/.bashrc
 export SPARK_HOME=/spark
 export SPARK_DIST_CLASSPATH=\$(hadoop classpath)
-export PATH=\$PATH:\$SPARK_HOME/bin
+export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin:\$HIVE_HOME/bin:\$SPARK_HOME/bin:/usr/local/bin
 EOF
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop
 export SPARK_HOME=/spark
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native
-export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin:/usr/local/bin
 export SPARK_DIST_CLASSPATH=$(hadoop classpath)
 
 # 4. default conf setting
