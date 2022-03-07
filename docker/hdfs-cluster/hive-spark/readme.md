@@ -1,10 +1,10 @@
 # Hive-Spark node container   
 ## Specification 
-- Hadoop : 
-- Hive : 
+- Hadoop : 3.2.2 
+- Hive : 3.1.2  
 - Yarn : 
-- Hue : 
-- Spark :  
+- Hue : 4
+- Spark : 3.1.3  
   
 
 ## build 
