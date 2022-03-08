@@ -1,15 +1,16 @@
 # 
 export HIVE_VER=3.1.2 
 wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
-mkdir /hive
-tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /hive
+mkdir /hive-bin
+tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /
+mv /apache-hive-${HIVE_VER}-bin /hive-bin
 
 cat <<EOF |tee -a ~/.bashrc
-export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+export HIVE_HOME=/hive-bin
 export PATH=\$PATH:\$HIVE_HOME/bin
 EOF
 #source ~/.bashrc
-export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+export HIVE_HOME=/hive-bin
 export PATH=$PATH:$HIVE_HOME/bin
 export HADOOP_HOME=/hadoop
 echo "HADOOP_HOME=$HADOOP_HOME"

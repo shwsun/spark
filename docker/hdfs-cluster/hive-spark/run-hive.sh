@@ -1,6 +1,6 @@
 #### run hive 
-export HIVE_VER=3.1.2 
-export HIVE_HOME=/hive/apache-hive-${HIVE_VER}-bin
+#export HIVE_VER=3.1.2 
+export HIVE_HOME=/hive-bin
 export HADOOP_EXE_HOME=/hadoop/bin
 
 # 6. init schema 
