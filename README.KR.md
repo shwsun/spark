@@ -12,16 +12,11 @@ This project is aim for creating spark exercise environment and making spark get
 
 
 ---  
-# 테스트용 VM 구성  
-Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명합니다.  
-실행해 볼 수 있는 machine을 이미 준비해 둔 경우에는 이 단계는 생략합니다.  
-준비 과정은 각각 [`host-vm`], [`gcp`] 부분에서 자세하게 설명합니다.  
-  
-  
----  
+ 
 # 실행 순서  
 이 프로젝트는 아래와 같은 순서로 진행합니다.  
-1. 개발환경 준비 : code-server
+0. 테스트 머신 준비  
+1. (개발환경 준비 : code-server)
 2. 실행 환경 준비 : docker, docker-compose    
 3. hdfs + hive + spark cluster 준비   
 4. cluster 실행(spark cluster 실행) 
@@ -40,11 +35,26 @@ cd /spark-git/spark/docker/hdfs-cluster/shell
 docker exec -it spark-master bash -c "/install-files/run-spark.sh"
 ```
   
----  
+# 0. 테스트용 머신 준비  
+여기에서는 편의상 VM 또는 1 대의 머신에 여러 대의 container로 분산 환경을 구성합니다.  
+여러 대의 머신을 확보해서 분산환경을 구성하려면, 이 샘플의 container 각각에 실행하는 과정을 머신에서 직접 수행하면 됩니다.  
+    
+Virtualbox(vagrant)나 GCP를 이용해 machine을 준비하는 과정을 설명합니다.  
+실행해 볼 수 있는 machine을 이미 준비해 둔 경우에는 이 단계는 생략합니다.  
+준비 과정은 각각 [`host-vm`], [`gcp`] 부분에서 자세하게 설명합니다.  
+> ... 작성 중 ...  
+  
+--- 
+
 # 1. Code-Server 설치하기  
-개발환경 자체를 `code-server`를 이용해 편집하기 위해 host machine에 직접 설치합니다.   
-GCP 에서 VM 을 생성해 사용하는 경우, GCP SSH 콘솔에서 아래와 같이 실행합니다.  
+개발환경 설치 과정을 소스 코드로 관리하기 위해(Infrastructure as Code) `code-server`를 설치하고, 여기에서 설치 프로젝트를 진행할 예정입니다.   
+설치 과정이 필요하지 않고, 클러스터를 실행해 보기만 하려는 경우에는 `code-server`는 설치할 필요가 없습니다.  
+code-server의 terminal과 소스 편집창을 오가며 작업할 예정이라, code-server를 container로 설치하지 않고, baremetal 로 설치했습니다. 
+code-server 터미널에서 실행한 여러가지 종류의 설치 명령이, container 내부가 아닌 머신에서 실행되어야 하는 경우가 더 많기 때문입니다.  
+     
+GCP 에서 VM 을 생성해 사용하는 경우, GCP SSH 콘솔이나 명령창에 연결해서 아래와 같이 실행합니다.  
 ```bash
+# 코드 서버 설치 파일 다운로드 및 설치  
 sudo -i
 curl -fsSL https://code-server.dev/install.sh | sh
 ```
@@ -54,6 +64,9 @@ code-server > /dev/null 2>&1 &
 # 아래와 같이 코드 서버 설정을 확인할 수 있습니다. 
 cat ~/.config/code-server/config.yaml
 ```
+  
+머신을 시작하면 바로 코드 서버가 실행되도록 서비스로 등록합니다.  
+  
 지정한 포트로 실행하고 외부 접속을 허용하기 위해 아래와 같이 설정을 변경하고 서비스로 등록합니다.   
 코드서버 포트가 GCP 방화벽에 열려 있어야 합니다.  
 ```bash
