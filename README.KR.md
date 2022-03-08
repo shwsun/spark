@@ -33,6 +33,7 @@ cd /spark-git/spark/docker/hdfs-cluster/shell
 # Spark cluster 실행. 'restart-all.sh' 실행하면 ssh 연결이 가능해져서 전체 spark node 한번에 실행 가능.  
 # 향후, restart-all.sh 에 통합할 예정  
 docker exec -it spark-master bash -c "/install-files/run-spark.sh"
+docker exec -it spark-master jupyter server list
 ```
   
 # 0. 테스트용 머신 준비  
@@ -99,9 +100,8 @@ sudo -i
 apt-get update  
 apt-get install -y ca-certificates curl gnupg lsb-release
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# 아래 문장은 줄바꿈 없이 한 줄로 이루어진 명령. 웹 복사시 줄바꿈 들어가 있으면, 줄바꿈 없애야 함.  
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
@@ -142,4 +142,14 @@ docker exec -it spark-master bash -c "/install-files/run-spark.sh"
 Hue를 연결하거나, Jupyter 를 실행해 Spark 개발환경에 연결한다.  
 Hue 는 Jupyter 보다 편집은 불편하지만, hive 등 다른 환경과 통합되어 있어서 편한 점이 장점이다.  
 Hue는 pyspark, Livy interactive 환경을 설치하고, Jupyter는 원격 연결 방식으로 설치해서 사용할 예정.  
+  
+> 주피터 실행 전에 명령창에서 pyspark로 스파크 실행이 가능한 상황 확인해야 함.  
+> 이 환경 유지한 상태로 jupyter를 실행해야 함. 
+> 주피터에서 pip install pyspark로 설치하는 pyspark는 spark 사용하기 위한 API 일 뿐.  
+> spark session 연결 시에는 외부 환경에 설정된 pyspark 실행 환경이 로드되어야 한다.  
+  
+아래와 같이 `spark-master` node 에서 실행한 jupyter 노트북에서 spark session을 연결해서 실행할 수 있다.  
+![Spark Yarn connection](./imgs/spark-yarn-connect.png)  
+
+
   

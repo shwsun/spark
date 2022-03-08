@@ -85,7 +85,7 @@ services:
     container_name: spark-master
     hostname: spark-master
     #command: bash 
-    command: bash -c "./install-jupyter.sh"
+    command: bash -c "./install-jupyter.sh;echo '======== jupyter installed. =======';/bin/bash"
     volumes:
       - /spark-git/spark/spark-local/notebooks:/notebooks
     depends_on:
