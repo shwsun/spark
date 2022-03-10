@@ -38,5 +38,9 @@ docker exec -u root -it namenode jps
 echo "====>  Yarn initialized. <===="
 # run hiveserver2 in dn01 as detached mode 
 echo "====>  Start Run Hiveserver2 in dn01 <===="
-docker exec -it -d dn01 /bin/bash /install-files/run-hive.sh
+docker exec -it -d dn01 /bin/bash /install-files/shells/run-hive.sh
 echo "====>  Hiveserver2 started. <===="
+echo "====>  Start Spark master & History server in spark-master <===="
+docker exec -it -d spark-master /bin/bash /install-files/shells/run-spark.sh
+docker exec -u root -it spark-master jps
+echo "====> Spark master & History server started. <===="

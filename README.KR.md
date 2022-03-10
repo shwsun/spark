@@ -25,7 +25,7 @@ This project is aim for creating spark exercise environment and making spark get
 - 클러스터 생성 및 실행  
 ```bash
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
-cd /spark-git/spark/docker/hdfs-cluster/shell 
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
 # 클러스터 환경 생성 
 ./cluster-up.sh 
 # hadoop, spark master/slave nodes 실행  
@@ -117,7 +117,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 환경 실행 전/후에 처리할 일들을 묶어서 실행 스크립트로 만들어 두었습니다.  
 스크립트를 순서대로 실행하면, cluster를 실행하고 사용할 수 있습니다.  
 ```bash
-#cd /spark-git/spark/docker/hdfs-cluster/shell
+#cd /spark-git/spark/docker/hdfs-cluster/cluster-shell 
 ./cluster-up.sh 
 ```
   
@@ -128,7 +128,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 - 클러스터 생성 및 실행  
 ```bash
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
-cd /spark-git/spark/docker/hdfs-cluster/shell 
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
 # 클러스터 환경 생성 
 ./cluster-up.sh 
 # hadoop, spark master/slave nodes 실행  

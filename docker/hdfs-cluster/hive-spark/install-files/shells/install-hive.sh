@@ -1,9 +1,9 @@
 # 
 export HIVE_VER=3.1.2 
 wget https://dlcdn.apache.org/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
-mkdir /hive-bin
+#mkdir /hive-bin
 tar -xvf apache-hive-${HIVE_VER}-bin.tar.gz -C /
-mv /apache-hive-${HIVE_VER}-bin /hive-bin
+mv /apache-hive-${HIVE_VER}-bin /hive-bin/
 
 cat <<EOF |tee -a ~/.bashrc
 export HIVE_HOME=/hive-bin

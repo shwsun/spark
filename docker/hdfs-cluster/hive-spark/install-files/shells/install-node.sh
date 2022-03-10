@@ -19,7 +19,7 @@ apt-get install -y openjdk-8-jdk
 # hadoop 3.2.2 (3.2.0)
 wget https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz
 tar -xvf hadoop-3.2.2.tar.gz -C /
-mv /hadoop-3.2.2 /hadoop
+mv /hadoop-3.2.2 /hadoop/
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/hadoop
 export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop

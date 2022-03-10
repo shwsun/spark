@@ -85,7 +85,10 @@ services:
     container_name: spark-master
     hostname: spark-master
     #command: bash 
-    command: bash -c "./run-jupyter.sh;./run-spark.sh;/bin/bash"
+    # run-spark.sh를 실행하려면 node 간에 ssh 연결이 끝난 상태이어야 한다.  
+    # 외부 쉘 restart-all.sh 에서 ssh sync를 처리한다. 따라서, ssh sync 완료 후에 실행하도록 변경. 
+    #command: bash -c "./run-jupyter.sh;./run-spark.sh;/bin/bash"
+    command: bash -c "./run-jupyter.sh;/bin/bash"
     volumes:
       - /spark-git/spark/spark-local/notebooks:/notebooks
     depends_on:

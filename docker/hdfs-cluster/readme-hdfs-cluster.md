@@ -6,14 +6,14 @@
 ## cluster 실행하기 간단  
 ```bash
 # 1. cluster root로 이동
-cd /spark-git/spark/docker/hdfs-cluster/shell 
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell 
 # 2. cluster up (new console)
 # 2.1 run hue 
 # docker run -it --privileged -u root --name hue --net hdfscluster_default -p 8890:8888 -d shwsun/hue ./startup.sh
 ./cluster-up.sh 
 # 3. up 결과 확인 후 hadoop start 실행.  
 # 3.1 initschema & run hiveserver2 (new console)
-cd /spark-git/spark/docker/hdfs-cluster/shell
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell 
 ./restart-all.sh 
 
 # 4. Spark cluster 실행. 3 실행하면 ssh 연결이 가능해져서 전체 spark node 한번에 실행 가능.  
