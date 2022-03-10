@@ -36,3 +36,13 @@ root@dn01:/install-files# find / -name 'log4j*'
 /hive-bin/apache-hive-3.1.2-bin/lib/log4j-web-2.10.0.jar
 /hive-bin/apache-hive-3.1.2-bin/lib/log4j-1.2-api-2.10.0.jar
 ```
+  
+---  
+## Livy 설치  
+spark-master 에 livy server를 설치하고 실행하면, hue 에서 job-livy를 조회할 수 있다.  
+hue notebook pyspark에 livy를 연결하면, 편집기를 이용해 livy를 호출할 수 있다.  
+단, spark 3.x 에서는 livy 호출 시 아래와 같은 에러가 발생한다.  
+이 에러를 처리해야 사용할 수 있다.  
+```bash
+The Spark session is dead and could not be created in the cluster: at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:90) at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1039) at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1048) at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala) Caused by: java.lang.ClassNotFoundException: scala.Function0$class at java.net.URLClassLoader.findClass(URLClassLoader.java:387) at java.lang.ClassLoader.loadClass(ClassLoader.java:418) at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ... 20 more 2022-03-10 06:22:21,062 INFO util.ShutdownHookManager: Shutdown hook called
+```

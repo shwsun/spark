@@ -17,6 +17,6 @@ RUN ./init-network.sh;./install-node.sh;
 # install hive. necessary only in hive job node. but for installation convinience install all nodes.  
 RUN ./install-hive.sh;
 # spark : spark-master & data node , jupyter : spark-master node. but for convinience installed in all nodes.  
-RUN ./install-spark.sh;./install-jupyter.sh;
+RUN ./install-spark.sh;./install-jupyter.sh;./install-livy.sh;
 RUN ./install-log4j-fix.sh;
 CMD /bin/bash
