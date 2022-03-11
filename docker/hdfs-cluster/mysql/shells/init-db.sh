@@ -1,4 +1,4 @@
-service mysql restart
+# service mysql restart
 #sleep 5
 #### create hive meta-store ####
 mysql -u root -p"\n" -e "install plugin validate_password soname 'validate_password.so';"
