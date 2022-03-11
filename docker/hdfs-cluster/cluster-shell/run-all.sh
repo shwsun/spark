@@ -69,7 +69,9 @@ docker exec -it -d spark-master /bin/bash /install-files/shells/run-spark.sh
 docker exec -u root -it spark-master jps
 echo "====> Spark master & History server started. <===="
 
-echo "====>  Start Spark Livy server <===="
-docker exec -it -d spark-master /bin/bash /install-files/shells/run-livy.sh
-docker exec -u root -it spark-master jps
-echo "====> Spark Livy server started. <===="
+echo "====> Spark Livy server not started. need higher scala build. <===="
+# spark 3 scala 1.2 빌드 필요해서 비활성화 
+# echo "====>  Start Spark Livy server <===="
+# docker exec -it -d spark-master /bin/bash /install-files/shells/run-livy.sh
+# docker exec -u root -it spark-master jps
+# echo "====> Spark Livy server started. <===="
