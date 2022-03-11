@@ -6,22 +6,31 @@
 ./sync_key.sh
 # Hue start 
 echo "====  ssh key synched. ===="
-# run hue in detached mode 
-docker exec -it --privileged -u root -d hue ./startup.sh  
-sleep 5
-echo "====>  Hue started. <===="
+
 #### node start ####
 # init namenode 
 echo "====>  Namenode initializing ... <===="
 echo "====  formatting ===="
 if [ "$1" == "init" ] 
 then 
+    # rdb init  
+    docker exec -it --privileged -u root -d rdb /bin/bash /install-files/shells/init-db.sh
+    sleep 5
+    echo ">> hive & hue db created. "
     echo ">> namenode inited. "
-    rm -rdf /hdfs/
+    # 이미 docker 에서 mount 된 이후라, 지우려면 내용만 지워야 한다.  
+    #rm -rdf /hdfs/
     docker exec -u root -it namenode /hadoop/bin/hdfs namenode -format -force
 else 
     echo ">> run previously formatted namenode. "
 fi
+
+
+
+# run hue in detached mode 
+docker exec -it --privileged -u root -d hue ./startup.sh  
+sleep 5
+echo "====>  Hue started. <===="
 
 echo "====  start hdfs ===="
 docker exec -u root -it namenode /hadoop/sbin/start-dfs.sh 
