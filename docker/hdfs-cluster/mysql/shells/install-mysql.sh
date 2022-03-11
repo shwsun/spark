@@ -4,5 +4,6 @@ apt-get update
 # mysql 
 apt-get install -y mysql-server
 sed -i 's/bind-address/bind-address = 0.0.0.0 #/' /etc/mysql/mysql.conf.d/mysqld.cnf
-service mysql start
+echo "==== install mysql-server ===="
+#service mysql start
 #service mysql restart
