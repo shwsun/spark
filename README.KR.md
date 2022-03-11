@@ -127,15 +127,15 @@ sudo chmod +x /usr/local/bin/docker-compose
   
 - 클러스터 생성 및 실행  
 ```bash
+# mysql data를 도커 재실행시에도 유지하려고 /data/mysql 볼륨을 공유. 미리 생성해 두어야. 
+mkdir -p /data/mysql
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
 cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
+# 최초 실행시, hive&hue db 생성(초기화) 및 namenode format을 진행해야 할 경우 명령에 init 옵션을 추가. 
 # 클러스터 환경 생성 
-./cluster-up.sh 
+./cluster-up.sh init
 # hadoop, spark master/slave nodes 실행  
-./restart-all.sh 
-# Spark cluster 실행. 'restart-all.sh' 실행하면 ssh 연결이 가능해져서 전체 spark node 한번에 실행 가능.  
-# 향후, restart-all.sh 에 통합할 예정  
-docker exec -it spark-master bash -c "/install-files/run-spark.sh"
+./run-all.sh init
 ```
   
 # 5. IDE 연결  

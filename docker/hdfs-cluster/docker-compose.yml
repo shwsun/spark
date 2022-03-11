@@ -59,8 +59,9 @@ services:
     image: shwsun/mysql-hue
     container_name: rdb
     hostname: rdb
-    # volumes:
-    #   - /hdfs/dn03:/hdfs/data
+    # must be /data/mysql folder in host machine
+    volumes:
+      - /data/mysql:/var/lib/mysql
     # depends_on:
     #   - dn03
     # ports:
