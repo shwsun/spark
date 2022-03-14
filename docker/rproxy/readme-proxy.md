@@ -4,7 +4,7 @@ Cluster Web UI 호출에 사용할 proxy 설정
 
 ```bash
 # nginx -s reload
-docker run -it --name proxy -p 80:80 -d nginx
+docker run -it --name rproxy --net hdfs-cluster_default -p 80:80 -d nginx
 ```
 
 ```Dockerfile
@@ -19,7 +19,7 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 docker build -t shwsun/rproxy .
 docker push shwsun/rproxy
 
-docker run -it --name rproxy -p 80:80 -d shwsun/rproxy /bin/bash
+docker run -it --name rproxy --net hdfs-cluster_default -p 80:80 -d shwsun/rproxy /bin/bash
 
 ```
 
@@ -28,7 +28,7 @@ docker run -it --name rproxy -p 80:80 -d shwsun/rproxy /bin/bash
 ```bash
 # rproxy 경로에서 실행 
 docker cp default.conf rproxy:/etc/nginx/conf.d/default.conf
-docker exec -it rproxy nginx -s reload
+docker exec -u root --privileged -it rproxy  nginx -s reload
 ```
 
 

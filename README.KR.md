@@ -27,13 +27,19 @@ This project is aim for creating spark exercise environment and making spark get
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
 cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
 # 클러스터 환경 생성 
-./cluster-up.sh 
+./cluster-up.sh init 
+# # rproxy 실행 
+# cd /spark-git/spark/docker/rproxy 
+# docker run -it --name rproxy --net hdfs-cluster_default -p 80:80 -d nginx  
+# docker cp default.conf rproxy:/etc/nginx/conf.d/default.conf
+# docker exec --privileged -u root -it rproxy nginx -s reload
 # hadoop, spark master/slave nodes 실행  
-./restart-all.sh 
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell 
+./run-all.sh init 
 # Spark cluster 실행. 'restart-all.sh' 실행하면 ssh 연결이 가능해져서 전체 spark node 한번에 실행 가능.  
 # 향후, restart-all.sh 에 통합할 예정  
-docker exec -it spark-master bash -c "/install-files/run-spark.sh"
-docker exec -it spark-master jupyter server list
+# docker exec -it spark-master bash -c "/install-files/run-spark.sh"
+# docker exec -it spark-master jupyter server list
 ```
   
 # 0. 테스트용 머신 준비  
