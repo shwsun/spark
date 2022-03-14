@@ -19,7 +19,7 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 docker build -t shwsun/rproxy .
 docker push shwsun/rproxy
 
-docker run -it --name rproxy -p 80:80 -d shwsun/rproxy
+docker run -it --name rproxy -p 80:80 -d shwsun/rproxy /bin/bash
 
 ```
 
