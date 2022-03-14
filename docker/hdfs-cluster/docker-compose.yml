@@ -60,8 +60,8 @@ services:
     container_name: rdb
     hostname: rdb
     # must be /data/mysql folder in host machine
-    volumes:
-      - /data/mysql:/var/lib/mysql
+    # volumes:
+    #   - /data/mysql:/var/lib/mysql
     # depends_on:
     #   - dn03
     # ports:
