@@ -178,3 +178,39 @@ git remote set-url origin "https://shwsun@github.com/shwsun/spark.git"
 # github personal access token setting 
 git push --all
 ```
+
+---  
+# VM 에 디스크 추가  
+1. disk 추가   
+2. ssh 에서 추가 디스크 정보 확인  
+3. 디스크 포맷    
+4. 마운트    
+5. 재부팅시 마운트 유지 설정  
+  
+- 추가 디스크 조회   
+```bash
+lsblk -o NAME,HCTL,SIZE,MOUNTPOINT | grep -i "sd" 
+```
+- 디스크 포맷   
+```bash
+sudo parted /dev/sda --script mklabel gpt mkpart xfspart xfs 0% 100%
+sudo mkfs.xfs /dev/sda1
+sudo partprobe /dev/sda1
+parted /dev/sdb --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdb1
+partprobe /dev/sdb1
+```
+- 마운트  
+```bash
+mkdir -p /hdfs/dn01  
+mount /dev/sda1 /hdfs/dn01
+mkdir -p /hdfs/dn02  
+mount /dev/sdb1 /hdfs/dn02
+```
+- 유지 설정  
+```bash
+blkid
+vi /etc/fstab 
+# UUID=7ffa522d-7454-49eb-b21c-83ebfc42f87a   /hdfs/dn01   xfs   defaults,nofail   1   2
+# UUID=89682606-644f-49e2-a552-279fa1fe939b   /hdfs/dn02   xfs   defaults,nofail   1   2
+```
