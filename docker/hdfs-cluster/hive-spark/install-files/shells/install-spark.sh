@@ -29,6 +29,10 @@ export SPARK_DIST_CLASSPATH=$(hadoop classpath)
 cp /install-files/conf-spark/* $SPARK_HOME/conf/
 mkdir -p /usr/local/spark/eventLog
 
+# spark jdbc driver 복사 
+HIVE_HOME=/hive-bin
+cp $HIVE_HOME/lib/mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar $SPARK_HOME/jars/
+# spark jdbc 연결 위해 
 # 6. 실행 
 # > $SPARK_HOME/sbin/start-all.sh
 # > $SPARK_HOME/sbin/start-history-server.sh
