@@ -26,5 +26,18 @@ flush privileges;
 EOF
 mysql -u root -p"\n" < /install-files/hue_db-creation.sql
 echo "===== hue_db created. ====="
+
+#### create jdbc connection test db ####
+cat <<EOF |tee /install-files/test_jdbc-creation.sql
+set global validate_password_policy=LOW;
+set global validate_password_length=4;
+CREATE USER 'jdbc'@'%' IDENTIFIED BY 'jdbc';
+
+CREATE DATABASE test_jdbc;
+GRANT ALL privileges on test_jdbc.* to 'jdbc'@'%' with GRANT option;
+flush privileges;
+EOF
+mysql -u root -p"\n" < /install-files/test_jdbc-creation.sql
+echo "===== test_jdbc db created. ====="
 # vi /etc/mysql/conf.d/mysqld.cnf
 # bind-address 0.0.0.0
