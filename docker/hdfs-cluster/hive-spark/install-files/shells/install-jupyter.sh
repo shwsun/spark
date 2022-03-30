@@ -7,6 +7,7 @@ pip install --upgrade pip
 pip install jupyterlab
 pip install pyspark==3.2.1
 pip install pandas 
+pip install pyarrow 
 mkdir -p /notebooks
 echo "==== jupyter lab, pyspark installed. ===="
 

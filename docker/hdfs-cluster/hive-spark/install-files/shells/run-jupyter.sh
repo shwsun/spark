@@ -7,7 +7,7 @@ export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin
 echo $PATH
 echo "==== Jupyter starting... ===="
-jupyter lab --allow-root --ip='*' --notebook-dir='/notebooks' --workspace='/notebooks' > /dev/null 2>&1 &
+jupyter lab --LabApp.max_buffer_size=1048576000 --allow-root --ip='*' --notebook-dir='/notebooks' --workspace='/notebooks' > /dev/null 2>&1 &
 sleep 5
 echo "==== Jupyter started. ===="
 echo | jupyter server list  
