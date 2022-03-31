@@ -20,6 +20,11 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
   
+# docker login error X11 
+```bash
+apt-get remove -y golang-docker-credential-helpers
+```
+  
 ---  
 # pyspark+jupyter 
 ubuntu container에 pyspark와 jupyter notebook을 직접 설치  

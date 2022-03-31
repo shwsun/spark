@@ -3,6 +3,7 @@
 <configuration>
 
 <property><name>dfs.namenode.name.dir</name><value>file:///hdfs/node</value></property>
+<property><name>dfs.datanode.data.dir</name><value>file:///hdfs/node</value></property>
 <property><name>dfs.permissions.enabled</name><value>false</value></property>
 <property><name>dfs.replication</name><value>3</value></property>
 <property><name>dfs.namenode.secondary.http-address</name><value>namenode:50090</value></property>
