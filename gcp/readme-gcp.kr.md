@@ -193,15 +193,15 @@ lsblk -o NAME,HCTL,SIZE,MOUNTPOINT | grep -i "sd"
 ```
 - 디스크 포맷   
 ```bash
-sudo parted /dev/sda --script mklabel gpt mkpart xfspart xfs 0% 100%
-sudo mkfs.xfs /dev/sda1
-sudo partprobe /dev/sda1
+parted /dev/sda --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sda1
+partprobe /dev/sda1
 parted /dev/sdb --script mklabel gpt mkpart xfspart xfs 0% 100%
 mkfs.xfs /dev/sdb1
 partprobe /dev/sdb1
-parted /dev/sde --script mklabel gpt mkpart xfspart xfs 0% 100%
-mkfs.xfs /dev/sde1
-partprobe /dev/sde1
+parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdc1
+partprobe /dev/sdc1
 ```
 - 마운트  
 ```bash
@@ -210,7 +210,7 @@ mount /dev/sda1 /hdfs/dn01
 mkdir -p /hdfs/dn02  
 mount /dev/sdb1 /hdfs/dn02
 mkdir -p /hdfs/dn03  
-mount /dev/sde1 /hdfs/dn03
+mount /dev/sdc1 /hdfs/dn03
 ```
 - 유지 설정  
 ```bash

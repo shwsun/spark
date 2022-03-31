@@ -24,6 +24,12 @@ This project is aim for creating spark exercise environment and making spark get
   
 - 클러스터 생성 및 실행  
 ```bash
+# vm 생성 후, 최초 1회  
+mkdir /spark-git;cd /spark-git
+git clone https://github.com/shwsun/spark.git 
+## /hdfs/dn01 ~ dn03 volume mount  
+
+# 실행 시, 매 번  
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
 cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
 # 클러스터 환경 생성 
