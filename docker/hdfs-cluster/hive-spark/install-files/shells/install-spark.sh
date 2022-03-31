@@ -16,7 +16,7 @@ export SPARK_HOME=/spark
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin:/usr/local/bin
-export SPARK_DIST_CLASSPATH=$(hadoop classpath)
+export SPARK_DIST_CLASSPATH=$(/hadoop/bin/hadoop classpath)
 
 # 4. default conf setting
 # cd $SPARK_HOME/conf

@@ -63,7 +63,7 @@ insert into intbl values(1, 'a');
 docker build -t shwsun/nn . 
 docker run -it --privileged --name namenode --hostname namenode --rm -p 8088:8088 -v /hdfs/namenode:/hdfs/name shwsun/nn
 
-docker run -it --privileged --name namenode --rm -p 8088:8088 -v /hdfs/namenode:/hdfs/name shwsun/nn /bin/bash
+docker run -it --privileged --name namenode --rm -p 8088:8088 -v /hdfs/namenode:/hdfs/node shwsun/hive-spark /bin/bash
 docker run -itd --privileged --name datanode --rm -p 8088:8088 -v /hdfs/datanode:/hdfs/data shwsun/dn
 
 docker exec -it namenode jps
