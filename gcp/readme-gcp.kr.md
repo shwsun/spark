@@ -202,6 +202,10 @@ partprobe /dev/sdb1
 parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
 mkfs.xfs /dev/sdc1
 partprobe /dev/sdc1
+#edge 50gb
+parted /dev/sdf --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdf1
+partprobe /dev/sdf1
 ```
 - 마운트  
 ```bash
@@ -211,6 +215,9 @@ mkdir -p /hdfs/dn02
 mount /dev/sdb1 /hdfs/dn02
 mkdir -p /hdfs/dn03  
 mount /dev/sdc1 /hdfs/dn03
+# edge 
+mkdir -p /spark-git 
+mount /dev/sdf1 /spark-git 
 ```
 - 유지 설정  
 ```bash
@@ -219,4 +226,5 @@ vi /etc/fstab
 # UUID=7ffa522d-7454-49eb-b21c-83ebfc42f87a   /hdfs/dn01   xfs   defaults,nofail   1   2
 # UUID=89682606-644f-49e2-a552-279fa1fe939b   /hdfs/dn02   xfs   defaults,nofail   1   2
 # UUID=581eac09-acc8-40c0-b1bb-ee9b9dce6b3a   /hdfs/dn03   xfs   defaults,nofail   1   2
+# UUID=838b5891-294e-415b-981a-50274b0ec450   /spark-git   xfs   defaults,nofail   1   2
 ```
