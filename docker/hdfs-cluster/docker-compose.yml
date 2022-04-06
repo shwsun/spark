@@ -96,7 +96,8 @@ services:
     #command: bash -c "./run-jupyter.sh;./run-spark.sh;/bin/bash"
     command: bash -c "./run-jupyter.sh;/bin/bash"
     volumes:
-      - /spark-git/spark/spark-local/notebooks:/notebooks/spark-local
+      - /spark-git:/notebooks
+#      - /spark-git/spark/spark-local/notebooks:/notebooks/spark-local
     depends_on:
       - namenode
     ports:
