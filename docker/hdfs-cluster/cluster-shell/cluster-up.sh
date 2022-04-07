@@ -9,4 +9,6 @@ else
 fi
 
 docker-compose down
-docker-compose up 
+docker-compose up & 
+sleep(5)
+./run-all.sh  
