@@ -31,9 +31,10 @@ git clone https://github.com/shwsun/spark.git
 
 # 실행 시, 매 번  
 # hdfs/yarn/hive/spark cluster 실행 쉘이 존재하는 경로로 이동
-cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
-# 클러스터 환경 생성 
-./cluster-up.sh init 
+# cd /spark-git/spark/docker/hdfs-cluster/cluster-shell  
+# # 클러스터 환경 생성 
+# ./cluster-up.sh init 
+cd /spark-git/spark/docker/hdfs-cluster/cluster-shell;./cluster-up.sh init  
 # # rproxy 실행 
 # cd /spark-git/spark/docker/rproxy 
 # docker run -it --name rproxy --net hdfs-cluster_default -p 80:80 -d nginx  
