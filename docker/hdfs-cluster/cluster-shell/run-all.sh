@@ -15,7 +15,7 @@ if [ "$1" == "init" ]
 then 
     # rdb init  
     docker exec -it --privileged -u root -d rdb /bin/bash /install-files/shells/init-db.sh
-    sleep 5
+    sleep 10
     echo ">> hive & hue db created. "
     echo ">> namenode inited. "
     # 이미 docker 에서 mount 된 이후라, 지우려면 내용만 지워야 한다.  
