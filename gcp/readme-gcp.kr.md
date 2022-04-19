@@ -193,6 +193,7 @@ lsblk -o NAME,HCTL,SIZE,MOUNTPOINT | grep -i "sd"
 ```
 - 디스크 포맷   
 ```bash
+# data node dn01 ~ dn03  32gb  
 parted /dev/sda --script mklabel gpt mkpart xfspart xfs 0% 100%
 mkfs.xfs /dev/sda1
 partprobe /dev/sda1
@@ -203,9 +204,9 @@ parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
 mkfs.xfs /dev/sdc1
 partprobe /dev/sdc1
 #edge 50gb
-parted /dev/sdf --script mklabel gpt mkpart xfspart xfs 0% 100%
-mkfs.xfs /dev/sdf1
-partprobe /dev/sdf1
+parted /dev/sdd --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdd1
+partprobe /dev/sdd1
 ```
 - 마운트  
 ```bash
@@ -217,7 +218,7 @@ mkdir -p /hdfs/dn03
 mount /dev/sdc1 /hdfs/dn03
 # edge 
 mkdir -p /spark-git 
-mount /dev/sdf1 /spark-git 
+mount /dev/sdd1 /spark-git 
 ```
 - 유지 설정  
 ```bash
@@ -227,4 +228,11 @@ vi /etc/fstab
 # UUID=89682606-644f-49e2-a552-279fa1fe939b   /hdfs/dn02   xfs   defaults,nofail   1   2
 # UUID=581eac09-acc8-40c0-b1bb-ee9b9dce6b3a   /hdfs/dn03   xfs   defaults,nofail   1   2
 # UUID=838b5891-294e-415b-981a-50274b0ec450   /spark-git   xfs   defaults,nofail   1   2
+
+# spark-gomerry
+vi /etc/fstab 
+# UUID=5a78882c-2ecb-4def-81d6-2bead2420c34   /hdfs/dn01   xfs   defaults,nofail   1   2
+# UUID=af0e8586-bf59-4117-ad46-19f4aa278afd   /hdfs/dn02   xfs   defaults,nofail   1   2
+# UUID=90636e60-d712-4661-8259-929f416b1a20   /hdfs/dn03   xfs   defaults,nofail   1   2
+# UUID=9f75992d-176c-4763-a8a8-05e50de57c72   /spark-git   xfs   defaults,nofail   1   2
 ```
