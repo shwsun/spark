@@ -10,6 +10,8 @@ pip install pandas
 pip install pyarrow 
 mkdir -p /notebooks
 echo "==== jupyter lab, pyspark installed. ===="
+apt-get install -y git 
+echo "==== git installed. ===="
 
 # # start jupyter 
 # jupyter lab --allow-root --ip='*' --notebook-dir='/notebooks' --workspace='/notebooks' > /dev/null 2>&1 &
