@@ -67,3 +67,26 @@ CREATE DATABASE hue_db;
 GRANT ALL privileges on hue_db.* to 'hue_u'@'%' with GRANT option;
 flush privileges;
 ```
+  
+## test_jdbc database 생성  
+```python
+# jdbc 저장 테스트  
+psdf = spark.read.format("parquet").load(CKPT_FILE_CHANNEL)
+props = {"driver":"com.mysql.jdbc.Driver"}
+db_url = "jdbc:mysql://rdb/test_jdbc?user=test_jdbc&password=test_jdbc"
+tbl = "report_channel"
+psdf.write.jdbc(db_url, tbl, mode='append', properties=props)
+```
+
+```bash
+docker exec -it rdb /bin/bash
+```
+```sql
+set global validate_password_policy=LOW;
+set global validate_password_length=3;
+CREATE USER 'test_jdbc'@'%' IDENTIFIED BY 'test_jdbc';
+CREATE DATABASE test_jdbc;
+GRANT ALL privileges on test_jdbc.* to 'test_jdbc'@'%' with GRANT option;
+flush privileges;
+```
+
