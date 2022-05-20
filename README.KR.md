@@ -10,6 +10,12 @@ This project is aim for creating spark exercise environment and making spark get
 - Ubuntu 18.04 (docker)
 - RAM >= 8 GB  
 
+### 실행  
+[Spark Cluster + Hdfs + Hive manual installation](docker/hdfs-cluster/Readme.md).  
+
+```bashcd 
+/spark-git/spark/docker/hdfs-cluster/cluster-shell;./cluster-up.sh init   
+```
 
 ---  
  

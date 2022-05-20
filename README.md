@@ -28,4 +28,7 @@ This project is aim for creating spark exercise environment and making spark get
 8. Spark Cluster + Hdfs + Hive manual installation  
 9. Oozie installation 
 10. Zeppelin installation  
+
+  
+At this time you can run this cluster 
   
