@@ -54,4 +54,5 @@ With 'root' account type your own password and then create this account.
 You must create 'root' account because in this container several things are setted with 'root' account.  
 ![Hue](imgs/spark-cluster-hue.png)    
 
-
+In Hue I'm gonna use 'Files(HDFS web browser)' and 'Editor > MySQL'. 
+![Hue HDFS File browser](imgs/spark-cluster-hue-files.png)   

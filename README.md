@@ -30,5 +30,9 @@ This project is aim for creating spark exercise environment and making spark get
 10. Zeppelin installation  
 
   
-At this time you can run this cluster 
+At this time you can run this cluster [Spark Cluster + Hdfs + Hive manual installation](docker/hdfs-cluster/Readme.md).  
+
+```bashcd 
+/spark-git/spark/docker/hdfs-cluster/cluster-shell;./cluster-up.sh init   
+```
   
