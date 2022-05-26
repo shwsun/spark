@@ -149,6 +149,9 @@ docker exec -it namenode hdfs dfs -chmod 755 /user/root
 ---  
 # Hive 설치하기  
 hadoop 설치가 완료되면, 이 중 hive job을 던지는 역할을 할 node 1대를 선정해서 해당 노드에 hive를 설치한다.  
+> Hue 에서 Hive 연결하려면 dn01 에서 hiveserver2 실행해야 한다. 
+> docker exec -it dn01 /bin/bash 
+> root@dn01:/install-files/shells# ./run-hive.sh  
 
 ## Hive metastore db 추가  
 ```sql
