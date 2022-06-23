@@ -41,8 +41,16 @@ root@dn01:/install-files# find / -name 'log4j*'
 ## Livy 설치  
 spark-master 에 livy server를 설치하고 실행하면, hue 에서 job-livy를 조회할 수 있다.  
 hue notebook pyspark에 livy를 연결하면, 편집기를 이용해 livy를 호출할 수 있다.  
-단, spark 3.x 에서는 livy 호출 시 아래와 같은 에러가 발생한다.  
-이 에러를 처리해야 사용할 수 있다.  
-```bash
-The Spark session is dead and could not be created in the cluster: at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:90) at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1039) at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1048) at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala) Caused by: java.lang.ClassNotFoundException: scala.Function0$class at java.net.URLClassLoader.findClass(URLClassLoader.java:387) at java.lang.ClassLoader.loadClass(ClassLoader.java:418) at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ... 20 more 2022-03-10 06:22:21,062 INFO util.ShutdownHookManager: Shutdown hook called
-```
+  
+  
+- edge server에 livy 설치 파일 다운로드. https://dlcdn.apache.org/incubator/livy/0.7.1-incubating/apache-livy-0.7.1-incubating-bin.zip  
+- 해당 서버(spark-master)에는 이미 JDK, SPARK_HOME, HADOOP_CONF_DIR 이 설정되어 있다.  
+- 압축 해제 후, livy api server 실행  
+- 8998 포트에서 작동 확인  
+  
+Hue 에서 pyspark/scala 편집기를 사용하기 위해서는 아래와 같이 설정  
+ - Spark 3.2.x, Scala 2.12 이상에서는 Livy 소스 컴파일해야 사용 가능  
+ - K8s cluster 에서는 Lighter 등 사용 가능.  
+ - 편집기 자체는 polynote 사용 가능  
+
+  
