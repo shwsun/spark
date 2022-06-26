@@ -80,8 +80,8 @@
         </oozie.test.default.config.file>
         <oozie.test.config.file>${oozie.test.default.config.file}</oozie.test.config.file>
 
-        <hadoop.version>2.6.0</hadoop.version>
-        <hadoop.majorversion>2</hadoop.majorversion>
+        <hadoop.version>3.2.3</hadoop.version>
+        <hadoop.majorversion>3</hadoop.majorversion>
         <hadooplib.version>hadoop-${hadoop.majorversion}-${project.version}</hadooplib.version>
         <hbase.version>1.2.3</hbase.version>
 
@@ -98,11 +98,11 @@
          <hive.classifier>core</hive.classifier>
          <sqoop.version>1.4.7</sqoop.version>
          <spark.version>3.2.1</spark.version>
-         <spark.streaming.kafka.version>1.6.1</spark.streaming.kafka.version>
-         <spark.bagel.version>1.6.1</spark.bagel.version>
+         <spark.streaming.kafka.version>3.2.1</spark.streaming.kafka.version>
+         <spark.bagel.version>3.2.1</spark.bagel.version>
          <spark.guava.version>14.0.1</spark.guava.version>
          <spark.scala.binary.version>2.12</spark.scala.binary.version>
-         <sqoop.classifier>hadoop260</sqoop.classifier>
+         <sqoop.classifier>hadoop320</sqoop.classifier>
          <tez.version>0.8.4</tez.version>
          <joda.time.version>2.9.9</joda.time.version>
          <avro.version>1.8.2</avro.version>
@@ -172,9 +172,9 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>repository.cloudera.com</id>
-            <name>repository.cloudera.com-releases</name>
-            <url>https://repository.cloudera.com/artifactory/ext-release-local</url>
+            <id>central</id>
+            <name>repository central</name>
+            <url>http://repo.maven.apache.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
