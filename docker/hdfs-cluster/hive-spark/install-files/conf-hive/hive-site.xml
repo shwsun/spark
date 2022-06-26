@@ -95,7 +95,10 @@
             <name>hive.compactor.worker.threads</name>
             <value>4</value>
         </property>     
-
+        <property>
+            <name>hive.execution.engine</name>
+            <value>tez</value>
+        </property>  
 <property>
   <name>beeline.hs2.jdbc.url.tcpUrl</name>
   <value>jdbc:hive2://{{hostname}}:10000/metastore;user=hive;password=hive</value>

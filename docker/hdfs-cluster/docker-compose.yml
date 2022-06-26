@@ -32,33 +32,33 @@ services:
     mem_limit: 4g
     tty: true
 
-#   dn02:
-#     image: shwsun/hive-spark
-#     container_name: dn02
-#     hostname: dn02
-#     volumes:
-#       - /hdfs/dn02:/hdfs/node
-#     depends_on:
-#       - namenode
-#     ports:
-#       - "8043:8042"
-#     #   - "50075:50075"
-#     mem_limit: 8g
-#     tty: true
+  dn02:
+    image: shwsun/hive-spark
+    container_name: dn02
+    hostname: dn02
+    volumes:
+      - /hdfs/dn02:/hdfs/node
+    depends_on:
+      - namenode
+    ports:
+      - "8043:8042"
+    #   - "50075:50075"
+    mem_limit: 8g
+    tty: true
 
-#   dn03:
-#     image: shwsun/hive-spark
-#     container_name: dn03
-#     hostname: dn03
-#     volumes:
-#       - /hdfs/dn03:/hdfs/node
-#     depends_on:
-#       - namenode
-#     ports:
-#       - "8044:8042"
-#     #   - "50075:50075"
-#     mem_limit: 8g
-#     tty: true
+  dn03:
+    image: shwsun/hive-spark
+    container_name: dn03
+    hostname: dn03
+    volumes:
+      - /hdfs/dn03:/hdfs/node
+    depends_on:
+      - namenode
+    ports:
+      - "8044:8042"
+    #   - "50075:50075"
+    mem_limit: 8g
+    tty: true
 
   rdb:
     image: shwsun/mysql-hue
