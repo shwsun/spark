@@ -21,7 +21,7 @@ docker exec -it oozie /bin/bash
 wget https://dlcdn.apache.org/oozie/5.2.1/oozie-5.2.1.tar.gz
 tar xfv oozie-5.2.1.tar.gz && rm oozie-5.2.1.tar.gz
 cd /install-files/oozie-5.2.1
-mvn clean package assembly:single -DskipTests -P hadoop-3,uber -Dhadoop.version=3.2.2 
+mvn clean package assembly:single -DskipTests -P hadoop-3,uber -Dhadoop.version=3.2.3 
 # ==> compile error 발생 : 아래와 같이 hdoop 3 패치 적용. 
 # /install-files/oozie-5.2.1/distro/target/oozie-5.2.1-distro.tar.gz 생성 됨. 
 
