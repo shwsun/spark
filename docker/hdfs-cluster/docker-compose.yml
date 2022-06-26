@@ -29,7 +29,7 @@ services:
     ports:
       - "8042:8042"
     #   - "50075:50075"
-    mem_limit: 4g
+    mem_limit: ${dn_size}
     tty: true
 
   dn02:
@@ -43,7 +43,7 @@ services:
     ports:
       - "8043:8042"
     #   - "50075:50075"
-    mem_limit: 8g
+    mem_limit: ${dn_size}
     tty: true
 
   dn03:
@@ -57,7 +57,7 @@ services:
     ports:
       - "8044:8042"
     #   - "50075:50075"
-    mem_limit: 8g
+    mem_limit: ${dn_size}
     tty: true
 
   rdb:
