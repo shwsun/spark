@@ -1,3 +1,4 @@
 .metals/
 .vscode/
 logs/
+.ipynb_checkpoints/
