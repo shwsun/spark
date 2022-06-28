@@ -1,3 +1,4 @@
+# cluster 구성 노드 생성이 완료된 상황을 가정하고, 클러스터를 구성하는 각 노드에서 구성요소들을 순서대로 실행한다.  
 # rm -rdf /hdfs/
 # echo "==== /hdfs/ cleared. ===="
 # docker-compose up
