@@ -116,4 +116,14 @@
         <name>beeline.hs2.jdbc.url.default</name>
         <value>tcpUrl</value>
     </property>   
+    
+    <property>
+        <name>datanucleus.autoCreateSchema</name>
+        <value>false</value>
+        <description>creates necessary schema on a startup if one doesn't exist. set this to false, after creating it once</description>
+    </property>
+    <property>
+        <name>datanucleus.fixedDatastore</name>
+        <value>true</value>
+    </property>
 </configuration>

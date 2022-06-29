@@ -30,7 +30,7 @@ services:
       - "8042:8042"
       - "9083:9083"
     #   - "50075:50075"
-    mem_limit: ${dn_size}
+    mem_limit: 4g
     tty: true
 
   # dn02:
@@ -111,3 +111,7 @@ services:
       - "18080:18080"
     mem_limit: 8g
     tty: true
+
+networks:
+    default:
+        name: hdfs-cluster-net
