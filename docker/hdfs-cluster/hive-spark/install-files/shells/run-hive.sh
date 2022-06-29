@@ -20,6 +20,7 @@ $HADOOP_EXE_HOME/hdfs dfs -chmod g+w /user/root
 # run metastore service :9083.  
 # hiveserver2 & other services(impala, spark, etc...) -> (thrift) metastore service -> (jdbc) metastore db 
 $HIVE_HOME/bin/hive --service metastore & 
+sleep 5
 echo "---- metastore service remote started ----"
 # 7. hive 서버 실행  
 $HIVE_HOME/bin/hiveserver2
