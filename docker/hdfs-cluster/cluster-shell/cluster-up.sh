@@ -10,5 +10,6 @@ fi
 
 docker-compose down
 docker-compose up & 
-sleep 10
+# need enough time to create dn01~dnn container. 
+sleep 30
 ./run-all.sh init 
