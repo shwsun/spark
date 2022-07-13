@@ -18,7 +18,39 @@ Spark yarn cluster 에서는 client 나 driver 에만 spark가 존재하면 된�
 Spark cluster를 별도로 start 하지 않아도 Yarn 설정에 따라 Spark slave 들이 작동한다.  
  -> 현재는 각각의 data 노드에도 spark 를 모두 설치한 상태.  
 >> -> Spark을 제거한 상태에서도 테스트 해 본다.  
+### Requrements  
+- Maven 3.8.4  
+- Scala 2.12   
+- spark 3.2.1 src    
   
+```bash
+# upgrade maven 
+wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz -P /tmp
+tar xf /tmp/apache-maven-*.tar.gz -C /opt
+ln -s /opt/apache-maven-3.8.6 /opt/maven
+vi /etc/profile.d/maven.sh
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export M2_HOME=/opt/maven
+export MAVEN_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+chmod +x /etc/profile.d/maven.sh
+source /etc/profile.d/maven.sh
+
+# install scala 2.12 
+wget https://downloads.lightbend.com/scala/2.12.2/scala-2.12.2.deb
+dpkg -i scala-2.12.2.deb  
+apt-get update 
+apt-get install scala  
+
+# spark 3.2.1  
+wget https://dlcdn.apache.org/spark/spark-3.2.1/spark-3.2.1.tgz  
+# hadoop 3.2.3 , hive 3.1.2  
+./build/mvn -Pyarn -Phadoop-3.2 -Dhadoop.version=3.2.3 -Phive -Phive-thriftserver -DskipTests clean package
+
+```
+
 ---  
 ## log4j 취약점 확인  
 - dn01  

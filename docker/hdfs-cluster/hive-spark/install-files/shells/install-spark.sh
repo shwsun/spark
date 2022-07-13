@@ -1,10 +1,11 @@
 cd /install-files
 # 1. download spark without hadoop
 #wget https://dlcdn.apache.org/spark/spark-3.1.3/spark-3.1.3-bin-without-hadoop.tgz
-wget https://dlcdn.apache.org/spark/spark-3.2.1/spark-3.2.1-bin-without-hadoop.tgz
+# wget https://dlcdn.apache.org/spark/spark-3.2.1/spark-3.2.1-bin-without-hadoop.tgz
+wget https://dlcdn.apache.org/spark/spark-3.2.1/spark-3.2.1-bin-hadoop3.2-scala2.13.tgz
 # 2. unzip to spark home dir 
-tar -xvf spark-3.2.1-bin-without-hadoop.tgz -C /
-mv /spark-3.2.1-bin-without-hadoop /spark
+tar -xvf spark-3.2.1-bin-hadoop3.2-scala2.13.tgz -C /
+mv /spark-3.2.1-bin-hadoop3.2-scala2.13 /spark
 # 3. env variables setting
 cat <<EOF |tee -a ~/.bashrc
 export SPARK_HOME=/spark

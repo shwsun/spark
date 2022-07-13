@@ -63,3 +63,7 @@ hdfs dfs -chown -R root:supergroup /user
 hdfs dfs -chown -R root:supergroup /user/root
 hdfs dfs -chmod 755 /user
 hdfs dfs -chmod 755 /user/root
+
+./sbin/start-thriftserver.sh --hiveconf hive.server2.thrift.port=10000 --hiveconf hive.server2.thrift.bind.host=dn01 --master yarn
+    
+    

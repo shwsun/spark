@@ -12,6 +12,7 @@ services:
     ports:
       - "50070:50070"
       - "8088:8088"
+      - "8188:8188"
       - "9000:9000"
       - "9870:9870"
       - "8050:8050"
@@ -30,39 +31,40 @@ services:
     ports:
       - "8042:8042"
       - "9083:9083"
+      - "10000:10000" 
       - "10001:10001"
       # metastore thrift http  
     #   - "50075:50075"
     mem_limit: 4g
     tty: true
 
-  dn02:
-    image: shwsun/hive-spark
-    container_name: dn02
-    hostname: dn02
-    volumes:
-      - /hdfs/dn02:/hdfs/node
-    depends_on:
-      - namenode
-    ports:
-      - "8043:8042"
-    #   - "50075:50075"
-    mem_limit: 4g
-    tty: true
+#   dn02:
+#     image: shwsun/hive-spark
+#     container_name: dn02
+#     hostname: dn02
+#     volumes:
+#       - /hdfs/dn02:/hdfs/node
+#     depends_on:
+#       - namenode
+#     ports:
+#       - "8043:8042"
+#     #   - "50075:50075"
+#     mem_limit: 4g
+#     tty: true
 
-  dn03:
-    image: shwsun/hive-spark
-    container_name: dn03
-    hostname: dn03
-    volumes:
-      - /hdfs/dn03:/hdfs/node
-    depends_on:
-      - namenode
-    ports:
-      - "8044:8042"
-    #   - "50075:50075"
-    mem_limit: 4g
-    tty: true
+#   dn03:
+#     image: shwsun/hive-spark
+#     container_name: dn03
+#     hostname: dn03
+#     volumes:
+#       - /hdfs/dn03:/hdfs/node
+#     depends_on:
+#       - namenode
+#     ports:
+#       - "8044:8042"
+#     #   - "50075:50075"
+#     mem_limit: 4g
+#     tty: true
 
   rdb:
     image: shwsun/mysql-hue
