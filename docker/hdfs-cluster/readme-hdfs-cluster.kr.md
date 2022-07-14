@@ -104,6 +104,10 @@ cd /spark-git/spark/docker/hdfs-cluster
 ./up.sh
 # up 결과 확인 후 아래 실행.
 ./restart.sh
+
+# hive metastore 실행  
+docker exec -it dn01 /bin/bash
+hive --service metastore  
 ```
 
 ---  

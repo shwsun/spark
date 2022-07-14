@@ -86,3 +86,8 @@ Hue 에서 pyspark/scala 편집기를 사용하기 위해서는 아래와 같이
  - 편집기 자체는 polynote 사용 가능  
 
   
+#### Hive metastore 실행  
+```bash
+docker exec -it dn01 /bin/bash
+hive --service metastore  
+```
